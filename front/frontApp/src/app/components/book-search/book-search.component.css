@@ -1,0 +1,148 @@
+/* 📚 Contenedor principal del buscador */
+.search-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.search-container:hover {
+  transform: translateY(-5px);
+}
+
+/* 📌 Encabezado */
+h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* 🔍 Estilo del formulario */
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🎯 Inputs de búsqueda */
+.input-group {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+}
+
+.input-group input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+}
+
+/* 🔘 Botón de búsqueda */
+.search-button {
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.search-button:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+/* 📄 Resultados */
+.results-container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  list-style: none;
+}
+
+/* 🎴 Tarjetas de libros */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  justify-content: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.book-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.book-card:hover {
+  transform: scale(1.05);
+}
+
+/* 📖 Imagen de portada */
+.book-cover {
+  width: 200px;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+/* ℹ️ Información del libro */
+.book-info h4 {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.book-info p {
+  font-size: 1rem;
+  color: #555;
+  margin: 2px 0;
+}
+
+/* 🎭 Animación de aparición */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ❌ Botón de cerrar modal */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 22px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s ease-in-out;
+}
+
+.close:hover {
+  color: red;
+}

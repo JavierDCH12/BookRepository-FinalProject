@@ -1,0 +1,73 @@
+<div class="favorites-container">
+  <h2>❤️ My Favorite Books</h2>
+
+  <!-- 🔄 Carga y errores -->
+  <div *ngIf="isLoading" class="loading">⏳ Loading favorites...</div>
+  <div *ngIf="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
+
+  <!-- 📖 Si no hay favoritos -->
+  <div *ngIf="favoriteBooks.length === 0 && !isLoading" class="no-favorites">
+    <p>No favorite books yet. ⭐ Add some from the search page!</p>
+  </div>
+
+  <!-- 📚 Lista de favoritos -->
+  <div class="favorite-grid">
+    <div *ngFor="let book of favoriteBooks" class="favorite-card">
+
+      <!-- 🖼️ Imagen del libro -->
+      <div class="book-image">
+        <img *ngIf="book.cover_url && book.cover_url !== 'None'" 
+             [src]="book.cover_url" 
+             alt="Book cover">
+      </div>
+
+      <!-- 📖 Información del libro -->
+      <div class="book-info">
+        <h4>{{ book.title }}</h4>
+        <p *ngIf="book.author" class="author">
+          👤 <a href="#" (click)="$event.preventDefault(); getAuthorWikipediaLink(book.author)">
+            {{ book.author }}
+          </a>
+        </p>
+        <p *ngIf="book.first_publish_year" class="publish-year">📅 {{ book.first_publish_year }}</p>
+
+        <!-- 📝 Sección de reseñas -->
+        <div class="review-container">
+          <h5>📝 Your Review</h5>
+
+          <!-- 📜 Modo lectura -->
+          <div *ngIf="!editingReview[book.book_key]" class="review-display">
+            <p class="review-text">
+              {{ reviewTexts[book.book_key] || 'No review yet. ✍️ Click to add one!' }}
+            </p>
+            <button class="edit-review-button" (click)="toggleReviewEdit(book.book_key)">
+              ✏️ Edit Review
+            </button>
+          </div>
+
+          <!-- ✏️ Modo edición -->
+          <div *ngIf="editingReview[book.book_key]" class="review-edit">
+            <textarea [(ngModel)]="reviewTexts[book.book_key]"
+                      placeholder="Write your review..."></textarea>
+
+            <!-- 🔘 Botones de acción -->
+            <div class="review-actions">
+              <button class="save-review-button" (click)="saveReview(book.book_key)">
+                💾 Save
+              </button>
+              <button class="cancel-review-button" (click)="toggleReviewEdit(book.book_key)">
+                ❌ Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ❌ Botón de eliminar favorito -->
+        <button class="remove-button" (click)="removeFavorite(book.book_key)">❌ Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔙 Botón de volver a inicio -->
+  <button class="home-button" (click)="navigateToHome()">🏠 Back to Home</button>
+</div>

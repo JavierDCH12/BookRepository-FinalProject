@@ -1,0 +1,68 @@
+<div class="container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h2>Register</h2>
+
+    <!-- Username Field -->
+    <label for="username">
+      Username:
+      <input id="username" type="text" pattern="^.{5,}$" formControlName="username" required [ngClass]="{'is-invalid': form.get('username')?.invalid && (form.get('username')?.dirty || form.get('username')?.touched), 'is-valid': form.get('username')?.valid}">
+      <span *ngIf="form.get('username')?.hasError('required') && (form.get('username')?.dirty || form.get('username')?.touched)">
+        Username is required.
+      </span>
+      <span *ngIf="form.get('username')?.hasError('minlength') && (form.get('username')?.dirty || form.get('username')?.touched)">
+        Username must be at least 5 characters long.
+      </span>
+    </label>
+
+    <!-- Email Field -->
+    <label for="email">
+      Email:
+      <input id="email" type="email" formControlName="email" required [ngClass]="{'is-invalid': form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched), 'is-valid': form.get('email')?.valid}">
+      <span *ngIf="form.get('email')?.hasError('required') && (form.get('email')?.dirty || form.get('email')?.touched)">
+        Email is required.
+      </span>
+      <span *ngIf="form.get('email')?.hasError('email') && (form.get('email')?.dirty || form.get('email')?.touched)">
+        Invalid email address.
+      </span>
+    </label>
+
+    <!-- Password Field -->
+    <label for="password">
+      Password:
+      <input id="password" type="password" pattern="^.{5,}$" formControlName="password" required [ngClass]="{'is-invalid': form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched), 'is-valid': form.get('password')?.valid}">
+      <span *ngIf="form.get('password')?.hasError('required') && (form.get('password')?.dirty || form.get('password')?.touched)">
+        Password is required.
+      </span>
+      <span *ngIf="form.get('password')?.hasError('minlength') && (form.get('password')?.dirty || form.get('password')?.touched)">
+        Password must be at least 5 characters long.
+      </span>
+    </label>
+
+    <!-- Confirm Password Field -->
+    <label for="confirmPassword">
+      Confirm Password:
+      <input id="confirmPassword" type="password" formControlName="confirmPassword" required [ngClass]="{'is-invalid': form.get('confirmPassword')?.invalid && (form.get('confirmPassword')?.dirty || form.get('confirmPassword')?.touched), 'is-valid': form.get('confirmPassword')?.valid}">
+      <span *ngIf="form.get('confirmPassword')?.hasError('required') && (form.get('confirmPassword')?.dirty || form.get('confirmPassword')?.touched)">
+        Confirm Password is required.
+      </span>
+      <span *ngIf="form.get('confirmPassword')?.hasError('passwordsDoNotMatch') && (form.get('confirmPassword')?.dirty || form.get('confirmPassword')?.touched)">
+        Passwords do not match.
+      </span>
+    </label>
+
+    <!-- Backend Error Message -->
+    <div *ngIf="backendErrorMessage" class="error-message">
+      {{ backendErrorMessage }}
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="successfulRegistration" class="success-message">
+      Registration successful! Redirecting to login...
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="form.invalid">Register</button>
+  </form>
+
+  <button type="button" (click)="navigateToLogin()" class="login-button">Go to Login</button>
+</div>

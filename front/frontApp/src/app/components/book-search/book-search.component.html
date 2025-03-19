@@ -1,0 +1,61 @@
+<div class="search-container">
+  <h2>📚 Busca un Libro</h2>
+
+  <!-- 🔍 Formulario de búsqueda -->
+  <form (ngSubmit)="onSearch()" class="search-form">
+    <div class="input-group">
+      <input type="text" [(ngModel)]="searchParams.title" name="title" placeholder="📖 Título del libro">
+    </div>
+
+    <div class="input-group">
+      <input type="text" [(ngModel)]="searchParams.author" name="author" placeholder="✍️ Autor">
+    </div>
+
+    <div class="input-group">
+      <input type="text" [(ngModel)]="searchParams.genre" name="genre" placeholder="📚 Género">
+    </div>
+
+    <button type="submit" [disabled]="isLoading" class="search-button">
+      {{ isLoading ? "🔍 Buscando..." : "🔍 Buscar" }}
+    </button>
+  </form>
+
+  <!-- 🔄 Mensajes de carga y error -->
+  <div *ngIf="isLoading" class="loading">Cargando resultados...</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <!-- 📖 Resultados -->
+  <div *ngIf="results.length" class="results-container">
+    <h3>📚 Resultados</h3>
+    <div class="book-grid">
+      <div *ngFor="let book of results" class="book-card">
+        <img *ngIf="book.cover_url" [src]="book.cover_url" alt="Portada" class="book-cover">
+        
+        <div class="book-info">
+          <h4>{{ book.title }}</h4>
+          <p *ngIf="book.author" class="author">
+            👤 <a href="#" (click)="$event.preventDefault(); getAuthorWikipediaLink(book.author)">{{ book.author }}</a>
+          </p>
+          <p *ngIf="book.first_publish_year" class="publish-year">📅 {{ book.first_publish_year }}</p>
+          <p *ngIf="book.genres" class="genres">🏷️ Género: {{ formatGenres(book.genres) }}</p>
+
+          <!-- ⭐ Botón de favoritos -->
+          <button (click)="toggleFavorite(book); $event.stopPropagation()" class="fav-button">
+            {{ isFavorite(book.book_key) ? "⭐ Quitar de Favoritos" : "☆ Añadir a Favoritos" }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📖 Modal para descripción -->
+  <div class="modal" *ngIf="isModalOpen">
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <h3>{{ selectedBookTitle }}</h3>
+      <p *ngIf="isLoadingDescription" class="loading">Cargando descripción...</p>
+      <p *ngIf="selectedBookDescription">{{ selectedBookDescription }}</p>
+      <p *ngIf="!selectedBookDescription && !isLoadingDescription" class="error-message">No hay descripción disponible.</p>
+    </div>
+  </div>
+</div>

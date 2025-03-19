@@ -1,0 +1,124 @@
+/* 🎨 Contenedor del perfil */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to bottom, #4A90E2, #7F8C8D);
+}
+
+/* 🏷️ Tarjeta del perfil */
+.profile-card {
+  background: white;
+  width: 400px;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.profile-card:hover {
+  transform: scale(1.02);
+}
+
+/* 📷 Imagen del perfil */
+.profile-picture img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4A90E2;
+}
+
+/* 📂 Sección de subida de imagen */
+.upload-section {
+  margin-top: 10px;
+}
+
+.file-label {
+  display: inline-block;
+  background: #4A90E2;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.file-label:hover {
+  background: #357ABD;
+}
+
+/* 📑 Detalles del usuario */
+.profile-details {
+  padding: 15px 0;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-weight: bold;
+  color: #555;
+}
+
+.value {
+  color: #222;
+  font-weight: bold;
+}
+
+.value.active {
+  color: #2ECC71;
+}
+
+/* ✏️ Botón de edición */
+.edit-profile-btn,
+.save-profile-btn {
+  background: #4A90E2;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  margin-top: 15px;
+}
+
+.edit-profile-btn:hover {
+  background: #357ABD;
+}
+
+.save-profile-btn {
+  background: #2ECC71;
+}
+
+.save-profile-btn:hover {
+  background: #27AE60;
+}
+
+/* 🏠 Botón para volver */
+.home-button {
+  background: #ff9800;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  margin-top: 10px;
+}
+
+.home-button:hover {
+  background: #e68900;
+}

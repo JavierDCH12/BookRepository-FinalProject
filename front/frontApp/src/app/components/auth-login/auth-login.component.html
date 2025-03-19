@@ -1,0 +1,41 @@
+<div class="container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h2>Login</h2>
+
+    <!-- Username Field -->
+    <label class="input-group">
+      <span class="icon">👤</span>
+      <input type="text" formControlName="username" required autocomplete="username" placeholder="Enter your username">
+    </label>
+    <span *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error-text">
+      <span *ngIf="loginForm.get('username')?.hasError('required')">Username is required.</span>
+      <span *ngIf="loginForm.get('username')?.hasError('minlength')">Username must be at least 3 characters long.</span>
+    </span>
+
+    <!-- Password Field -->
+    <label class="input-group">
+      <span class="icon">🔒</span>
+      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" required autocomplete="current-password" placeholder="Enter your password">
+      <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+        {{ showPassword ? '🙈' : '👁️' }}
+      </button>
+    </label>
+    <span *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-text">
+      <span *ngIf="loginForm.get('password')?.hasError('required')">Password is required.</span>
+      <span *ngIf="loginForm.get('password')?.hasError('minlength')">Password must be at least 5 characters long.</span>
+    </span>
+
+    <!-- Backend Error Message -->
+    <div *ngIf="backendErrorMessage" class="error-message">
+      {{ backendErrorMessage }}
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="loginForm.invalid || isSubmitting">
+      {{ isSubmitting ? 'Logging in...' : 'Login' }}
+    </button>
+  </form>
+
+  <button type="button" (click)="navigateToRegister()" class="register-button">Go to Register</button>
+
+</div>
