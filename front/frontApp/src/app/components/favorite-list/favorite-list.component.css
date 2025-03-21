@@ -1,192 +1,190 @@
-/* 🏠 Contenedor principal */
+/* 🏠 Contenedor principal, centrado y contenido compacto */
 .favorites-container {
-  max-width: 1100px;
+  max-width: 1000px;
   margin: 50px auto;
-  padding: 35px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border-radius: 18px;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-  text-align: center;
+  padding: 30px;
+  background: linear-gradient(135deg, #ffffff, #f4f6f8);
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   font-family: 'Poppins', sans-serif;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  text-align: center;
 }
 
-/* 📚 Diseño en grid para los favoritos */
+/* 📚 Grid centrado */
 .favorite-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 30px;
-  padding: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 25px;
+  justify-items: center;
+  padding: 20px 0;
 }
 
-/* 📖 Tarjeta del libro */
+/* 📖 Tarjeta del libro, más proporcionada y elegante */
 .favorite-card {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  width: 100%;
+  max-width: 280px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  text-align: center;
+  padding: 18px;
+  transition: transform 0.25s, box-shadow 0.25s;
 }
 
 .favorite-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
 }
 
-/* 📄 Información del libro */
-.book-info {
-  padding: 18px;
-  text-align: center;
+/* 📷 Imagen centrada */
+.book-image img {
+  width: 170px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
 }
 
+/* 📖 Información del libro */
 .book-info h4 {
-  font-size: 22px;
-  margin: 12px 0;
-  font-weight: bold;
+  font-size: 18px;
+  margin-top: 12px;
   color: #222;
 }
 
-/* 📝 Sección de reseñas */
-.review-container {
-  width: 100%;
-  margin-top: 10px;
-  padding: 12px;
-  background: #f8f8f8;
-  border-radius: 12px;
-  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease-in-out;
+.author a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
 }
 
-/* 📜 Modo lectura */
-.review-display {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+.author a:hover {
+  color: #0056b3;
+}
+
+/* 📝 Review container muy integrado y discreto */
+.review-container {
+  width: 80%;
+  background: #fafafa;
+  border-radius: 10px;
   padding: 10px;
+  margin-top: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.03);
+  margin-left: 7%;
 }
 
 .review-text {
   font-size: 14px;
-  font-style: italic;
-  color: #444;
-  background: #ffffff;
-  padding: 8px;
-  border-radius: 8px;
-  width: 100%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-}
-
-/* ✏️ Modo edición */
-.review-edit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 10px;
-}
-
-.review-edit textarea {
-  width: 100%;
-  height: 80px;
-  resize: none;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  outline: none;
-  background: #ffffff;
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
-  transition: border 0.3s ease-in-out;
-}
-
-.review-edit textarea:focus {
-  border-color: #007bff;
-}
-
-/* 🎭 Botones de acción */
-.review-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 8px;
-}
-
-.review-actions button {
-  flex: 1;
-  padding: 8px 12px;
-  font-size: 14px;
-  font-weight: bold;
-  border: none;
+  color: #555;
+  padding: 8px 10px;
+  background: #fff;
   border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ✏️ Botón de editar reseña */
+.review-placeholder {
+  color: #999;
+  font-style: italic;
+  background: #f0f0f0;
+  border-radius: 6px;
+  padding: 6px;
+}
+
+/* ✏️ Edit review button */
 .edit-review-button {
   background-color: #007bff;
   color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.25s;
+  font-size: 12px;
 }
 
 .edit-review-button:hover {
   background-color: #0056b3;
-  transform: scale(1.05);
 }
 
-/* 💾 Botón de guardar reseña */
+/* 📝 Área de edición */
+.review-edit textarea {
+  width: 100%;
+  height: 80px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: none;
+  margin-bottom: 10px;
+}
+
+.review-actions {
+  display: flex;
+  gap: 8px;
+}
+
 .save-review-button {
-  background-color: #4CAF50;
+  background-color: #28a745;
   color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
 }
 
 .save-review-button:hover {
-  background-color: #388e3c;
-  transform: scale(1.05);
+  background-color: #218838;
 }
 
-/* ❌ Botón de cancelar edición */
 .cancel-review-button {
   background-color: #ff9800;
   color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
 }
 
 .cancel-review-button:hover {
   background-color: #e68900;
-  transform: scale(1.05);
 }
 
-/* ❌ Botón de eliminar favorito */
+/* ⭐ Rating stars */
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 8px 0;
+  cursor: pointer;
+  font-size: 28px;
+}
+
+.filled-star {
+  color: #ffd700;
+}
+
+.empty-star {
+  color: #ccc;
+}
+
 .remove-button {
   background-color: #e53935;
   color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
 }
 
 .remove-button:hover {
   background-color: #c62828;
-  transform: scale(1.05);
-}
-
-/* 🏠 Botón para volver */
-.home-button {
-  margin-top: 20px;
-  background-color: #ff9800;
-  color: white;
-  border: none;
-  padding: 14px 22px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: all 0.3s ease-in-out;
-}
-
-.home-button:hover {
-  background-color: #e68900;
-  transform: scale(1.05);
 }

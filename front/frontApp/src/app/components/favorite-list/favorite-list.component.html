@@ -31,26 +31,41 @@
         </p>
         <p *ngIf="book.first_publish_year" class="publish-year">📅 {{ book.first_publish_year }}</p>
 
+        <!-- ⭐ Rating -->
+        <div class="rating-section">
+          <h5>⭐ Your Rating</h5>
+          <div class="stars" *ngIf="book?.rating !== undefined">
+            <span *ngFor="let star of [1,2,3,4,5]" 
+                  (click)="updateBookRating(book.book_key, star)"
+                  [ngClass]="{'filled-star': star <= book.rating, 'empty-star': star > book.rating}">
+              ★
+            </span>
+          </div>
+        </div>
+
         <!-- 📝 Sección de reseñas -->
         <div class="review-container">
           <h5>📝 Your Review</h5>
-
-          <!-- 📜 Modo lectura -->
+          
+          <!-- 📜 Vista previa o modo lectura -->
           <div *ngIf="!editingReview[book.book_key]" class="review-display">
-            <p class="review-text">
-              {{ reviewTexts[book.book_key] || 'No review yet. ✍️ Click to add one!' }}
-            </p>
+            <blockquote *ngIf="reviewTexts[book.book_key]; else noReview">
+              "{{ reviewTexts[book.book_key] }}"
+            </blockquote>
+            <ng-template #noReview>
+              <p class="review-placeholder">No review yet. ✍️ Click below to add one!</p>
+            </ng-template>
             <button class="edit-review-button" (click)="toggleReviewEdit(book.book_key)">
-              ✏️ Edit Review
+              ✏️ Add or Edit Review
             </button>
           </div>
 
           <!-- ✏️ Modo edición -->
           <div *ngIf="editingReview[book.book_key]" class="review-edit">
             <textarea [(ngModel)]="reviewTexts[book.book_key]"
-                      placeholder="Write your review..."></textarea>
+                      placeholder="Write your review here..."></textarea>
 
-            <!-- 🔘 Botones de acción -->
+            <!-- 🔘 Botones acción edición -->
             <div class="review-actions">
               <button class="save-review-button" (click)="saveReview(book.book_key)">
                 💾 Save
@@ -63,11 +78,11 @@
         </div>
 
         <!-- ❌ Botón de eliminar favorito -->
-        <button class="remove-button" (click)="removeFavorite(book.book_key)">❌ Remove</button>
+        <button class="remove-button" (click)="removeFavorite(book.book_key)">❌ Remove from Favorites</button>
       </div>
     </div>
   </div>
 
-  <!-- 🔙 Botón de volver a inicio -->
+  <!-- 🔙 Botón de volver -->
   <button class="home-button" (click)="navigateToHome()">🏠 Back to Home</button>
 </div>

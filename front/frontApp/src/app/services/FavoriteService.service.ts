@@ -12,7 +12,8 @@ export interface FavoriteBook {
   genres?: string[] | string;
   first_publish_year?: number;
   cover_url?: string;
-  review?: string; // ✅ Añadimos la reseña en la interfaz
+  review?: string; 
+  rating: number;
 }
 
 @Injectable({
@@ -50,7 +51,8 @@ export class FavoriteService {
       genres: Array.isArray(book.genres) ? book.genres.join(', ') : book.genres || '',
       first_publish_year: book.first_publish_year || undefined,
       cover_url: book.cover_url || '',
-      review: book.review || '' // ✅ Enviar reseña si existe
+      review: book.review || '',
+      rating: book.rating || 0
     };
 
     console.log("📡 Enviando libro a favoritos:", formattedBook);
@@ -68,4 +70,9 @@ export class FavoriteService {
     return this.http.patch(`${this.favoritesUrl}${bookKey}/review/`, { review }, { headers: this.getAuthHeaders() });
 
   }
+
+  updateRating(bookKey: string, rating: number): Observable<any> {
+    return this.http.patch(`${this.favoritesUrl}${bookKey}/rating/`, { rating }, { headers: this.getAuthHeaders() });
+  }
+  
 }

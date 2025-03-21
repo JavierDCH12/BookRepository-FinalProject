@@ -16,20 +16,25 @@ import { WikipediaService } from '../../services/WikipediaService.service';
 export class BookSearchComponent {
   searchParams = { title: '', author: '', genre: '' };
   results: Book[] = [];
-  favoriteBooks = new Set<string>(); // ✅ Set para favoritos
+  favoriteBooks = new Set<string>();
   isLoading = false;
   errorMessage: string | null = null;
-  isAuthenticated:boolean=false;
+  isAuthenticated: boolean = false;
 
-  // ✅ Se agregan las propiedades que faltaban en el modal
+  // Modal properties
   isModalOpen = false;
   selectedBookTitle: string | null = null;
   selectedBookDescription: string | null = null;
   isLoadingDescription = false;
 
-  constructor(private searchService: SearchService, private favoriteService: FavoriteService, private router: Router, private wikipediaService:WikipediaService) {}
+  constructor(
+    private searchService: SearchService,
+    private favoriteService: FavoriteService,
+    private router: Router,
+    private wikipediaService: WikipediaService
+  ) {}
 
-  /** 🔍 Realizar búsqueda de libros */
+  /** 🔍 Buscar libros */
   onSearch(): void {
     this.isLoading = true;
     this.errorMessage = null;
@@ -42,13 +47,13 @@ export class BookSearchComponent {
         this.isLoading = false;
       },
       error: () => {
-        this.errorMessage = 'Failed to fetch book results. Try again';
+        this.errorMessage = 'Failed to fetch book results. Try again.';
         this.isLoading = false;
       },
     });
   }
 
-  /** ⭐ Obtener favoritos del usuario */
+  /** ⭐ Cargar favoritos */
   loadFavorites(): void {
     this.favoriteService.getFavorites().subscribe({
       next: (favorites: FavoriteBook[]) => {
@@ -58,11 +63,12 @@ export class BookSearchComponent {
     });
   }
 
+  /** ✅ Formatear géneros */
   formatGenres(genres: string | string[]): string {
     return Array.isArray(genres) ? genres.join(', ') : genres;
   }
 
-  /** ⭐ Agregar o quitar un libro de favoritos */
+  /** ⭐ Añadir o quitar favoritos */
   toggleFavorite(book: Book): void {
     if (this.isFavorite(book.book_key)) {
       this.favoriteService.removeFavorite(book.book_key).subscribe({
@@ -80,6 +86,8 @@ export class BookSearchComponent {
         genres: Array.isArray(book.genres) ? book.genres : [],
         first_publish_year: book.first_publish_year || undefined,
         cover_url: book.cover_url || undefined,
+        review: '',        // Valor por defecto
+        rating: 0          // Valor por defecto
       };
 
       this.favoriteService.addFavorite(favoriteBook).subscribe({
@@ -91,12 +99,12 @@ export class BookSearchComponent {
     }
   }
 
-  /** 📍 Verificar si un libro está en favoritos */
+  /** 📍 Verificar favorito */
   isFavorite(bookKey: string): boolean {
     return this.favoriteBooks.has(bookKey);
   }
 
-  /** 📖 Abrir el modal para ver la descripción */
+  /** 📖 Modal descripción */
   openModal(book_key: string, title: string): void {
     if (!book_key) {
       this.selectedBookDescription = 'No description available.';
@@ -120,22 +128,18 @@ export class BookSearchComponent {
     });
   }
 
-  /** ❌ Cerrar el modal */
+  /** ❌ Cerrar modal */
   closeModal(): void {
     this.isModalOpen = false;
   }
 
-
-
+  /** 🌐 Buscar autor en Wikipedia */
   getAuthorWikipediaLink(author: string): void {
     console.log(`🔎 Buscando en Wikipedia: ${author}`);
-  
+
     this.wikipediaService.getWikipediaLink(author).subscribe({
       next: (link: string | null) => {
-        console.log("📡 Respuesta recibida:", link);
-  
         if (link) {
-          console.log(`🔗 Wikipedia link encontrado: ${link}`);
           window.open(link, '_blank');
         } else {
           console.warn(`⚠️ No se encontró un enlace de Wikipedia para: ${author}`);
@@ -146,10 +150,4 @@ export class BookSearchComponent {
       }
     });
   }
-  
-  
-  
-
-
-
 }

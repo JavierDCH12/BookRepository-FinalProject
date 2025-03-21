@@ -125,4 +125,19 @@ export class FavoriteListComponent implements OnInit {
   navigateToHome() {
     this.router.navigate([NAVIGATION_ROUTES.HOME]);
   }
+
+
+  updateBookRating(bookKey: string, rating: number) {
+    this.favoriteService.updateRating(bookKey, rating).subscribe({
+      next: () => {
+        console.log(`✅ Rating actualizado para ${bookKey}`);
+        const book = this.favoriteBooks.find(b => b.book_key === bookKey);
+        if (book) book.rating = rating;
+      },
+      error: (err) => console.error(`❌ Error actualizando rating:`, err)
+    });
+  }
+  
+
+
 }
