@@ -74,7 +74,7 @@ class FavoriteBookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FavoriteBook
-        fields = ['id', 'book_key', 'title', 'author', 'isbn', 'genres', 'first_publish_year', 'added_date', 'cover_url', 'review']
+        fields = ['id', 'book_key', 'title', 'author', 'isbn', 'genres', 'first_publish_year', 'added_date', 'cover_url', 'review', 'rating']
 
     def get_genres(self, obj):
         if isinstance(obj.genres, list):

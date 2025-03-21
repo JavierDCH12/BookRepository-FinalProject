@@ -18,5 +18,7 @@ urlpatterns = [
     path('users/upload-profile-picture/', views.upload_profile_picture, name='upload-profile-picture'),
     path('users/profile/update-profile/', views.update_profile, name='upload-profile'),
     path('users/favorites/<str:book_key>/review/', views.manage_review, name='manage_review'),
+    path('users/favorites/<str:book_key>/rating/', views.update_rating, name='update_rating'),
+
 
 ]

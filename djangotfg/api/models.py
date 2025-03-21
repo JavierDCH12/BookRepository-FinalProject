@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from django.conf import settings
@@ -41,6 +42,8 @@ class FavoriteBook(models.Model):
     added_date = models.DateTimeField(auto_now_add=True)
     book_key = models.CharField(max_length=255, default="UNKNOWN")
     review=models.CharField(null=True, blank=True)
+    rating = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])  # ✅ Campo rating
+
 
 
     class Meta:

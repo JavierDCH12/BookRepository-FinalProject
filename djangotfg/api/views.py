@@ -6,6 +6,7 @@ from rest_framework import status
 from sympy.codegen.fnodes import use_rename
 
 from .models import FavoriteBook
+from .notifications.email import send_welcome_email
 from .serializers import UserProfileSerializer, RegisterSerializer, FavoriteBookSerializer
 from django.contrib.auth import get_user_model
 import logging
@@ -53,6 +54,8 @@ def register_user(request):
 
     if serializer.is_valid():
         serializer.save()
+        send_welcome_email(request.data.get('email'), request.data.get('username'))
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     logger.error(f"❌ Error al registrar el usuario: {serializer.errors}")
@@ -173,3 +176,25 @@ def manage_review(request, book_key):
     favorite.save()
 
     return Response({'message': 'Review saved successfully', 'review': favorite.review}, status=status.HTTP_200_OK)
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_rating(request, book_key):
+    user = request.user
+    favorite = FavoriteBook.objects.filter(user=user, book_key=book_key).first()
+
+    if not favorite:
+        return Response({'error': 'Book not found in favorites'}, status=status.HTTP_404_NOT_FOUND)
+
+    rating_value = request.data.get('rating')
+    try:
+        rating_value = int(rating_value)
+        if rating_value < 0 or rating_value > 5:
+            raise ValueError
+    except (ValueError, TypeError):
+        return Response({'error': 'Invalid rating value (must be between 0 and 5)'}, status=status.HTTP_400_BAD_REQUEST)
+
+    favorite.rating = rating_value
+    favorite.save()
+
+    return Response({'message': 'Rating updated successfully', 'rating': favorite.rating})
