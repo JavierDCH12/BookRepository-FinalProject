@@ -26,6 +26,8 @@ export class BookSearchComponent {
   selectedBookTitle: string | null = null;
   selectedBookDescription: string | null = null;
   isLoadingDescription = false;
+  isModalAuthOpen = false;
+
 
   constructor(
     private searchService: SearchService,
@@ -68,8 +70,21 @@ export class BookSearchComponent {
     return Array.isArray(genres) ? genres.join(', ') : genres;
   }
 
+  openAuthModal() {
+    this.isModalAuthOpen = true;
+  }
+  
+  closeAuthModal() {
+    this.isModalAuthOpen = false;
+  }
+
   /** ⭐ Añadir o quitar favoritos */
-  toggleFavorite(book: Book): void {
+  toggleFavorite(book: Book): void { 
+    if (!this.isAuthenticated) {
+      this.openAuthModal();
+      return;
+    }
+  
     if (this.isFavorite(book.book_key)) {
       this.favoriteService.removeFavorite(book.book_key).subscribe({
         next: () => {
@@ -86,10 +101,10 @@ export class BookSearchComponent {
         genres: Array.isArray(book.genres) ? book.genres : [],
         first_publish_year: book.first_publish_year || undefined,
         cover_url: book.cover_url || undefined,
-        review: '',        // Valor por defecto
-        rating: 0          // Valor por defecto
+        review: '',
+        rating: 0
       };
-
+  
       this.favoriteService.addFavorite(favoriteBook).subscribe({
         next: () => {
           this.favoriteBooks.add(book.book_key);
@@ -98,6 +113,7 @@ export class BookSearchComponent {
       });
     }
   }
+  
 
   /** 📍 Verificar favorito */
   isFavorite(bookKey: string): boolean {
@@ -149,5 +165,15 @@ export class BookSearchComponent {
         console.error(`❌ Error obteniendo el enlace de Wikipedia:`, err);
       }
     });
+  }
+
+
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
+  }
+  
+  navigateToRegister() {
+    this.router.navigate(['/register']);
   }
 }

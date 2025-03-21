@@ -59,3 +59,15 @@
     </div>
   </div>
 </div>
+
+<div class="modal-auth-backdrop" *ngIf="isModalAuthOpen" (click)="closeAuthModal()"></div>
+<div class="modal-auth" *ngIf="isModalAuthOpen">
+  <h3>🔒 Acción protegida</h3>
+  <p>Para guardar favoritos necesitas iniciar sesión o registrarte.</p>
+  <div class="auth-buttons">
+    <button (click)="navigateToLogin()">🔑 Ir a Login</button>
+    <button (click)="navigateToRegister()">📝 Registrarse</button>
+  </div>
+  <button class="close-modal" (click)="closeAuthModal()">❌</button>
+</div>
+
