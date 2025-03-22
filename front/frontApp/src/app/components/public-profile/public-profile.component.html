@@ -1,33 +1,39 @@
 <div class="public-profile-container" *ngIf="!isLoading && userProfile; else loading">
-    <h2>👤 Profile of {{ userProfile.username }}</h2>
-    <p class="joined-date">Joined on: {{ userProfile.date_joined | date:'longDate' }}</p>
-  
-    <div *ngIf="userProfile.favorites.length > 0; else noFavorites">
-      <h3>📚 Favorite Books</h3>
-      <div class="favorites-grid">
-        <div class="book-card" *ngFor="let book of userProfile.favorites">
-          <img *ngIf="book.cover_url" [src]="book.cover_url" alt="{{ book.title }} cover">
-          <h4>{{ book.title }}</h4>
-          <p *ngIf="book.author">By: {{ book.author }}</p>
-          <div class="rating-display" *ngIf="book.rating && book.rating > 0">
-            <span *ngFor="let star of [1,2,3,4,5]" 
-                  [class.filled-star]="star <= book.rating">
-              ★
-            </span>
-          </div>
-          <div class="review" *ngIf="book.review">
-            <p>"{{ book.review }}"</p>
-          </div>
+  <div class="profile-header">
+    <img class="profile-picture" [src]="'http://127.0.0.1:8000' + userProfile.profile_picture" alt="Profile Picture">
+    <div class="user-info">
+      <h2>👤 {{ userProfile.username }}</h2>
+      <p class="joined-date">Joined on: {{ userProfile.date_joined | date:'longDate' }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="userProfile.favorites.length > 0; else noFavorites">
+    <h3>📚 Favorite Books</h3>
+    <div class="favorites-grid">
+      <div class="book-card" *ngFor="let book of userProfile.favorites">
+        <img *ngIf="book.cover_url" [src]="book.cover_url" alt="{{ book.title }} cover">
+        <h4>{{ book.title }}</h4>
+        <p *ngIf="book.author">By: {{ book.author }}</p>
+        <div class="rating-display" *ngIf="book.rating && book.rating > 0">
+          <span *ngFor="let star of [1,2,3,4,5]" 
+                [class.filled-star]="star <= book.rating">
+            ★
+          </span>
+        </div>
+        <div class="review" *ngIf="book.review">
+          <p>"{{ book.review }}"</p>
         </div>
       </div>
     </div>
-  
-    <ng-template #noFavorites>
-      <p class="no-favorites">This user has not added any favorite books yet.</p>
-    </ng-template>
   </div>
-  
-  <ng-template #loading>
-    <div class="loading-text">⏳ Loading profile...</div>
+
+  <ng-template #noFavorites>
+    <p class="no-favorites">This user has not added any favorite books yet.</p>
   </ng-template>
-  
+
+  <button class="back-home-button" (click)="navigateToHome()">🏠 Back to Home</button>
+</div>
+
+<ng-template #loading>
+  <div class="loading-text">⏳ Loading profile...</div>
+</ng-template>

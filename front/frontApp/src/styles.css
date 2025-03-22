@@ -1,13 +1,16 @@
-/* ✅ Estilo general del toast */
+/* ✅ Apariencia base */
 .toast {
-    border-radius: 10px !important;
-    padding: 16px 20px !important;
+    border-radius: 12px !important;
+    padding: 16px 22px !important;
     font-family: 'Poppins', sans-serif !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
     opacity: 0.95 !important;
+    width: 320px !important;
+    margin-top: 10px !important;
+    text-align: center !important;
   }
   
-  /* ✅ Colores para los diferentes tipos */
+  /* ✅ Colores personalizados */
   .toast-success {
     background-color: #4CAF50 !important;
     color: #fff !important;
@@ -28,27 +31,28 @@
     color: #fff !important;
   }
   
-  /* ✅ Botón de cerrar */
+  /* ✅ Cierre visible */
   .toast-close-button {
     color: #fff !important;
-    font-size: 18px !important;
-    opacity: 0.9 !important;
+    font-size: 20px !important;
+    opacity: 1 !important;
+    margin-right: 4px;
   }
   
-  /* ✅ Barra de progreso */
+  /* ✅ Barra de progreso discreta */
   .toast-progress {
-    background-color: rgba(255, 255, 255, 0.7) !important;
+    background-color: rgba(255, 255, 255, 0.5) !important;
   }
   
-  /* ✅ Animación sutil de aparición */
+  /* ✅ Animación elegante desde arriba */
   .toast.fade.show {
-    animation: toast-fade-in 0.4s ease forwards;
+    animation: slideDownFadeIn 0.4s ease forwards;
   }
   
-  @keyframes toast-fade-in {
+  @keyframes slideDownFadeIn {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(-20px);
     }
     to {
       opacity: 1;

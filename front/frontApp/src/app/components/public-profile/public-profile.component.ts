@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PublicProfileService, PublicUserProfile } from '../../services/PublicProfileService.service';
+import { NAVIGATION_ROUTES } from '../../utils/constants';
+
 
 @Component({
   selector: 'app-public-profile',
@@ -16,9 +18,10 @@ export class PublicProfileComponent implements OnInit {
   errorMessage: string | null = null;
 
   constructor(
-    private route: ActivatedRoute,
-    private publicProfileService: PublicProfileService
-  ) {}
+      private route: ActivatedRoute,
+      private publicProfileService: PublicProfileService,
+      private router: Router
+    ) {}
 
   ngOnInit(): void {
     const username = this.route.snapshot.paramMap.get('username');
@@ -40,4 +43,12 @@ export class PublicProfileComponent implements OnInit {
       }
     });
   }
+
+  navigateToHome() {
+      this.router.navigate([NAVIGATION_ROUTES.HOME]);
+    }
+
+
+
+
 }
