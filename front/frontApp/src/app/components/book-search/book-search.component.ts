@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SearchService, Book } from '../../services/BookSearchService.service';
 import { FavoriteService, FavoriteBook } from '../../services/FavoriteService.service';
+import { UserAuthServiceService } from '../../services/UserAuthService.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WikipediaService } from '../../services/WikipediaService.service';
@@ -13,7 +14,7 @@ import { WikipediaService } from '../../services/WikipediaService.service';
   standalone: true,
   imports: [CommonModule, FormsModule]
 })
-export class BookSearchComponent {
+export class BookSearchComponent implements OnInit {
   searchParams = { title: '', author: '', genre: '' };
   results: Book[] = [];
   favoriteBooks = new Set<string>();
@@ -28,13 +29,21 @@ export class BookSearchComponent {
   isLoadingDescription = false;
   isModalAuthOpen = false;
 
-
   constructor(
     private searchService: SearchService,
     private favoriteService: FavoriteService,
     private router: Router,
-    private wikipediaService: WikipediaService
+    private wikipediaService: WikipediaService,
+    private userAuthService: UserAuthServiceService  // ✅ Inyección del servicio de auth
   ) {}
+
+  ngOnInit(): void {
+    this.isAuthenticated = this.userAuthService.isAuthenticated();
+    console.log('🟢 User authenticated?', this.isAuthenticated);
+    if (this.isAuthenticated) {
+      this.loadFavorites();
+    }
+  }
 
   /** 🔍 Buscar libros */
   onSearch(): void {
@@ -65,7 +74,6 @@ export class BookSearchComponent {
     });
   }
 
-  /** ✅ Formatear géneros */
   formatGenres(genres: string | string[]): string {
     return Array.isArray(genres) ? genres.join(', ') : genres;
   }
@@ -81,6 +89,7 @@ export class BookSearchComponent {
   /** ⭐ Añadir o quitar favoritos */
   toggleFavorite(book: Book): void { 
     if (!this.isAuthenticated) {
+      localStorage.setItem('pendingFavoriteBook', JSON.stringify(book));
       this.openAuthModal();
       return;
     }
@@ -113,9 +122,7 @@ export class BookSearchComponent {
       });
     }
   }
-  
 
-  /** 📍 Verificar favorito */
   isFavorite(bookKey: string): boolean {
     return this.favoriteBooks.has(bookKey);
   }
@@ -144,15 +151,12 @@ export class BookSearchComponent {
     });
   }
 
-  /** ❌ Cerrar modal */
   closeModal(): void {
     this.isModalOpen = false;
   }
 
-  /** 🌐 Buscar autor en Wikipedia */
   getAuthorWikipediaLink(author: string): void {
     console.log(`🔎 Buscando en Wikipedia: ${author}`);
-
     this.wikipediaService.getWikipediaLink(author).subscribe({
       next: (link: string | null) => {
         if (link) {
@@ -166,8 +170,6 @@ export class BookSearchComponent {
       }
     });
   }
-
-
 
   navigateToLogin() {
     this.router.navigate(['/login']);

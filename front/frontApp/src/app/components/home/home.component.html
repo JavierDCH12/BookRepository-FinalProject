@@ -8,7 +8,7 @@
            alt="Profile Picture">
       <h3>{{ username }}</h3>
       <p class="user-email">📧 {{ userProfile?.email }}</p>
-      <button class="profile-button" (click)="navigateToProfile()">👤 Ver Perfil</button>
+      <button class="profile-button" (click)="navigateToProfile()">👤 Ver Perfil Privado</button>
     </div>
 
     <!-- 📌 Sección principal -->
@@ -23,8 +23,14 @@
         <button *ngIf="isAuthenticated" (click)="navigateToFavoriteList()">⭐ Mis Favoritos</button>
         <button *ngIf="isAuthenticated" (click)="logout()">🚪 Cerrar Sesión</button>
       </div>
-    </div>
 
+      <!-- 👥 Ver perfil público de otro usuario -->
+      <div class="public-profile-search">
+        <h4>🔎 Ver perfil público de un usuario:</h4>
+        <input type="text" [(ngModel)]="searchedUsername" placeholder="Introduce username">
+        <button (click)="navigateToPublicProfile()">Ir</button>
+      </div>
+    </div>
   </div>
 </div>
 

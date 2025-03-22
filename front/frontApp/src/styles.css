@@ -1,1 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
+/* ✅ Estilo general del toast */
+.toast {
+    border-radius: 10px !important;
+    padding: 16px 20px !important;
+    font-family: 'Poppins', sans-serif !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    opacity: 0.95 !important;
+  }
+  
+  /* ✅ Colores para los diferentes tipos */
+  .toast-success {
+    background-color: #4CAF50 !important;
+    color: #fff !important;
+  }
+  
+  .toast-error {
+    background-color: #e53935 !important;
+    color: #fff !important;
+  }
+  
+  .toast-info {
+    background-color: #2196f3 !important;
+    color: #fff !important;
+  }
+  
+  .toast-warning {
+    background-color: #ff9800 !important;
+    color: #fff !important;
+  }
+  
+  /* ✅ Botón de cerrar */
+  .toast-close-button {
+    color: #fff !important;
+    font-size: 18px !important;
+    opacity: 0.9 !important;
+  }
+  
+  /* ✅ Barra de progreso */
+  .toast-progress {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+  }
+  
+  /* ✅ Animación sutil de aparición */
+  .toast.fade.show {
+    animation: toast-fade-in 0.4s ease forwards;
+  }
+  
+  @keyframes toast-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
