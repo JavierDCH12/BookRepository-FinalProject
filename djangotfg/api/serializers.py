@@ -85,3 +85,20 @@ class FavoriteBookSerializer(serializers.ModelSerializer):
         if isinstance(value, list):
             return ", ".join(value)
         return value
+
+
+class PublicFavoriteBookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteBook
+        fields = ['book_key', 'title', 'author', 'cover_url', 'rating', 'review']
+
+class PublicUserProfileSerializer(serializers.ModelSerializer):
+    favorites = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['username', 'date_joined', 'favorites']
+
+    def get_favorites(self, obj):
+        favorites = FavoriteBook.objects.filter(user=obj)
+        return PublicFavoriteBookSerializer(favorites, many=True).data

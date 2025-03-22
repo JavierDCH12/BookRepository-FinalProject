@@ -7,7 +7,7 @@ from sympy.codegen.fnodes import use_rename
 
 from .models import FavoriteBook
 from .notifications.email import send_welcome_email
-from .serializers import UserProfileSerializer, RegisterSerializer, FavoriteBookSerializer
+from .serializers import UserProfileSerializer, RegisterSerializer, FavoriteBookSerializer, PublicUserProfileSerializer
 from django.contrib.auth import get_user_model
 import logging
 
@@ -197,3 +197,15 @@ def update_rating(request, book_key):
     favorite.save()
 
     return Response({'message': 'Rating updated successfully', 'rating': favorite.rating})
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def public_profile_view(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = PublicUserProfileSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
