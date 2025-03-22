@@ -55,7 +55,6 @@ def register_user(request):
     if serializer.is_valid():
         serializer.save()
         send_welcome_email(request.data.get('email'), request.data.get('username'))
-
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     logger.error(f"❌ Error al registrar el usuario: {serializer.errors}")
