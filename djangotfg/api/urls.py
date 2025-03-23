@@ -20,5 +20,6 @@ urlpatterns = [
     path('users/favorites/<str:book_key>/review/', views.manage_review, name='manage_review'),
     path('users/favorites/<str:book_key>/rating/', views.update_rating, name='update_rating'),
     path('users/public-profile/<str:username>/', views.public_profile_view, name='public-profile'),
+    path('books/popular/', views.popular_books, name='popular-books'),
 
 ]

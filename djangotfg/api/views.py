@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -5,6 +6,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from sympy.codegen.fnodes import use_rename
 
+from constants import SUCCESS_DEACTIVATE, ERROR_REGISTER, SUCCESS_UPDATE_PROFILE, ERROR_FETCHING_FAVS, \
+    INFO_ALREADY_FAVS, INFO_BOOK_REMOVED_FAVS, ERROR_BOOK_NOT_FOUND_IN_FAVS, ERROR_UPLOAD_PHOTO, \
+    SUCCESS_UPLOAD_PHOTO, ERROR_EMPTY, SUCCESS_SAVED_REVIEW, ERROR_INVALID_REVIEW, SUCCESS_UPDATE_REVIEW, \
+    ERROR_USER_NOT_FOUND
 from .models import FavoriteBook
 from .notifications.email import send_welcome_email
 from .serializers import UserProfileSerializer, RegisterSerializer, FavoriteBookSerializer, PublicUserProfileSerializer
@@ -38,7 +43,7 @@ def user_profile(request):
     if request.method == 'DELETE':
         user.is_active = False
         user.save()
-        return Response({'detail': 'Cuenta desactivada con éxito'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'detail': SUCCESS_DEACTIVATE}, status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'GET':
         serializer = UserProfileSerializer(user)
@@ -57,7 +62,7 @@ def register_user(request):
         send_welcome_email(request.data.get('email'), request.data.get('username'))
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    logger.error(f"❌ Error al registrar el usuario: {serializer.errors}")
+    logger.error(ERROR_REGISTER, {serializer.errors})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -73,7 +78,7 @@ def update_profile(request):
 
     if serializer.is_valid():
         serializer.save()
-        return Response({"message": "Perfil actualizado con éxito", "user": serializer.data}, status=status.HTTP_200_OK)
+        return Response({"message": SUCCESS_UPDATE_PROFILE, "user": serializer.data}, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -96,7 +101,7 @@ def manage_favorites(request):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error(f"❌ Error fetching favorites: {str(e)}")
-            return Response({"error": "Failed to retrieve favorites"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": ERROR_FETCHING_FAVS}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     elif request.method == 'POST':
         serializer = FavoriteBookSerializer(data=request.data)
@@ -107,7 +112,7 @@ def manage_favorites(request):
             # ✅ Verificar si ya existe el favorito
             if FavoriteBook.objects.filter(user=user, book_key=book_key).exists():
                 logger.warning(f"⚠️ Book {book_key} is already in favorites for user {user.username}")
-                return Response({'message': 'Book is already in favorites'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'message': INFO_ALREADY_FAVS}, status=status.HTTP_400_BAD_REQUEST)
 
             serializer.save(user=user)
             logger.info(f"✅ Book {book_key} added to favorites for user {user.username}")
@@ -128,10 +133,10 @@ def remove_favorite(request, book_key):
     if favorite:
         favorite.delete()
         logger.info(f"✅ Book {book_key} removed from favorites for user {user.username}")
-        return Response({'message': 'Book removed from favorites'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': INFO_BOOK_REMOVED_FAVS}, status=status.HTTP_204_NO_CONTENT)
 
     logger.warning(f"⚠️ Book {book_key} not found in favorites for user {user.username}")
-    return Response({'message': 'Book not found in favorites'}, status=status.HTTP_404_NOT_FOUND)
+    return Response({'message': ERROR_BOOK_NOT_FOUND_IN_FAVS}, status=status.HTTP_404_NOT_FOUND)
 
 
 
@@ -142,14 +147,14 @@ def upload_profile_picture(request):
     user = request.user
 
     if 'profile_picture' not in request.FILES:
-        return Response({"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": ERROR_UPLOAD_PHOTO}, status=status.HTTP_400_BAD_REQUEST)
 
     user.profile_picture = request.FILES['profile_picture']
     user.save()
 
     return Response(
         {
-            "message": "Profile picture updated successfully!",
+            "message": SUCCESS_UPLOAD_PHOTO,
             "profile_picture": user.profile_picture.url
         },
         status=status.HTTP_200_OK
@@ -164,17 +169,17 @@ def manage_review(request, book_key):
     favorite = FavoriteBook.objects.filter(user=user, book_key=book_key).first()
 
     if not favorite:
-        return Response({'error': 'Book not found in favorites'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': ERROR_BOOK_NOT_FOUND_IN_FAVS}, status=status.HTTP_404_NOT_FOUND)
 
     review_text = request.data.get('review', '').strip()
 
     if not review_text:
-        return Response({'error': 'Review cannot be empty'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': ERROR_EMPTY}, status=status.HTTP_400_BAD_REQUEST)
 
     favorite.review = review_text  # Si es nuevo, lo asigna; si ya existe, lo sobrescribe.
     favorite.save()
 
-    return Response({'message': 'Review saved successfully', 'review': favorite.review}, status=status.HTTP_200_OK)
+    return Response({'message': SUCCESS_SAVED_REVIEW, 'review': favorite.review}, status=status.HTTP_200_OK)
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
@@ -183,7 +188,7 @@ def update_rating(request, book_key):
     favorite = FavoriteBook.objects.filter(user=user, book_key=book_key).first()
 
     if not favorite:
-        return Response({'error': 'Book not found in favorites'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': ERROR_BOOK_NOT_FOUND_IN_FAVS}, status=status.HTTP_404_NOT_FOUND)
 
     rating_value = request.data.get('rating')
     try:
@@ -191,12 +196,12 @@ def update_rating(request, book_key):
         if rating_value < 0 or rating_value > 5:
             raise ValueError
     except (ValueError, TypeError):
-        return Response({'error': 'Invalid rating value (must be between 0 and 5)'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': ERROR_INVALID_REVIEW}, status=status.HTTP_400_BAD_REQUEST)
 
     favorite.rating = rating_value
     favorite.save()
 
-    return Response({'message': 'Rating updated successfully', 'rating': favorite.rating})
+    return Response({'message': SUCCESS_UPDATE_REVIEW, 'rating': favorite.rating})
 
 
 @api_view(['GET'])
@@ -205,7 +210,22 @@ def public_profile_view(request, username):
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
-        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': ERROR_USER_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
 
     serializer = PublicUserProfileSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def popular_books(request):
+    """Devuelve los libros más populares basados en favoritos de usuarios"""
+    top_books = (
+        FavoriteBook.objects.values(
+            'book_key', 'title', 'author', 'cover_url', 'first_publish_year'
+        )
+        .annotate(favorites_count=Count('id'))
+        .order_by('-favorites_count')[:20]
+    )
+
+    return Response(list(top_books), status=status.HTTP_200_OK)
