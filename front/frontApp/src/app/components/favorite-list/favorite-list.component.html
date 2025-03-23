@@ -83,6 +83,18 @@
     </div>
   </div>
 
+  <div *ngIf="popularBooks.length > 0" class="popular-section">
+    <h3>🔥 Popular Books Among Users</h3>
+    <div class="popular-carousel">
+      <div *ngFor="let book of popularBooks" class="popular-card">
+        <img *ngIf="book.cover_url" [src]="book.cover_url" alt="{{ book.title }} cover">
+        <p class="popular-title">{{ book.title }}</p>
+        <p class="popular-author">{{ book.author }}</p>
+      </div>
+    </div>
+  </div>
+  
+
   <!-- 🔙 Botón de volver -->
   <button class="home-button" (click)="navigateToHome()">🏠 Back to Home</button>
 </div>

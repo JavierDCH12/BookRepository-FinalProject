@@ -65,6 +65,13 @@ export class FavoriteService {
     return this.http.delete<void>(`${this.favoritesUrl}${bookKey}/`, { headers: this.getAuthHeaders() });
   }
 
+  getPopularBooks(): Observable<FavoriteBook[]> {
+    return this.http.get<FavoriteBook[]>(
+      `${environment.apiUrl}books/popular/`
+    );
+  }
+  
+
   /** ✅ Crear o actualizar reseña */
   manageReview(bookKey: string, review: string): Observable<any> {
     return this.http.patch(`${this.favoritesUrl}${bookKey}/review/`, { review }, { headers: this.getAuthHeaders() });

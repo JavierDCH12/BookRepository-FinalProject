@@ -188,3 +188,41 @@
 .remove-button:hover {
   background-color: #c62828;
 }
+
+.popular-section {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.popular-carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 10px;
+}
+
+.popular-card {
+  min-width: 150px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  padding: 8px;
+  flex-shrink: 0;
+}
+
+.popular-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.popular-title {
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.popular-author {
+  font-size: 12px;
+  color: #555;
+}
+

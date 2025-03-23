@@ -19,6 +19,8 @@ export class FavoriteListComponent implements OnInit {
   errorMessage: string | null = null;
   editingReview: { [key: string]: boolean } = {}; // Estado de edición de reseñas
   reviewTexts: { [key: string]: string } = {}; // Contiene las reseñas por `book_key`
+  popularBooks: FavoriteBook[] = [];
+
 
   constructor(
     private favoriteService: FavoriteService, 
@@ -29,6 +31,17 @@ export class FavoriteListComponent implements OnInit {
   /** 🔄 Cargar los favoritos del usuario */
   ngOnInit(): void {
     this.loadFavorites();
+    this.loadPopularBooks();
+
+  }
+
+  loadPopularBooks(): void {
+    this.favoriteService.getPopularBooks().subscribe({
+      next: (books: FavoriteBook[]) => {
+        this.popularBooks = books;
+      },
+      error: (err) => console.error('⚠️ Error loading popular books:', err),
+    });
   }
 
   loadFavorites(): void {
