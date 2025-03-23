@@ -84,51 +84,59 @@ def get_book_description(request, book_key):
     return Response({"detail": "No se encontró la descripción"}, status=status.HTTP_404_NOT_FOUND)
 
 
-@cache_page(60 * 10)  # Cache de 10 minutos
+@cache_page(60)
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_book_details(request, book_key):
-    """
-    Obtiene los detalles completos de un libro desde OpenLibrary por su `book_key`.
-    """
-    url = f"https://openlibrary.org/works/{book_key}.json"
+    url = f'https://openlibrary.org/works/{book_key}.json'
+
     response = requests.get(url)
 
     if response.status_code == 200:
         data = response.json()
 
-        # Obtener datos clave
-        title = data.get('title', 'Unknown Title')
-        description = data.get('description', 'No description available')
+        # Título y descripción
+        title = data.get('title', 'Unknown title')
+        description = data.get('description', {})
         if isinstance(description, dict):
-            description = description.get('value', 'No description available')
+            description = description.get('value', 'No description available.')
+        elif isinstance(description, str):
+            description = description
+        else:
+            description = 'No description available.'
 
-        covers = data.get('covers', [])
-        cover_url = f"https://covers.openlibrary.org/b/id/{covers[0]}-L.jpg" if covers else None
-
-        subjects = data.get('subjects', [])
-        subject_str = ", ".join(subjects[:5]) if subjects else None
-
+        # Autores (requiere segunda consulta)
+        authors_data = data.get('authors', [])
         authors = []
-        if data.get('authors'):
-            for author_entry in data['authors']:
-                author_url = author_entry['author']['key']
-                author_resp = requests.get(f"https://openlibrary.org{author_url}.json")
-                if author_resp.status_code == 200:
-                    author_data = author_resp.json()
-                    authors.append(author_data.get('name', 'Unknown'))
+        for author_ref in authors_data:
+            author_key = author_ref.get('author', {}).get('key')
+            if author_key:
+                author_response = requests.get(f'https://openlibrary.org{author_key}.json')
+                if author_response.status_code == 200:
+                    author_name = author_response.json().get('name')
+                    if author_name:
+                        authors.append(author_name)
 
-        result = {
+        # Portada
+        cover_id = data.get('covers', [None])[0]
+        cover_url = f"https://covers.openlibrary.org/b/id/{cover_id}-L.jpg" if cover_id else None
+
+        # Año de publicación (fecha de creación)
+        publish_year = data.get('created', {}).get('value', '')[:4] if data.get('created') else None
+
+        # Géneros
+        subjects = data.get('subjects', [])[:3] if data.get('subjects') else None
+
+        book_info = {
             'title': title,
             'description': description,
-            'cover_url': cover_url,
-            'genres': subject_str,
             'authors': authors,
+            'cover_url': cover_url,
+            'first_publish_year': publish_year,
+            'genres': subjects,
             'book_key': book_key,
         }
 
-        logger.info(f"✅ Detalles obtenidos para el libro {book_key}")
-        return Response(result, status=status.HTTP_200_OK)
+        return Response(book_info, status=status.HTTP_200_OK)
 
-    logger.error(f"❌ Error obteniendo detalles para el libro {book_key}")
     return Response({"detail": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
