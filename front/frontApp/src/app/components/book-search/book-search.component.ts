@@ -6,6 +6,7 @@ import { UserAuthServiceService } from '../../services/UserAuthService.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WikipediaService } from '../../services/WikipediaService.service';
+import { NAVIGATION_ROUTES } from '../../utils/constants';
 
 @Component({
   selector: 'app-book-search',
@@ -172,10 +173,14 @@ export class BookSearchComponent implements OnInit {
   }
 
   navigateToLogin() {
-    this.router.navigate(['/login']);
+    this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
   }
   
   navigateToRegister() {
-    this.router.navigate(['/register']);
+    this.router.navigate([NAVIGATION_ROUTES.REGISTER]);
+  }
+
+  navigateToBookDetail(bookKey: string) {
+    this.router.navigate([`${NAVIGATION_ROUTES.BOOK_DETAIL}/${bookKey}`]);
   }
 }

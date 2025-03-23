@@ -29,12 +29,19 @@
     <h3>📚 Resultados</h3>
     <div class="book-grid">
       <div *ngFor="let book of results" class="book-card">
-        <img *ngIf="book.cover_url" [src]="book.cover_url" alt="Portada" class="book-cover">
-        
+        <!-- Imagen clicable -->
+        <img *ngIf="book.cover_url" [src]="book.cover_url" alt="Portada" class="book-cover"
+             (click)="navigateToBookDetail(book.book_key)">
+
         <div class="book-info">
-          <h4>{{ book.title }}</h4>
+          <!-- Título clicable -->
+          <h4 (click)="navigateToBookDetail(book.book_key)" class="clickable-title">
+            {{ book.title }}
+          </h4>
           <p *ngIf="book.author" class="author">
-            👤 <a href="#" (click)="$event.preventDefault(); getAuthorWikipediaLink(book.author)">{{ book.author }}</a>
+            👤 <a href="#" (click)="$event.preventDefault(); getAuthorWikipediaLink(book.author)">
+              {{ book.author }}
+            </a>
           </p>
           <p *ngIf="book.first_publish_year" class="publish-year">📅 {{ book.first_publish_year }}</p>
           <p *ngIf="book.genres" class="genres">🏷️ Género: {{ formatGenres(book.genres) }}</p>
@@ -60,6 +67,7 @@
   </div>
 </div>
 
+<!-- Modal de autenticación -->
 <div class="modal-auth-backdrop" *ngIf="isModalAuthOpen" (click)="closeAuthModal()"></div>
 <div class="modal-auth" *ngIf="isModalAuthOpen">
   <h3>🔒 Acción protegida</h3>
@@ -70,4 +78,3 @@
   </div>
   <button class="close-modal" (click)="closeAuthModal()">❌</button>
 </div>
-

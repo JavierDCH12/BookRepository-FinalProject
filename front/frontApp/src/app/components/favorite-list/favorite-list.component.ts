@@ -150,7 +150,13 @@ export class FavoriteListComponent implements OnInit {
       error: (err) => console.error(`❌ Error actualizando rating:`, err)
     });
   }
-  
+
+
+  navigateToBookDetail(bookKey: string) {
+    console.log('Navigating to book:', bookKey);
+
+    this.router.navigate([`${NAVIGATION_ROUTES.BOOK_DETAIL}/${bookKey}`]);
+  }
 
 
 }

@@ -221,3 +221,16 @@ h2 {
   cursor: pointer;
 }
 
+
+.clickable-title {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #007bff;
+}
+.clickable-title:hover {
+  color: #0056b3;
+}
+.book-cover {
+  cursor: pointer;
+}
+
