@@ -101,7 +101,7 @@ Proyecto de desarrollo completo de una aplicación web para la gestión de usuar
 
 ## 📧 Autor
 **Javier Delgado Chacón**  
-GitHub: [https://github.com/JavierDCH1](https://github.com/JavierDCH1)  
+GitHub: [https://github.com/JavierDCH12](https://github.com/JavierDCH12)  
 
 ## 📄 Licencia
 Este proyecto está licenciado bajo los términos de la licencia BSD.
