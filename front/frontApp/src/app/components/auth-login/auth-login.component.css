@@ -1,111 +1,111 @@
+
 .container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  font-family: 'Roboto', sans-serif;
-  transition: transform 0.3s, box-shadow 0.3s;
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 35px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, #ffffff, #f3f8ff);
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+}
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-  }
+.container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+}
 
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 2rem;
-    color: #333;
-  }
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 2.2rem;
+  color: #333;
+}
 
-  form {
-    display: flex;
-    flex-direction: column;
-  }
+.input-group {
+  display: flex;
+  align-items: center;
+  background: #f0f4fa;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 15px;
+  transition: background 0.3s;
+}
 
-  .input-group {
-    display: flex;
-    align-items: center;
-    background: #f5f5f5;
-    border-radius: 6px;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
+.input-group:hover {
+  background: #e2ebf5;
+}
 
-  .icon {
-    font-size: 18px;
-    margin-right: 10px;
-  }
+.icon {
+  font-size: 20px;
+  margin-right: 12px;
+}
 
-  input {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    background: transparent;
-    font-size: 16px;
-    outline: none;
-    transition: border-bottom 0.3s ease-in-out;
-  }
+input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  outline: none;
+}
 
-  input:focus {
-    border-bottom: 2px solid #007bff;
-  }
+input:focus {
+  border-bottom: 2px solid #4a90e2;
+}
 
-  input.ng-touched.ng-invalid {
-    border-bottom: 2px solid red;
-  }
+.toggle-password {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
 
-  input.ng-touched.ng-valid {
-    border-bottom: 2px solid green;
-  }
+.error-text {
+  color: #d9534f;
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: block;
+}
 
-  .toggle-password {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-  }
+.error-message {
+  color: #d9534f;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
 
-  .error-text {
-    color: red;
-    font-size: 14px;
-    margin-bottom: 10px;
-    text-align: left;
-  }
+button[type="submit"],
+.register-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 15px;
+  transition: background 0.3s, transform 0.2s;
+}
 
-  .error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
-    text-align: center;
-  }
+button[type="submit"]:hover,
+.register-button:hover {
+  background-color: #357ab8;
+  transform: scale(1.02);
+}
 
-  button[type="submit"],
-  .login-button,
-  .register-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
-  }
+button[type="submit"]:disabled {
+  background-color: #a0b9da;
+  cursor: not-allowed;
+}
 
-  button[type="submit"]:hover,
-  .login-button:hover,
-  .register-button:hover {
-    background-color: #0056b3;
-  }
+.register-section {
+  text-align: center;
+  margin-top: 20px;
+}
 
-  button[type="submit"]:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-    transition: background 0.3s ease-in-out;
-  }
+.register-section p {
+  margin-bottom: 10px;
+  color: #555;
 }

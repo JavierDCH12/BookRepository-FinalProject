@@ -1,54 +1,54 @@
 <div class="container">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <h2>Register</h2>
+    <h2>Crear cuenta</h2>
 
     <!-- Username Field -->
-    <label for="username">
-      Username:
-      <input id="username" type="text" pattern="^.{5,}$" formControlName="username" required [ngClass]="{'is-invalid': form.get('username')?.invalid && (form.get('username')?.dirty || form.get('username')?.touched), 'is-valid': form.get('username')?.valid}">
-      <span *ngIf="form.get('username')?.hasError('required') && (form.get('username')?.dirty || form.get('username')?.touched)">
-        Username is required.
-      </span>
-      <span *ngIf="form.get('username')?.hasError('minlength') && (form.get('username')?.dirty || form.get('username')?.touched)">
-        Username must be at least 5 characters long.
-      </span>
-    </label>
+    <div class="input-group">
+      <span class="icon">👤</span>
+      <input id="username" type="text" formControlName="username" placeholder="Nombre de usuario" required [ngClass]="{'is-invalid': form.get('username')?.invalid && (form.get('username')?.dirty || form.get('username')?.touched), 'is-valid': form.get('username')?.valid}">
+    </div>
+    <small *ngIf="form.get('username')?.hasError('required') && (form.get('username')?.dirty || form.get('username')?.touched)" class="error-text">
+      El nombre de usuario es obligatorio.
+    </small>
+    <small *ngIf="form.get('username')?.hasError('minlength') && (form.get('username')?.dirty || form.get('username')?.touched)" class="error-text">
+      Mínimo 5 caracteres.
+    </small>
 
     <!-- Email Field -->
-    <label for="email">
-      Email:
-      <input id="email" type="email" formControlName="email" required [ngClass]="{'is-invalid': form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched), 'is-valid': form.get('email')?.valid}">
-      <span *ngIf="form.get('email')?.hasError('required') && (form.get('email')?.dirty || form.get('email')?.touched)">
-        Email is required.
-      </span>
-      <span *ngIf="form.get('email')?.hasError('email') && (form.get('email')?.dirty || form.get('email')?.touched)">
-        Invalid email address.
-      </span>
-    </label>
+    <div class="input-group">
+      <span class="icon">📧</span>
+      <input id="email" type="email" formControlName="email" placeholder="Correo electrónico" required [ngClass]="{'is-invalid': form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched), 'is-valid': form.get('email')?.valid}">
+    </div>
+    <small *ngIf="form.get('email')?.hasError('required') && (form.get('email')?.dirty || form.get('email')?.touched)" class="error-text">
+      El correo electrónico es obligatorio.
+    </small>
+    <small *ngIf="form.get('email')?.hasError('email') && (form.get('email')?.dirty || form.get('email')?.touched)" class="error-text">
+      Formato de correo inválido.
+    </small>
 
     <!-- Password Field -->
-    <label for="password">
-      Password:
-      <input id="password" type="password" pattern="^.{5,}$" formControlName="password" required [ngClass]="{'is-invalid': form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched), 'is-valid': form.get('password')?.valid}">
-      <span *ngIf="form.get('password')?.hasError('required') && (form.get('password')?.dirty || form.get('password')?.touched)">
-        Password is required.
-      </span>
-      <span *ngIf="form.get('password')?.hasError('minlength') && (form.get('password')?.dirty || form.get('password')?.touched)">
-        Password must be at least 5 characters long.
-      </span>
-    </label>
+    <div class="input-group">
+      <span class="icon">🔒</span>
+      <input id="password" type="password" formControlName="password" placeholder="Contraseña" required [ngClass]="{'is-invalid': form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched), 'is-valid': form.get('password')?.valid}">
+    </div>
+    <small *ngIf="form.get('password')?.hasError('required') && (form.get('password')?.dirty || form.get('password')?.touched)" class="error-text">
+      La contraseña es obligatoria.
+    </small>
+    <small *ngIf="form.get('password')?.hasError('minlength') && (form.get('password')?.dirty || form.get('password')?.touched)" class="error-text">
+      Mínimo 5 caracteres.
+    </small>
 
     <!-- Confirm Password Field -->
-    <label for="confirmPassword">
-      Confirm Password:
-      <input id="confirmPassword" type="password" formControlName="confirmPassword" required [ngClass]="{'is-invalid': form.get('confirmPassword')?.invalid && (form.get('confirmPassword')?.dirty || form.get('confirmPassword')?.touched), 'is-valid': form.get('confirmPassword')?.valid}">
-      <span *ngIf="form.get('confirmPassword')?.hasError('required') && (form.get('confirmPassword')?.dirty || form.get('confirmPassword')?.touched)">
-        Confirm Password is required.
-      </span>
-      <span *ngIf="form.get('confirmPassword')?.hasError('passwordsDoNotMatch') && (form.get('confirmPassword')?.dirty || form.get('confirmPassword')?.touched)">
-        Passwords do not match.
-      </span>
-    </label>
+    <div class="input-group">
+      <span class="icon">✅</span>
+      <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Confirmar contraseña" required [ngClass]="{'is-invalid': form.get('confirmPassword')?.invalid && (form.get('confirmPassword')?.dirty || form.get('confirmPassword')?.touched), 'is-valid': form.get('confirmPassword')?.valid}">
+    </div>
+    <small *ngIf="form.get('confirmPassword')?.hasError('required') && (form.get('confirmPassword')?.dirty || form.get('confirmPassword')?.touched)" class="error-text">
+      La confirmación es obligatoria.
+    </small>
+    <small *ngIf="form.get('confirmPassword')?.hasError('passwordsDoNotMatch') && (form.get('confirmPassword')?.dirty || form.get('confirmPassword')?.touched)" class="error-text">
+      Las contraseñas no coinciden.
+    </small>
 
     <!-- Backend Error Message -->
     <div *ngIf="backendErrorMessage" class="error-message">
@@ -57,12 +57,14 @@
 
     <!-- Success Message -->
     <div *ngIf="successfulRegistration" class="success-message">
-      Registration successful! Redirecting to login...
+      ¡Registro exitoso! Redirigiendo al login...
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" [disabled]="form.invalid">Register</button>
+    <button type="submit" [disabled]="form.invalid">Crear cuenta</button>
   </form>
 
-  <button type="button" (click)="navigateToLogin()" class="login-button">Go to Login</button>
+  <div class="login-redirect">
+    <p>¿Ya tienes una cuenta? <a (click)="navigateToLogin()">Inicia sesión aquí</a>.</p>
+  </div>
 </div>
