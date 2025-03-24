@@ -1,0 +1,115 @@
+openapi: 3.0.1
+info:
+  title: Book API
+  description: API para gestión de usuarios, favoritos y libros populares.
+  version: v1
+  contact:
+    name: API Support
+    email: javierdch12devtest@gmail.com
+  license:
+    name: BSD License
+servers:
+  - url: http://localhost:8000/api
+paths:
+  /books/description/{book_key}/:
+    get:
+      summary: Obtener descripción de libro
+      description: Obtiene la descripción de un libro usando su `key` en Open Library.
+      parameters:
+        - in: path
+          name: book_key
+          schema:
+            type: string
+          required: true
+          description: Clave del libro en Open Library.
+      responses:
+        '200':
+          description: Descripción obtenida correctamente.
+  /books/popular/:
+    get:
+      summary: Libros más populares
+      description: Devuelve los 20 libros más populares según favoritos de los usuarios.
+      responses:
+        '200':
+          description: Lista de libros populares.
+  /users/:
+    get:
+      summary: Obtener todos los usuarios
+      description: Devuelve una lista de todos los usuarios registrados.
+      responses:
+        '200':
+          description: Lista de usuarios.
+  /users/register/:
+    post:
+      summary: Registro de usuario
+      description: Permite registrar un nuevo usuario.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Usuario registrado correctamente.
+  /users/login/:
+    post:
+      summary: Inicio de sesión
+      description: Devuelve un par de tokens JWT para autenticación.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+      responses:
+        '200':
+          description: Tokens generados.
+  /users/favorites/:
+    get:
+      summary: Obtener favoritos
+      description: Devuelve la lista de libros favoritos del usuario autenticado.
+      responses:
+        '200':
+          description: Lista de favoritos.
+    post:
+      summary: Añadir libro favorito
+      description: Permite añadir un nuevo libro a favoritos.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_key:
+                  type: string
+      responses:
+        '201':
+          description: Libro añadido a favoritos.
+  /users/favorites/{book_key}/:
+    delete:
+      summary: Eliminar libro favorito
+      description: Elimina un libro de favoritos usando su `book_key`.
+      parameters:
+        - in: path
+          name: book_key
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Libro eliminado de favoritos.
+components:
+  schemas:
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string

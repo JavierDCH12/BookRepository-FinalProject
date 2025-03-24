@@ -43,7 +43,6 @@ def get_all_users(request):
 
 ### ✅ PERFIL DE USUARIO (GET & DELETE)
 @api_view(['GET', 'DELETE'])
-@cache_page(60)
 @permission_classes([IsAuthenticated])
 def user_profile(request):
     """Retrieve or deactivate user profile."""
@@ -99,7 +98,6 @@ def update_profile(request):
 
 ### ✅ OBTENER FAVORITOS (GET) & AÑADIR FAVORITO (POST)
 @api_view(['GET', 'POST'])
-@cache_page(60)
 @permission_classes([IsAuthenticated])
 @throttle_classes([FavoriteRateThrottle])
 def manage_favorites(request):
@@ -237,6 +235,7 @@ def public_profile_view(request, username):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+@cache_page((60*60))
 def popular_books(request):
     """Devuelve los libros más populares basados en favoritos de usuarios"""
     top_books = (

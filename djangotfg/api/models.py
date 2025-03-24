@@ -41,13 +41,17 @@ class FavoriteBook(models.Model):
     cover_url = models.URLField(null=True, blank=True)
     added_date = models.DateTimeField(auto_now_add=True)
     book_key = models.CharField(max_length=255, default="UNKNOWN")
-    review=models.CharField(null=True, blank=True)
+    review=models.CharField(null=True, blank=True, max_length=255)
     rating = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])  # ✅ Campo rating
 
 
 
     class Meta:
-        unique_together = ('user', 'isbn')
+        unique_together = ('user', 'book_key')
+        indexes = [
+            models.Index(fields=['user', 'book_key']),
+            models.Index(fields=['book_key']),
+        ]
 
     def __str__(self):
         return f"{self.title} ({self.user.username})"
