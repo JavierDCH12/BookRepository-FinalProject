@@ -21,9 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 
-# SECURITY WARNING: keep the secret key used in production secret!
-
-
+###########################LOAD ENV
 import os
 from dotenv import load_dotenv
 # Cargar variables desde el archivo .env
@@ -34,26 +32,27 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-
+###########################JWT
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # 1 hora de duración
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'ROTATE_REFRESH_TOKENS': False,  # 🚫 Evita que un nuevo token invalide el anterior
-    'BLACKLIST_AFTER_ROTATION': False,  # 🚫 Evita que se añadan tokens viejos a una lista negra
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
     'AUTH_HEADER_TYPES': ('Bearer',),
+
 }
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+###########################ALLOWED HOSTS
 ALLOWED_HOSTS = []
 
 
-# Application definition
-
+###########################APP DEFINITION
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -63,6 +62,7 @@ REST_FRAMEWORK = {
     ],
 }
 
+###########################CACHES
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -72,7 +72,7 @@ CACHES = {
 }
 
 
-
+###########################INSTALLED APPS
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+###########################MIDDLEWARE
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -109,6 +110,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mysite.urls'
 
+###########################TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -128,9 +130,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
-# Database
+###########################DATABASE: POSTGRESQL & RAILWAY
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -143,7 +144,7 @@ DATABASES = {
 }
 
 
-#SEND EMAIL
+###########################SEND EMAIL: MAILTRAP
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST')
@@ -158,7 +159,7 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'BookShelf <no-reply@booksh
 
 
 
-# Password validation
+###########################PASSWORD VALIDATION
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -176,11 +177,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+###########################AUTH USER MODEL
 AUTH_USER_MODEL = 'api.User'
 
 
-# Internationalization
+###########################INTERNATIONALIZATION
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
@@ -203,11 +204,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # 1 hora de duración
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7)}
-
-
-# Configuración de CORS
+###########################CORS
 CORS_ALLOW_ALL_ORIGINS = True  # ⚠️ Permite todas las conexiones (usarla solo en desarrollo)
 CORS_ALLOW_CREDENTIALS = True
