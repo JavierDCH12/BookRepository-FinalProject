@@ -2,13 +2,13 @@ from django.urls import path
 from . import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .serializers import UserProfileSerializer, RegisterSerializer, FavoriteBookSerializer, BookSerializer
-
+from .views import CustomLoginView
 
 urlpatterns = [
     # 🟢 USERS
     path('users/', views.get_all_users, name='get_all_users'),
     path('users/register/', views.register_user, name='register'),
-    path('users/login/', TokenObtainPairView.as_view(), name='login'),
+    path('users/login/', CustomLoginView.as_view(), name='login'),
     path('users/refresh/', TokenRefreshView.as_view(), name='refresh'),
     path('users/profile/', views.user_profile, name='user_profile'),
 

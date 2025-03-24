@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 
+from django.conf.global_settings import SECURE_HSTS_SECONDS, SECURE_HSTS_PRELOAD
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -227,5 +228,26 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 ###########################CORS
-CORS_ALLOW_ALL_ORIGINS = True  # ⚠️ Permite todas las conexiones (usarla solo en desarrollo)
+CORS_ALLOW_ALL_ORIGINS = False  # ⚠️ Permite todas las conexiones (usarla solo en desarrollo)
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200"
+
+]
+
+
+###########################BASIC DEPLOY SECURITY
+SECURE_SSL_REDIRECT= True
+SESSION_COOKIE_SECURE  = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+
+
+
