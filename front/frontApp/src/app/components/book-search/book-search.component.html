@@ -65,6 +65,13 @@
       <p *ngIf="!selectedBookDescription && !isLoadingDescription" class="error-message">No hay descripción disponible.</p>
     </div>
   </div>
+
+  <!-- 📊 Paginación -->
+  <div *ngIf="results.length" class="pagination">
+    <button (click)="previousPage()" [disabled]="currentPage <= 1">◀️ Anterior</button>
+    <span>Página {{ currentPage }} de {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage >= totalPages">Siguiente ▶️</button>
+  </div>
 </div>
 
 <!-- Modal de autenticación -->

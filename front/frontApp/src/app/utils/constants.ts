@@ -4,7 +4,8 @@ export const NAVIGATION_ROUTES = {
     REGISTER: '/register',
     SEARCH_BOOKS: '/search-books',
     FAVORITES: '/favorites',
-    PROFILE: '/profile'
+    PROFILE: '/profile',
+    BOOK_DETAIL: '/book-detail'
   };
   
   export const LOCAL_STORAGE_KEYS = {

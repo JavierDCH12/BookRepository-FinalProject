@@ -5,6 +5,7 @@ import { HomeComponent } from './components/home/home.component';
 import { FavoriteListComponent } from './components/favorite-list/favorite-list.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
+import { BookDetailComponent } from './components/book-detail/book-detail.component';
 
 export const routes: Routes = [
     { path: 'register', component: AuthRegisterComponent },
@@ -13,7 +14,8 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'favorites', component: FavoriteListComponent },
     { path: 'profile', component: ProfileComponent },
-    { path: 'user/:username', component: PublicProfileComponent },   
+    { path: 'user/:username', component: PublicProfileComponent }, 
+    { path: 'book-detail/:bookKey', component: BookDetailComponent },  // Add BookDetailComponent here when it's ready  
     { path: '**', redirectTo: 'home' }
 ];
 

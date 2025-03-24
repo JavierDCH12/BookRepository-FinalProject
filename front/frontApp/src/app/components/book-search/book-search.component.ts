@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SearchService, Book } from '../../services/BookSearchService.service';
+import { SearchService, Book, BookSearchResponse } from '../../services/BookSearchService.service';
 import { FavoriteService, FavoriteBook } from '../../services/FavoriteService.service';
 import { UserAuthServiceService } from '../../services/UserAuthService.service';
 import { CommonModule } from '@angular/common';
@@ -22,6 +22,11 @@ export class BookSearchComponent implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
   isAuthenticated: boolean = false;
+  
+  // Paginación
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalCount: number = 0;
 
   // Modal properties
   isModalOpen = false;
@@ -35,7 +40,7 @@ export class BookSearchComponent implements OnInit {
     private favoriteService: FavoriteService,
     private router: Router,
     private wikipediaService: WikipediaService,
-    private userAuthService: UserAuthServiceService  // ✅ Inyección del servicio de auth
+    private userAuthService: UserAuthServiceService
   ) {}
 
   ngOnInit(): void {
@@ -47,15 +52,19 @@ export class BookSearchComponent implements OnInit {
   }
 
   /** 🔍 Buscar libros */
-  onSearch(): void {
+  onSearch(page: number = 1): void {
     this.isLoading = true;
     this.errorMessage = null;
 
     const { title, author, genre } = this.searchParams;
 
-    this.searchService.searchBooks(title, author, genre).subscribe({
-      next: (response: Book[]) => {
-        this.results = response || [];
+    // Llamar a la API con la página actual y el límite de 20 por página
+    this.searchService.searchBooks(title, author, genre, page).subscribe({
+      next: (response: BookSearchResponse) => {
+        this.results = response.books || [];
+        this.totalCount = response.total_count;
+        this.totalPages = response.total_pages;
+        this.currentPage = response.current_page;
         this.isLoading = false;
       },
       error: () => {
@@ -182,5 +191,18 @@ export class BookSearchComponent implements OnInit {
 
   navigateToBookDetail(bookKey: string) {
     this.router.navigate([`${NAVIGATION_ROUTES.BOOK_DETAIL}/${bookKey}`]);
+  }
+
+  // Paginación
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.onSearch(this.currentPage + 1);
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.onSearch(this.currentPage - 1);
+    }
   }
 }
