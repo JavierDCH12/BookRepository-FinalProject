@@ -1,7 +1,6 @@
 <div class="search-container">
   <h2>📚 Busca un Libro</h2>
 
-  <!-- 🔍 Formulario de búsqueda -->
   <form (ngSubmit)="onSearch()" class="search-form">
     <div class="input-group">
       <input type="text" [(ngModel)]="searchParams.title" name="title" placeholder="📖 Título del libro">
@@ -20,21 +19,19 @@
     </button>
   </form>
 
-  <!-- 🔄 Mensajes de carga y error -->
   <div *ngIf="isLoading" class="loading">Cargando resultados...</div>
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
-  <!-- 📖 Resultados -->
   <div *ngIf="results.length" class="results-container">
     <h3>📚 Resultados</h3>
     <div class="book-grid">
       <div *ngFor="let book of results" class="book-card">
-        <!-- Imagen clicable -->
-        <img *ngIf="book.cover_url" [src]="book.cover_url" alt="Portada" class="book-cover"
-             (click)="navigateToBookDetail(book.book_key)">
+        <div class="book-cover-container">
+          <img *ngIf="book.cover_url" [src]="book.cover_url" alt="Portada" class="book-cover"
+               (click)="navigateToBookDetail(book.book_key)">
+        </div>
 
         <div class="book-info">
-          <!-- Título clicable -->
           <h4 (click)="navigateToBookDetail(book.book_key)" class="clickable-title">
             {{ book.title }}
           </h4>
@@ -46,16 +43,20 @@
           <p *ngIf="book.first_publish_year" class="publish-year">📅 {{ book.first_publish_year }}</p>
           <p *ngIf="book.genres" class="genres">🏷️ Género: {{ formatGenres(book.genres) }}</p>
 
-          <!-- ⭐ Botón de favoritos -->
           <button (click)="toggleFavorite(book); $event.stopPropagation()" class="fav-button">
             {{ isFavorite(book.book_key) ? "⭐ Quitar de Favoritos" : "☆ Añadir a Favoritos" }}
           </button>
         </div>
       </div>
     </div>
+
+    <div class="pagination">
+      <button (click)="previousPage()" [disabled]="currentPage <= 1">◀️ Anterior</button>
+      <span>Página {{ currentPage }} de {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage >= totalPages">Siguiente ▶️</button>
+    </div>
   </div>
 
-  <!-- 📖 Modal para descripción -->
   <div class="modal" *ngIf="isModalOpen">
     <div class="modal-content">
       <span class="close" (click)="closeModal()">&times;</span>
@@ -65,16 +66,4 @@
       <p *ngIf="!selectedBookDescription && !isLoadingDescription" class="error-message">No hay descripción disponible.</p>
     </div>
   </div>
-</div>
-
-<!-- Modal de autenticación -->
-<div class="modal-auth-backdrop" *ngIf="isModalAuthOpen" (click)="closeAuthModal()"></div>
-<div class="modal-auth" *ngIf="isModalAuthOpen">
-  <h3>🔒 Acción protegida</h3>
-  <p>Para guardar favoritos necesitas iniciar sesión o registrarte.</p>
-  <div class="auth-buttons">
-    <button (click)="navigateToLogin()">🔑 Ir a Login</button>
-    <button (click)="navigateToRegister()">📝 Registrarse</button>
-  </div>
-  <button class="close-modal" (click)="closeAuthModal()">❌</button>
 </div>

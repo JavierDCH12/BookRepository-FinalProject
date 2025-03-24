@@ -30,6 +30,10 @@ export class BookSearchComponent implements OnInit {
   isLoadingDescription = false;
   isModalAuthOpen = false;
 
+  currentPage = 1;
+  totalPages = 0;
+  totalCount = 0;
+
   constructor(
     private searchService: SearchService,
     private favoriteService: FavoriteService,
@@ -53,9 +57,11 @@ export class BookSearchComponent implements OnInit {
 
     const { title, author, genre } = this.searchParams;
 
-    this.searchService.searchBooks(title, author, genre).subscribe({
-      next: (response: Book[]) => {
-        this.results = response || [];
+    this.searchService.searchBooks(title, author, genre, this.currentPage).subscribe({
+      next: (response: any) => {
+        this.results = response.books || [];
+        this.totalCount = response.total_count; // Total de libros disponibles
+        this.totalPages = response.total_pages; // Total de páginas
         this.isLoading = false;
       },
       error: () => {
@@ -64,6 +70,11 @@ export class BookSearchComponent implements OnInit {
       },
     });
   }
+  
+  
+  
+
+  
 
   /** ⭐ Cargar favoritos */
   loadFavorites(): void {
@@ -86,6 +97,25 @@ export class BookSearchComponent implements OnInit {
   closeAuthModal() {
     this.isModalAuthOpen = false;
   }
+
+
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.onSearch(); 
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.onSearch(); 
+    }
+  }
+
+
+
 
   /** ⭐ Añadir o quitar favoritos */
   toggleFavorite(book: Book): void { 

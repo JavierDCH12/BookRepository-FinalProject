@@ -5,7 +5,7 @@ export const NAVIGATION_ROUTES = {
     SEARCH_BOOKS: '/search-books',
     FAVORITES: '/favorites',
     PROFILE: '/profile',
-  BOOK_DETAIL: '/'
+  BOOK_DETAIL: '/book-detail'
   };
 
   export const LOCAL_STORAGE_KEYS = {

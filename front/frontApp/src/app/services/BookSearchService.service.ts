@@ -15,32 +15,44 @@ export interface Book {
   book_key: string; 
 }
 
+export interface BookSearchResponse {
+  books: Book[];
+  total_count: number;
+  total_pages: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class SearchService {
-  private baseUrl = `${environment.apiUrl}books-api/search/book`;
+  private baseUrl = `${environment.apiUrl}books/search/`; // Aseguramos la URL correcta
   private openLibraryBaseUrl = 'https://openlibrary.org';
 
   constructor(private http: HttpClient) {}
 
-  searchBooks(title: string, author: string, genre: string): Observable<Book[]> {
+  searchBooks(title: string, author: string, genre: string, page: number): Observable<BookSearchResponse> {
     let params = new HttpParams();
     if (title) params = params.set('title', title);
     if (author) params = params.set('author', author);
     if (genre) params = params.set('genre', genre);
+    if (page) params = params.set('page', page.toString());
 
     console.log('📡 Requesting:', `${this.baseUrl}`, 'With Params:', params.toString());
 
-    return this.http.get<Book[]>(`${this.baseUrl}`, { params }).pipe(
-      map(response =>
-        response.map(book => ({
-          ...book,
-          book_key: book.book_key.replace('/works/', ''), 
-        }))
-      ),
+    return this.http.get<BookSearchResponse>(`${this.baseUrl}`, { params }).pipe(
+      map(response => {
+        // Asegúrate de que los libros se procesen correctamente.
+        return {
+          books: response.books.map(book => ({
+            ...book,
+            book_key: book.book_key.replace('/works/', '') // Asegura el formato del book_key
+          })),
+          total_count: response.total_count,
+          total_pages: response.total_pages
+        };
+      }),
       tap(response => console.log('📡 API Response in Angular:', response)),
-      catchError(error => {
+      catchError((error: HttpErrorResponse) => {
         console.error('⚠️ API Error in Angular:', error);
         return throwError(() => new Error('Error fetching books'));
       })
