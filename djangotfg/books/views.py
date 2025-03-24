@@ -13,6 +13,8 @@ def search_books(request):
     title = request.GET.get('title', '')
     author = request.GET.get('author', '')
     genre = request.GET.get('genre', '')
+    page = int(request.GET.get('page', 1))
+    per_page=20
 
     if not (title or author or genre):
         return Response({"detail": "Debes proporcionar al menos un parámetro (title, author o genre)"},
@@ -27,7 +29,8 @@ def search_books(request):
         query_parts.append(f"subject:{genre}")
 
     query = "+".join(query_parts)
-    url = f'https://openlibrary.org/search.json?q={query}'
+    offset = (page-1) + per_page
+    url = f'https://openlibrary.org/search.json?q={query}&limit={per_page}&offset={offset}'
     response = requests.get(url)
 
     if response.status_code == 200:

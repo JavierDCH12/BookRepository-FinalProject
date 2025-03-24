@@ -1,6 +1,7 @@
 from django.db.models import Count
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -107,9 +108,13 @@ def manage_favorites(request):
 
     if request.method == 'GET':
         try:
-            favorites = FavoriteBook.objects.filter(user=user)
-            serializer = FavoriteBookSerializer(favorites, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            favorites = FavoriteBook.objects.filter(user=request.user).order_by('-id')
+            paginator = PageNumberPagination()
+            paginator.page_size = 10
+            result_page = paginator.paginate_queryset(favorites, request)
+            serialized_data = FavoriteBookSerializer(result_page, many=True).data
+            return paginator.get_paginated_response(serialized_data)
+
         except Exception as e:
             logger.error(f"❌ Error fetching favorites: {str(e)}")
             return Response({"error": ERROR_FETCHING_FAVS}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -120,7 +125,6 @@ def manage_favorites(request):
         if serializer.is_valid():
             book_key = serializer.validated_data.get('book_key')
 
-            # ✅ Verificar si ya existe el favorito
             if FavoriteBook.objects.filter(user=user, book_key=book_key).exists():
                 logger.warning(f"⚠️ Book {book_key} is already in favorites for user {user.username}")
                 return Response({'message': INFO_ALREADY_FAVS}, status=status.HTTP_400_BAD_REQUEST)
@@ -131,6 +135,10 @@ def manage_favorites(request):
 
         logger.error(f"❌ Error adding favorite: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
 
 
 ### ✅ ELIMINAR UN FAVORITO
