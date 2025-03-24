@@ -108,6 +108,24 @@ MIDDLEWARE = [
 
 
 
+REST_FRAMEWORK= {
+
+    'DEFAULT_THROTTLE_CLASSES' : [
+        'rest_framework.throttling.AnonRateThrottle', #For anon user
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+
+        'anon_rate': '15/minute',
+        'user_rate': '100/minute'
+
+    }
+
+
+
+
+}
+
 ROOT_URLCONF = 'mysite.urls'
 
 ###########################TEMPLATES
