@@ -86,7 +86,11 @@ export class BookDetailComponent implements OnInit {
     }
   }
 
-  formatGenres(genres: string[]): string {
+  formatGenres(genres: string | string[]): string {
+    if (typeof genres === 'string') {
+      return genres;
+    }
+  
     return genres.join(', ');
   }
 

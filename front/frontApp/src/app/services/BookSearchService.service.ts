@@ -11,8 +11,8 @@ export interface Book {
   first_publish_year?: number;
   isbn?: string;
   cover_url?: string;
-  key: string;
   book_key: string; 
+  description?: string | null; 
 }
 
 export interface BookSearchResponse {
@@ -77,4 +77,34 @@ export class SearchService {
       })
     );
   }
+
+  getBookDetails(book_key: string): Observable<Book> {
+    const detailsUrl = `${this.openLibraryBaseUrl}/works/${book_key}.json`; 
+    console.log('📡 Fetching book details from:', detailsUrl);
+
+    return this.http.get<Book>(detailsUrl).pipe(
+      map((response: any) => {
+        return {
+          title: response.title,
+          author: response.authors.map((author: any) => author.name).join(', '),
+          first_publish_year: response.first_publish_year,
+          isbn: response.isbn || 'No ISBN available',
+          cover_url: response.cover_id ? `https://covers.openlibrary.org/b/id/${response.cover_id}-L.jpg` : 'No cover available',
+          book_key: book_key,
+          genres: response.subjects || ['No genres available'],
+          description: response.description ? response.description.value : 'No description available',
+        };
+      }),
+      catchError(error => {
+        console.error('⚠️ Error fetching book details:', error);
+        return throwError(() => new Error('No details available.'));
+      })
+    );
+  }
+
+
+  
+
+
+
 }
