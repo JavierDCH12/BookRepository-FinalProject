@@ -4,9 +4,10 @@ export const NAVIGATION_ROUTES = {
     REGISTER: '/register',
     SEARCH_BOOKS: '/search-books',
     FAVORITES: '/favorites',
-    PROFILE: '/profile'
+    PROFILE: '/profile',
+  BOOK_DETAIL: '/'
   };
-  
+
   export const LOCAL_STORAGE_KEYS = {
     TOKEN: 'auth_token',
     REFRESH: 'refresh_token',
@@ -16,4 +17,3 @@ export const NAVIGATION_ROUTES = {
   export const LOCAL_MEDIA = {
     DEFAULT_PROFILE_PICTURE: 'http://127.0.0.1:8000/media/profile_pics/default_avatar.jpg'
   }
-  
