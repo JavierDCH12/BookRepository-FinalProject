@@ -1,6 +1,6 @@
 from django.db.models import Count
 from django.views.decorators.cache import cache_page
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,9 +12,11 @@ from constants import SUCCESS_DEACTIVATE, ERROR_REGISTER, SUCCESS_UPDATE_PROFILE
     ERROR_USER_NOT_FOUND
 from .models import FavoriteBook
 from .notifications.email import send_welcome_email
+from .security.throttles import FavoriteRateThrottle, ProfileUpdateRateThrottle, RegisterRateThrottle
 from .serializers import UserProfileSerializer, RegisterSerializer, FavoriteBookSerializer, PublicUserProfileSerializer
 from django.contrib.auth import get_user_model
 import logging
+from api.security import throttles
 
 # Configuración de logs
 logger = logging.getLogger(__name__)
@@ -53,6 +55,8 @@ def user_profile(request):
 ### ✅ REGISTRO DE USUARIO
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@throttle_classes([RegisterRateThrottle])
+
 def register_user(request):
     """Registers a new user."""
     serializer = RegisterSerializer(data=request.data)
@@ -71,6 +75,8 @@ def register_user(request):
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
+@throttle_classes([ProfileUpdateRateThrottle])
+
 def update_profile(request):
     """Permite a los usuarios actualizar su perfil (nombre, apellidos, contraseña)."""
     user = request.user
@@ -90,6 +96,7 @@ def update_profile(request):
 @api_view(['GET', 'POST'])
 @cache_page(60)
 @permission_classes([IsAuthenticated])
+@throttle_classes([FavoriteRateThrottle])
 def manage_favorites(request):
     """Handles retrieving and adding favorite books."""
     user = request.user

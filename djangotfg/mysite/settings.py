@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 
+from django.conf.global_settings import SECURE_HSTS_SECONDS, SECURE_HSTS_PRELOAD, SECRET_KEY
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,39 +22,40 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 
-# SECURITY WARNING: keep the secret key used in production secret!
-
-
+###########################LOAD ENV
 import os
 from dotenv import load_dotenv
 # Cargar variables desde el archivo .env
 load_dotenv()
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY="r84it9q7%nqc-9bx$r15a6w*$bkf(l&yhb)^7ni2+@b+$g0q62"
+
+#SECRET_KEY = os.getenv('SECRET_KEY')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-
+###########################JWT
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # 1 hora de duración
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'ROTATE_REFRESH_TOKENS': False,  # 🚫 Evita que un nuevo token invalide el anterior
-    'BLACKLIST_AFTER_ROTATION': False,  # 🚫 Evita que se añadan tokens viejos a una lista negra
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
     'AUTH_HEADER_TYPES': ('Bearer',),
+
 }
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+###########################ALLOWED HOSTS
 ALLOWED_HOSTS = []
 
 
-# Application definition
-
+###########################APP DEFINITION
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -61,8 +63,22 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '15/minute',
+        'user': '100/minute',
+        'login': '5/minute',
+        'register': '3/minute',
+        'favorites': '25/minute',
+        'profile_update': '5/minute',
+    }
 }
 
+
+###########################CACHES
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -72,7 +88,7 @@ CACHES = {
 }
 
 
-
+###########################INSTALLED APPS
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -86,29 +102,28 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+###########################MIDDLEWARE
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
+
+
+
 
 
 
 
 ROOT_URLCONF = 'mysite.urls'
 
+###########################TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -128,9 +143,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
-# Database
+###########################DATABASE: POSTGRESQL & RAILWAY
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -143,22 +157,22 @@ DATABASES = {
 }
 
 
-#SEND EMAIL
+###########################SEND EMAIL: MAILTRAP
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+"""EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'BookShelf <no-reply@bookshelf.com>')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'BookShelf <no-reply@bookshelf.com>')"""
 
 
 
 
 
 
-# Password validation
+###########################PASSWORD VALIDATION
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -176,11 +190,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+###########################AUTH USER MODEL
 AUTH_USER_MODEL = 'api.User'
 
 
-# Internationalization
+###########################INTERNATIONALIZATION
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
@@ -203,11 +217,26 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # 1 hora de duración
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7)}
-
-
-# Configuración de CORS
-CORS_ALLOW_ALL_ORIGINS = True  # ⚠️ Permite todas las conexiones (usarla solo en desarrollo)
+###########################CORS
+CORS_ALLOW_ALL_ORIGINS = False  # ⚠️ Permite todas las conexiones (usarla solo en desarrollo)
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200"
+
+]
+
+
+###########################BASIC DEPLOY SECURITY descomentar para produccion
+"""SECURE_SSL_REDIRECT= True
+SESSION_COOKIE_SECURE  = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+"""
+

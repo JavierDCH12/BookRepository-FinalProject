@@ -13,6 +13,9 @@ def search_books(request):
     title = request.GET.get('title', '')
     author = request.GET.get('author', '')
     genre = request.GET.get('genre', '')
+    page = int(request.GET.get('page', 1))  # Número de página, por defecto es 1
+    per_page = 20  # Mostrar 20 resultados por página
+    max_results = 60  # Limitar a un total de 60 resultados
 
     if not (title or author or genre):
         return Response({"detail": "Debes proporcionar al menos un parámetro (title, author o genre)"},
@@ -27,14 +30,17 @@ def search_books(request):
         query_parts.append(f"subject:{genre}")
 
     query = "+".join(query_parts)
-    url = f'https://openlibrary.org/search.json?q={query}'
+    offset = (page - 1) * per_page  # Desplazamiento según la página
+    # Solicitar solo 60 libros como máximo
+    url = f'https://openlibrary.org/search.json?q={query}&limit={max_results}&offset={offset}'  # Limitar a 60 libros
     response = requests.get(url)
 
     if response.status_code == 200:
         data = response.json()
         resultados = []
 
-        for book in data.get('docs', [])[:50]:
+        # Asegúrate de limitar la respuesta a 60 libros
+        for book in data.get('docs', [])[:max_results]:
             title = book.get('title', 'Desconocido')
             author = ", ".join(book.get('author_name', ['Desconocido'])[:3])
             genres = [", ".join(book.get('subject', [])[:3])] if book.get('subject') else None
@@ -57,7 +63,16 @@ def search_books(request):
             }
             resultados.append(book_info)
 
-        return Response(resultados, status=status.HTTP_200_OK)
+        # Calcular el total de páginas basado en los 60 libros disponibles
+        total_count = min(len(resultados), max_results)  # El total de libros encontrados, hasta 60
+        total_pages = (total_count // per_page) + (1 if total_count % per_page > 0 else 0)
+
+        return Response({
+            "books": resultados,
+            "total_count": total_count,
+            "total_pages": total_pages,
+            "current_page": page,
+        }, status=status.HTTP_200_OK)
 
     return Response({"detail": "Error en la consulta a OpenLibrary"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
