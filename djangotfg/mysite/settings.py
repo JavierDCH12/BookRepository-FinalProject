@@ -27,6 +27,7 @@ import os
 from dotenv import load_dotenv
 # Cargar variables desde el archivo .env
 load_dotenv()
+SECRET_KEY="r84it9q7%nqc-9bx$r15a6w*$bkf(l&yhb)^7ni2+@b+$g0q62"
 
 #SECRET_KEY = os.getenv('SECRET_KEY')
 
