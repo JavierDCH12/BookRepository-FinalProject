@@ -20,6 +20,7 @@ export class FavoriteListComponent implements OnInit {
   editingReview: { [key: string]: boolean } = {}; // Estado de edición de reseñas
   reviewTexts: { [key: string]: string } = {}; // Contiene las reseñas por `book_key`
   popularBooks: FavoriteBook[] = [];
+  sortAscending: boolean = true; // Estado de ordenación
 
 
   constructor(
@@ -56,6 +57,8 @@ export class FavoriteListComponent implements OnInit {
           this.reviewTexts[book.book_key] = book.review || '';
         });
 
+        this.sortFavorites(); // Ordenar los favoritos después de cargarlos
+
         this.isLoading = false;
       },
       error: (error) => {
@@ -64,6 +67,17 @@ export class FavoriteListComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  /** 🔄 Ordenar los favoritos por rating */
+  sortFavorites(): void {
+    this.favoriteBooks.sort((a, b) => this.sortAscending ? a.rating - b.rating : b.rating - a.rating);
+  }
+
+  /** 🔄 Alternar el orden de clasificación */
+  toggleSortOrder(): void {
+    this.sortAscending = !this.sortAscending;
+    this.sortFavorites();
   }
 
   /** ❌ Eliminar un libro de favoritos */

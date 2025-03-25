@@ -10,6 +10,17 @@
     <p>No favorite books yet. ⭐ Add some from the search page!</p>
   </div>
 
+  <div class="sort-button-container">
+    <button (click)="toggleSortOrder()">
+      Sort by Rating
+      <span class="arrows">
+        <span [class.active]="sortAscending">⬆️</span>
+        <span [class.active]="!sortAscending">⬇️</span>
+      </span>
+    </button>
+  </div>
+  
+
   <!-- 📚 Lista de favoritos -->
   <div class="favorite-grid">
     <div *ngFor="let book of favoriteBooks" class="favorite-card">
