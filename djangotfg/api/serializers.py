@@ -14,10 +14,9 @@ class BookSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     profile_picture = serializers.SerializerMethodField()
-    first_name= serializers.CharField(required=False, allow_blank=True)
-    last_name= serializers.CharField(required=False, allow_blank=True)
+    first_name = serializers.CharField(required=False, allow_blank=True)
+    last_name = serializers.CharField(required=False, allow_blank=True)
     password = serializers.CharField(write_only=True, required=False, min_length=5)
-
 
     class Meta:
         model = User
@@ -28,6 +27,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
             return obj.profile_picture.url
         return '/media/profile_pics/default_avatar.jpg'
 
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exclude(pk=self.instance.pk).exists():
+            raise serializers.ValidationError("Este nombre de usuario ya está en uso.")
+        return value
+
     def update(self, instance, validated_data):
         password = validated_data.pop('password', None)
         for attr, value in validated_data.items():
@@ -36,6 +40,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
 
 
 
