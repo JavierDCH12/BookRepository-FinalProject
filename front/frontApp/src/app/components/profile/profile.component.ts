@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // ✅ SOLUCIÓN: Importar FormsModule
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
@@ -61,14 +62,31 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         console.log("✅ Perfil actualizado:", response);
         this.editMode = false;
-        alert("✅ Profile updated successfully!");
-        this.navigateToHome();
+  
+        Swal.fire({
+          title: '¡Perfil actualizado!',
+          text: 'Tu perfil ha sido actualizado correctamente.',
+          icon: 'success',
+          confirmButtonText: 'Volver al Inicio',
+          timer: 3000,  // ⏳ opcional, auto-cierra en 3 segundos
+          timerProgressBar: true
+        }).then(() => {
+          this.navigateToHome();
+        });
       },
       error: (error) => {
         console.error("❌ Error updating profile:", error);
+  
+        Swal.fire({
+          title: 'Error',
+          text: 'Hubo un problema al actualizar el perfil. Inténtalo de nuevo.',
+          icon: 'error',
+          confirmButtonText: 'Cerrar'
+        });
       }
     });
   }
+  
   
   
 
@@ -81,24 +99,41 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  // ✅ Subir la nueva imagen de perfil
   uploadProfilePicture(): void {
     if (!this.selectedFile) return;
-
+  
     const formData = new FormData();
     formData.append('profile_picture', this.selectedFile);
-
+  
     this.profileService.uploadProfilePicture(formData).subscribe({
       next: (response) => {
         console.log("✅ Imagen subida correctamente:", response);
         if (this.userProfile) {
           this.userProfile.profile_picture = response.profile_picture;
         }
-        alert("✅ Profile picture updated successfully!");
+  
+        Swal.fire({
+          title: '¡Imagen actualizada!',
+          text: 'Tu foto de perfil se ha subido correctamente.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          timer: 2500,  
+          timerProgressBar: true
+        });
       },
-      error: (error) => console.error('Error uploading profile picture:', error)
+      error: (error) => {
+        console.error('❌ Error uploading profile picture:', error);
+  
+        Swal.fire({
+          title: 'Error',
+          text: 'Hubo un problema al subir la imagen. Inténtalo de nuevo.',
+          icon: 'error',
+          confirmButtonText: 'Cerrar'
+        });
+      }
     });
   }
+  
 
   // ✅ Volver a la página de inicio
   navigateToHome(): void {
