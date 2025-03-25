@@ -1,18 +1,35 @@
+* {
+  box-sizing: border-box; /* Muy importante para controlar padding y borders */
+}
+
+
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
-  background-color: #f5f7fa;
+  background: linear-gradient(120deg, #e3f2fd, #f5f7fa);
+  color: #34495e;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* importante */
 }
 
 .home-container {
+  flex: 1; /* Toma todo el espacio disponible */
   display: flex;
   flex-direction: row;
-  gap: 20px;
-  padding: 20px;
+  gap: 25px;
+  padding: 30px;
   max-width: 1200px;
   margin: auto;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -20,46 +37,51 @@ html, body {
 }
 
 .profile-card {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background: #fdfdfd;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
 }
 
 .profile-picture {
   border-radius: 50%;
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
-  margin-bottom: 12px;
-  border: 2px solid #4a90e2;
+  border: 3px solid #64b5f6;
 }
 
 .profile-card h3 {
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 8px;
+  font-size: 1.6rem;
+  color: #2c3e50;
+  margin-top: 12px;
 }
 
 .user-email {
-  font-size: 1rem;
-  color: #555;
+  font-size: 0.95rem;
+  color: #607d8b;
   margin-bottom: 15px;
 }
 
 .profile-button {
-  padding: 10px 16px;
-  background-color: #4a90e2;
-  color: #ffffff;
+  padding: 10px 18px;
+  background-color: #42a5f5;
+  color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .profile-button:hover {
-  background-color: #357ab8;
+  background-color: #1e88e5;
+  box-shadow: 0 4px 8px rgba(30, 136, 229, 0.3);
 }
 
 .main-content {
@@ -70,93 +92,90 @@ html, body {
 }
 
 .main-section {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background: #fdfdfd;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .main-section h2 {
   font-size: 2rem;
-  color: #34495e;
-  margin-bottom: 10px;
+  color: #37474f;
 }
 
 .main-section p {
   font-size: 1rem;
-  color: #606f7b;
-  margin-bottom: 15px;
+  color: #607d8b;
 }
+
 .buttons {
   display: flex;
-  flex-direction: row;
-  gap: 15px; /* Mayor espacio entre botones */
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
   margin-top: 20px;
-  justify-content: center; /* Centrar botones si prefieres */
 }
 
 .buttons button {
-  padding: 12px 20px; /* Mayor padding para dar aire */
-  border-radius: 10px; /* Esquinas más suavizadas */
-  border: none;
-  background-color: #4a90e2;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #42a5f5;
   color: white;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  border: none;
   cursor: pointer;
-  box-shadow: 0 3px 6px rgba(74, 144, 226, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
 }
 
 .buttons button:hover {
-  background-color: #357ab8;
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(74, 144, 226, 0.25);
+  background-color: #1e88e5;
+  box-shadow: 0 4px 10px rgba(30, 136, 229, 0.3);
 }
 
 .buttons button:disabled {
   background-color: #b0bec5;
   cursor: not-allowed;
-  transform: none;
   box-shadow: none;
-  opacity: 0.7;
 }
 
 .public-profile-search {
   display: flex;
-  gap: 8px;
-  margin-top: 15px;
   align-items: center;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .public-profile-search input {
   flex: 1;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccd5e0;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #b0bec5;
+  background-color: #fafafa;
 }
 
 .public-profile-search button {
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: none;
-  background-color: #4a90e2;
+  padding: 10px 15px;
+  border-radius: 10px;
+  background-color: #42a5f5;
   color: white;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .public-profile-search button:hover {
-  background-color: #357ab8;
+  background-color: #1e88e5;
+  box-shadow: 0 4px 8px rgba(30, 136, 229, 0.3);
 }
 
 .dynamic-content-container {
-  flex: 1;
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background: #fdfdfd;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   overflow-y: auto;
-  max-height: calc(100vh - 350px);
+  max-height: calc(100vh - 400px);
 }
 
 .dynamic-content-container::-webkit-scrollbar {
@@ -164,32 +183,65 @@ html, body {
 }
 
 .dynamic-content-container::-webkit-scrollbar-thumb {
-  background-color: rgba(74,144,226,0.5);
+  background-color: #90caf9;
   border-radius: 10px;
 }
 
 .dynamic-content-container::-webkit-scrollbar-track {
-  background-color: #f0f4f8;
+  background-color: #e3f2fd;
 }
 
-/* Responsive design para pantallas pequeñas */
+/* 🚩 Footer fijo al fondo */
+.footer {
+  margin-top: auto; /* empuja el footer hacia abajo siempre */
+  width: 100%;
+  padding: 25px 15px;
+  background-color: #37474f;
+  color: #eceff1;
+  text-align: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
+}
+
+.footer-nav a {
+  color: #90caf9;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-size: 0.9rem;
+  margin: 0 6px;
+}
+
+.footer-nav a:hover {
+  color: #64b5f6;
+}
+
+.footer p {
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+/* ✅ Responsive (pantallas pequeñas) */
 @media (max-width: 800px) {
   .home-container {
     flex-direction: column;
-    padding: 10px;
+    padding: 15px;
   }
 
   .sidebar {
     width: 100%;
   }
 
-  .main-content {
-    width: 100%;
-  }
-
   .profile-card, .main-section, .dynamic-content-container {
-    padding: 15px;
+    padding: 20px;
   }
 
-  
+  .buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer {
+    padding: 20px 10px;
+  }
 }

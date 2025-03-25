@@ -1,47 +1,62 @@
-<div class="home-container">
+<body>
 
-  <!-- Tarjeta de Perfil -->
-  <div class="sidebar" *ngIf="isAuthenticated">
-    <div class="profile-card">
-      <img class="profile-picture"
-           [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture"
-           alt="Profile Picture">
-      <h3>{{ username }}</h3>
-      <p class="user-email">📧 {{ userProfile?.email }}</p>
-      <button class="profile-button" (click)="navigateToProfile()">👤 Ver Perfil Privado</button>
-    </div>
-  </div>
+  <div class="home-container">
 
-  <!-- Sección principal a la derecha -->
-  <div class="main-content">
-    <div class="main-section">
-      <h2>📚 Bienvenido a BookFinder</h2>
-      <p *ngIf="!isAuthenticated">Encuentra tus libros favoritos o regístrate para guardar favoritos.</p>
-      <p *ngIf="isAuthenticated">Hola, {{ username }} 👋 ¡Explora y guarda tus libros preferidos!</p>
-
-      <div class="buttons">
-        <button *ngIf="!isAuthenticated" (click)="navigateToLogin()">🔑 Login</button>
-        <button *ngIf="!isAuthenticated" (click)="navigateToRegister()">📝 Registro</button>
-        <button *ngIf="isAuthenticated" (click)="setView('favorites')">⭐ Mis Favoritos</button>
-        <button *ngIf="isAuthenticated" (click)="setView('search')" [disabled]="currentView === 'search'">
-          🔍 Buscar Libros
-        </button>
-        <button *ngIf="isAuthenticated" (click)="logout()">🚪 Cerrar Sesión</button>
-      </div>
-
-      <div class="public-profile-search">
-        <h4>🔎 Ver perfil público:</h4>
-        <input type="text" [(ngModel)]="searchedUsername" placeholder="Introduce username">
-        <button (click)="navigateToPublicProfile()">Ir</button>
+    <!-- Tarjeta de Perfil (Sidebar) -->
+    <div class="sidebar" *ngIf="isAuthenticated">
+      <div class="profile-card">
+        <img class="profile-picture"
+             [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture"
+             alt="Profile Picture">
+        <h3>{{ username }}</h3>
+        <p class="user-email">📧 {{ userProfile?.email }}</p>
+        <button class="profile-button" (click)="navigateToProfile()">👤 Ver Perfil Privado</button>
       </div>
     </div>
 
-    <!-- Sección dinámica: búsqueda o favoritos -->
-    <div class="dynamic-content-container">
-      <app-book-search *ngIf="currentView === 'search'"></app-book-search>
-      <app-favorite-list *ngIf="currentView === 'favorites'"></app-favorite-list>
+    <!-- Sección Principal -->
+    <div class="main-content">
+      <div class="main-section">
+        <h2>📚 Bienvenido a BookFinder</h2>
+        <p *ngIf="!isAuthenticated">Encuentra tus libros favoritos o regístrate para guardar favoritos.</p>
+        <p *ngIf="isAuthenticated">Hola, {{ username }} 👋 ¡Explora y guarda tus libros preferidos!</p>
+
+        <div class="buttons">
+          <button *ngIf="!isAuthenticated" (click)="navigateToLogin()">🔑 Login</button>
+          <button *ngIf="!isAuthenticated" (click)="navigateToRegister()">📝 Registro</button>
+          <button *ngIf="isAuthenticated" (click)="setView('favorites')">⭐ Mis Favoritos</button>
+          <button *ngIf="isAuthenticated" (click)="setView('search')" [disabled]="currentView === 'search'">
+            🔍 Buscar Libros
+          </button>
+          <button *ngIf="isAuthenticated" (click)="logout()">🚪 Cerrar Sesión</button>
+        </div>
+
+        <div class="public-profile-search">
+          <h4>🔎 Ver perfil público:</h4>
+          <input type="text" [(ngModel)]="searchedUsername" placeholder="Introduce username">
+          <button (click)="navigateToPublicProfile()">Ir</button>
+        </div>
+      </div>
+
+      <!-- Sección Dinámica -->
+      <div class="dynamic-content-container">
+        <app-book-search *ngIf="currentView === 'search'"></app-book-search>
+        <app-favorite-list *ngIf="currentView === 'favorites'"></app-favorite-list>
+      </div>
     </div>
 
   </div>
-  
-</div>
+
+  <!-- ⚡ Footer fuera del home-container -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>📖 <strong>BookFinder</strong> © 2024. Todos los derechos reservados.</p>
+      <nav class="footer-nav">
+        <a href="#">Términos y Condiciones</a> |
+        <a href="#">Política de Privacidad</a> |
+        <a href="#">Contacto</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
