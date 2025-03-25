@@ -1,158 +1,150 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  /* ...existing code... */
-}
-
 .home-container {
-  font-family: 'Poppins', sans-serif;
-  padding: 20px;
-  background: linear-gradient(135deg, #f3f8ff, #ffffff);
-  border-radius: 15px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;  /* Ensure it occupies the full height of the screen */
+  gap: 30px;
+  padding: 30px;
+  align-items: flex-start;
+  background-color: #f9fafc; /* Fondo claro */
 }
 
-.home-content {
-  width: 100%;
-  max-width: 900px;
-  margin-bottom: 30px;
-  text-align: center;  /* Asegura que el contenido esté centrado */
+/* Barra lateral del perfil */
+.sidebar {
+  width: 280px;
 }
 
 .profile-card {
   background: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
   text-align: center;
-  margin-bottom: 30px;
+  transition: transform 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
 }
 
 .profile-picture {
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  border: 3px solid #4a90e2;
 }
 
 .profile-card h3 {
-  font-size: 1.5rem;
-  color: #333;
+  font-size: 1.6rem; /* 25.6px */
+  color: #2c3e50;
   margin-bottom: 10px;
 }
 
-.profile-card .user-email {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 20px;
+.user-email {
+  font-size: 0.95rem; /* 15.2px */
+  color: #7f8c8d;
+  margin-bottom: 18px;
 }
 
-.profile-card .profile-button {
-  padding: 12px 20px;
+.profile-button {
+  padding: 10px 18px;
   background-color: #4a90e2;
   color: white;
+  font-size: 0.95rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.profile-card .profile-button:hover {
+.profile-button:hover {
   background-color: #357ab8;
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.2);
+}
+
+/* Sección principal centrada */
+.home-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
 .main-section {
-  margin-top: 20px;
-  width: 100%;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
 }
 
 .main-section h2 {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 15px;
+  font-size: 2rem; /* 32px */
+  color: #34495e;
+  margin-bottom: 12px;
 }
 
 .main-section p {
-  font-size: 1.1rem;
-  color: #555;
-  margin-bottom: 20px;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
+  font-size: 1rem; /* 16px */
+  color: #606f7b;
 }
 
 .buttons button {
-  padding: 12px 20px;
-  background-color: #4a90e2;
-  color: white;
+  padding: 10px 18px;
+  font-size: 0.95rem; /* 15.2px */
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  background-color: #4a90e2;
+  color: white;
+  margin-right: 10px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .buttons button:hover {
   background-color: #357ab8;
-}
-
-.buttons button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.2);
 }
 
 .public-profile-search {
-  margin-top: 20px;
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.public-profile-search h4 {
+  font-size: 1rem; /* 16px */
+  color: #34495e;
 }
 
 .public-profile-search input {
+  flex: 1;
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 16px;
-  width: 70%;
-  margin-right: 10px;
+  border: 1px solid #d1d9e6;
+  font-size: 0.95rem; /* 15.2px */
 }
 
 .public-profile-search button {
-  padding: 10px 20px;
+  padding: 10px 16px;
+  font-size: 0.95rem; /* 15.2px */
+  border-radius: 8px;
+  border: none;
   background-color: #4a90e2;
   color: white;
-  border: none;
-  border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .public-profile-search button:hover {
   background-color: #357ab8;
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.2);
 }
 
+/* Sección de búsqueda de libros */
 .book-search-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-  padding: 20px 0;
-  background-color: #f9f9f9; /* Le damos un fondo más suave para diferenciarla */
-  border-radius: 10px;
-}
-
-.book-search-container app-book-search {
-  width: 100%;
-  max-width: 900px;
-  border-radius: 15px;
   background: #ffffff;
-  padding: 20px;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+  margin-top: 15px;
 }

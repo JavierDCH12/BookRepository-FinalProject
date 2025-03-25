@@ -1,7 +1,7 @@
 <div class="home-container">
-  <div class="home-content">
-    
-    <!-- 🖼️ Tarjeta de Perfil (solo si está autenticado) -->
+  
+  <!-- 🖼️ Tarjeta de Perfil (izquierda, solo autenticado) -->
+  <div class="sidebar">
     <div class="profile-card" *ngIf="isAuthenticated">
       <img class="profile-picture"
            [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture"
@@ -10,8 +10,10 @@
       <p class="user-email">📧 {{ userProfile?.email }}</p>
       <button class="profile-button" (click)="navigateToProfile()">👤 Ver Perfil Privado</button>
     </div>
+  </div>
 
-    <!-- 📌 Sección principal -->
+  <div class="home-content">
+    <!-- 📌 Sección principal (centrada arriba) -->
     <div class="main-section">
       <h2>📚 Bienvenido a BookFinder</h2>
       <p *ngIf="!isAuthenticated">Encuentra tus libros favoritos o regístrate para guardar favoritos.</p>
@@ -31,10 +33,11 @@
         <button (click)="navigateToPublicProfile()">Ir</button>
       </div>
     </div>
+
+    <!-- 🔍 Sección de búsqueda -->
+    <div class="book-search-container">
+      <app-book-search></app-book-search>
+    </div>
   </div>
 
-  <!-- 🔍 Sección de búsqueda dentro del mismo contenedor -->
-  <div class="book-search-container">
-    <app-book-search></app-book-search>
-  </div>
 </div>
