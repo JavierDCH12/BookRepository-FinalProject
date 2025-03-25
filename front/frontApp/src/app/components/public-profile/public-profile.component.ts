@@ -23,12 +23,22 @@ export class PublicProfileComponent implements OnInit {
       private router: Router
     ) {}
 
-  ngOnInit(): void {
-    const username = this.route.snapshot.paramMap.get('username');
-    if (username) {
-      this.loadPublicProfile(username);
+    ngOnInit(): void {
+      const username = this.route.snapshot.paramMap.get('username');
+      if (username && username.trim()) {
+        this.loadPublicProfile(username.trim());
+      } else {
+        this.errorMessage = 'Invalid username.';
+        this.isLoading = false;
+      }
     }
-  }
+
+    reloadProfile(): void {
+      if (this.userProfile?.username) {
+        this.loadPublicProfile(this.userProfile.username);
+      }
+    }
+    
 
   private loadPublicProfile(username: string): void {
     this.isLoading = true;

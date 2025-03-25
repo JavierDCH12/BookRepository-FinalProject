@@ -15,16 +15,9 @@ export interface PublicFavoriteBook {
 export interface PublicUserProfile {
   username: string;
   email: string;
-  date_joined: string;
-  profile_picture: string;  
-  favorites: {
-    book_key: string;
-    title: string;
-    author?: string;
-    cover_url?: string;
-    rating?: number;
-    review?: string;
-  }[];
+  register_date: string;  
+  profile_picture?: string;  
+  favorites: PublicFavoriteBook[];
 }
 
 @Injectable({

@@ -1,39 +1,65 @@
-<div class="public-profile-container" *ngIf="!isLoading && userProfile; else loading">
-  <div class="profile-header">
-    <img class="profile-picture" [src]="'http://127.0.0.1:8000' + userProfile.profile_picture" alt="Profile Picture">
-    <div class="user-info">
-      <h2>👤 {{ userProfile.username }}</h2>
-      <p class="joined-date">Joined on: {{ userProfile.date_joined | date:'longDate' }}</p>
-    </div>
+<div class="public-profile-container">
+  
+  <!-- 🔄 Loading Spinner -->
+  <div class="loading-container" *ngIf="isLoading">
+    <span class="spinner"></span>
+    <p>⏳ Loading profile...</p>
   </div>
 
-  <div *ngIf="userProfile.favorites.length > 0; else noFavorites">
-    <h3>📚 Favorite Books</h3>
-    <div class="favorites-grid">
-      <div class="book-card" *ngFor="let book of userProfile.favorites">
-        <img *ngIf="book.cover_url" [src]="book.cover_url" alt="{{ book.title }} cover">
-        <h4>{{ book.title }}</h4>
-        <p *ngIf="book.author">By: {{ book.author }}</p>
-        <div class="rating-display" *ngIf="book.rating && book.rating > 0">
-          <span *ngFor="let star of [1,2,3,4,5]" 
-                [class.filled-star]="star <= book.rating">
-            ★
-          </span>
-        </div>
-        <div class="review" *ngIf="book.review">
-          <p>"{{ book.review }}"</p>
-        </div>
+  <!-- ❌ Error message -->
+  <div class="error-container" *ngIf="errorMessage">
+    <p>⚠️ {{ errorMessage }}</p>
+    <button class="back-home-button" (click)="navigateToHome()">🏠 Go to Home</button>
+  </div>
+
+  <!-- ✅ Loaded Profile -->
+  <div *ngIf="!isLoading && userProfile">
+    <div class="profile-header">
+      <img 
+        class="profile-picture"
+        [src]="userProfile.profile_picture ? 'http://127.0.0.1:8000' + userProfile.profile_picture : 'assets/default-avatar.png'"
+        alt="{{ userProfile.username }}'s Profile Picture"
+        >
+      <div class="user-info">
+        <h2>👤 {{ userProfile.username }} Profile</h2>
       </div>
     </div>
+
+    <!-- 📚 Favorites section -->
+    <section class="favorites-section">
+      <h3>📚 Favorite Books</h3>
+
+      <div *ngIf="userProfile.favorites.length === 0" class="no-favorites">
+        <p>✨ This user hasn't added any favorite books yet.</p>
+      </div>
+
+      <div class="favorites-grid" *ngIf="userProfile.favorites.length > 0">
+        <div class="book-card" *ngFor="let book of userProfile.favorites">
+          <img 
+            class="book-cover" 
+            [src]="book.cover_url || 'assets/default-cover.png'" 
+            [alt]="book.title + ' cover'"
+            >
+          
+          <h4>{{ book.title }}</h4>
+          <p *ngIf="book.author" class="author">✍️ By {{ book.author }}</p>
+
+          <div class="rating-display" *ngIf="book.rating && book.rating > 0">
+            <ng-container *ngFor="let star of [1,2,3,4,5]">
+              <span [class.filled-star]="star <= book.rating">★</span>
+            </ng-container>
+          </div>
+
+          <blockquote class="review" *ngIf="book.review">
+            "{{ book.review }}"
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- 🔙 Back button -->
+    <div class="back-button-container">
+      <button class="back-home-button" (click)="navigateToHome()">🏠 Back to Home</button>
+    </div>
   </div>
-
-  <ng-template #noFavorites>
-    <p class="no-favorites">This user has not added any favorite books yet.</p>
-  </ng-template>
-
-  <button class="back-home-button" (click)="navigateToHome()">🏠 Back to Home</button>
 </div>
-
-<ng-template #loading>
-  <div class="loading-text">⏳ Loading profile...</div>
-</ng-template>

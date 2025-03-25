@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
 
+
 @Component({
   selector: 'app-book-detail',
   templateUrl: './book-detail.component.html',
@@ -138,7 +139,7 @@ export class BookDetailComponent implements OnInit {
 
   // Navegar hacia la lista de libros
   navigateToHome(): void {
-    this.router.navigate([NAVIGATION_ROUTES.HOME]);
+    this.router.navigate([NAVIGATION_ROUTES.FAVORITES]);
   }
 
   // Actualizar la valoración
