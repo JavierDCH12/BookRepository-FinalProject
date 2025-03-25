@@ -1,26 +1,38 @@
-import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserAuthServiceService } from '../../services/UserAuthService.service';
 import { ProfileService, UserProfile } from '../../services/ProfileService.service';
-import { CommonModule } from '@angular/common';
+import { UserAuthServiceService } from '../../services/UserAuthService.service';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
+import { FavoriteListComponent } from '../favorite-list/favorite-list.component'; // ✅ Importación corregida
+import { FavoriteBook, FavoriteService } from '../../services/FavoriteService.service';
+import { CommonModule } from '@angular/common';
 import { BookSearchComponent } from '../book-search/book-search.component';
-import { Book } from '../../services/BookSearchService.service';
-import { FavoriteService, FavoriteBook } from '../../services/FavoriteService.service';
-import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { Book } from '../../services/BookSearchService.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  imports: [CommonModule, BookSearchComponent, FormsModule],
+  imports: [
+    CommonModule,
+    BookSearchComponent,
+    FormsModule,
+    FavoriteListComponent  // ✅ Añadido correctamente
+  ],
 })
 export class HomeComponent implements OnInit {
   isAuthenticated: boolean = false;
   userProfile: UserProfile | null = null;
   searchedUsername: string = '';
+
+  currentView: 'search' | 'favorites' = 'search';
+
+  setView(view: 'search' | 'favorites') {
+    this.currentView = view;
+  }
 
   constructor(
     private userAuthService: UserAuthServiceService,
@@ -37,14 +49,15 @@ export class HomeComponent implements OnInit {
       this.checkPendingFavorite();
     }
 
-    this.profileService.currentUser$.subscribe((profile) => {
+    this.profileService.currentUser$.subscribe((profile: any) => {
       this.userProfile = profile;
     });
   }
 
   private loadUserProfile(): void {
     this.profileService.getUserProfile().subscribe({
-      error: (error) => {
+      next: (profile: any) => { this.userProfile = profile; }, // ✅ Asegúrate de cargar el perfil
+      error: (error: any) => {
         console.error('⚠️ Error loading profile:', error);
       }
     });

@@ -1,8 +1,8 @@
 <div class="home-container">
-  
-  <!-- 🖼️ Tarjeta de Perfil (izquierda, solo autenticado) -->
-  <div class="sidebar">
-    <div class="profile-card" *ngIf="isAuthenticated">
+
+  <!-- Tarjeta de Perfil -->
+  <div class="sidebar" *ngIf="isAuthenticated">
+    <div class="profile-card">
       <img class="profile-picture"
            [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture"
            alt="Profile Picture">
@@ -12,8 +12,8 @@
     </div>
   </div>
 
-  <div class="home-content">
-    <!-- 📌 Sección principal (centrada arriba) -->
+  <!-- Sección principal a la derecha -->
+  <div class="main-content">
     <div class="main-section">
       <h2>📚 Bienvenido a BookFinder</h2>
       <p *ngIf="!isAuthenticated">Encuentra tus libros favoritos o regístrate para guardar favoritos.</p>
@@ -22,22 +22,26 @@
       <div class="buttons">
         <button *ngIf="!isAuthenticated" (click)="navigateToLogin()">🔑 Login</button>
         <button *ngIf="!isAuthenticated" (click)="navigateToRegister()">📝 Registro</button>
-        <button *ngIf="isAuthenticated" (click)="navigateToFavoriteList()">⭐ Mis Favoritos</button>
+        <button *ngIf="isAuthenticated" (click)="setView('favorites')">⭐ Mis Favoritos</button>
+        <button *ngIf="isAuthenticated" (click)="setView('search')" [disabled]="currentView === 'search'">
+          🔍 Buscar Libros
+        </button>
         <button *ngIf="isAuthenticated" (click)="logout()">🚪 Cerrar Sesión</button>
       </div>
 
-      <!-- 👥 Ver perfil público de otro usuario -->
       <div class="public-profile-search">
-        <h4>🔎 Ver perfil público de un usuario:</h4>
+        <h4>🔎 Ver perfil público:</h4>
         <input type="text" [(ngModel)]="searchedUsername" placeholder="Introduce username">
         <button (click)="navigateToPublicProfile()">Ir</button>
       </div>
     </div>
 
-    <!-- 🔍 Sección de búsqueda -->
-    <div class="book-search-container">
-      <app-book-search></app-book-search>
+    <!-- Sección dinámica: búsqueda o favoritos -->
+    <div class="dynamic-content-container">
+      <app-book-search *ngIf="currentView === 'search'"></app-book-search>
+      <app-favorite-list *ngIf="currentView === 'favorites'"></app-favorite-list>
     </div>
-  </div>
 
+  </div>
+  
 </div>
