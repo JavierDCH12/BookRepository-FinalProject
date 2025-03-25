@@ -7,7 +7,7 @@ import { NAVIGATION_ROUTES } from '../../utils/constants';
 import { BookSearchComponent } from '../book-search/book-search.component';
 import { Book } from '../../services/BookSearchService.service';
 import { FavoriteService, FavoriteBook } from '../../services/FavoriteService.service';
-import { ToastrService } from 'ngx-toastr';  // ✅ Importar ToastrService
+import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -22,13 +22,12 @@ export class HomeComponent implements OnInit {
   userProfile: UserProfile | null = null;
   searchedUsername: string = '';
 
-
   constructor(
     private userAuthService: UserAuthServiceService,
     private profileService: ProfileService,
     private router: Router,
     private favoriteService: FavoriteService,
-    private toastr: ToastrService // ✅ Inyectar ToastrService
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -37,13 +36,14 @@ export class HomeComponent implements OnInit {
       this.loadUserProfile();
       this.checkPendingFavorite();
     }
+
+    this.profileService.currentUser$.subscribe((profile) => {
+      this.userProfile = profile;
+    });
   }
 
   private loadUserProfile(): void {
     this.profileService.getUserProfile().subscribe({
-      next: (profile: UserProfile) => {
-        this.userProfile = profile;
-      },
       error: (error) => {
         console.error('⚠️ Error loading profile:', error);
       }
@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
   }
 
   get username(): string {
-    return localStorage.getItem('username') || 'Usuario';
+    return this.userProfile?.username || localStorage.getItem('username') || 'Usuario';
   }
 
   logout() {
@@ -81,7 +81,6 @@ export class HomeComponent implements OnInit {
     this.router.navigate([NAVIGATION_ROUTES.PROFILE]);
   }
 
-  // ✅ Método que revisa y guarda el pending favorite con toast
   private checkPendingFavorite() {
     const pendingBookData = localStorage.getItem('pendingFavoriteBook');
     if (pendingBookData) {

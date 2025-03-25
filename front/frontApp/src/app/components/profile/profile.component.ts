@@ -60,18 +60,16 @@ export class ProfileComponent implements OnInit {
     this.profileService.updateUserProfile(this.editedProfile).subscribe({
       next: (response) => {
         console.log("✅ Perfil actualizado:", response);
-        alert("✅ Profile updated successfully!");
-        
-        this.loadUserProfile(); 
         this.editMode = false;
-        setTimeout(() => this.navigateToHome(), 2500);
+        alert("✅ Profile updated successfully!");
+        this.navigateToHome();
       },
       error: (error) => {
         console.error("❌ Error updating profile:", error);
-        alert("⚠️ Error al actualizar el perfil. Inténtalo nuevamente.");
       }
     });
   }
+  
   
 
   // ✅ Seleccionar y subir imagen de perfil

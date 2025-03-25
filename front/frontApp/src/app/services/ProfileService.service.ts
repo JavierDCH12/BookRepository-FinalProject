@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environ/environ';
 import { LOCAL_STORAGE_KEYS } from '../utils/constants';
@@ -28,6 +28,10 @@ export class ProfileService {
 
   constructor(private http: HttpClient) {}
 
+
+  private currentUserSubject = new BehaviorSubject<UserProfile | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
+
   /** 🔐 Obtener headers de autenticación */
   private getAuthHeaders(isFormData: boolean = false): HttpHeaders {
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
@@ -47,6 +51,7 @@ export class ProfileService {
   /** 👤 Obtener información del perfil del usuario */
   getUserProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>(this.profileUrl, { headers: this.getAuthHeaders() }).pipe(
+      tap(profile => this.currentUserSubject.next(profile)), 
       catchError((error) => {
         console.error("❌ Error fetching user profile:", error);
         return throwError(() => new Error("Failed to load user profile."));
@@ -69,6 +74,12 @@ export class ProfileService {
     return this.http.put<UserProfile>(url, profileData, { headers: this.getAuthHeaders() });
   }
   
-  
+  setCurrentUser(user: UserProfile) {
+    this.currentUserSubject.next(user);
+  }
+
+  getCurrentUser(): UserProfile | null {
+    return this.currentUserSubject.value;
+  }
   
 }
