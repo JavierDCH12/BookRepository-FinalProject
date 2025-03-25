@@ -1,29 +1,33 @@
-/* 🎨 Contenedor del perfil */
 .profile-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(to bottom, #4A90E2, #7F8C8D);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4A90E2, #8e54e9);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* 🏷️ Tarjeta del perfil */
 .profile-card {
-  background: white;
-  width: 400px;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  transition: transform 0.3s ease-in-out;
+  background: #fff;
+  border-radius: 20px;
+  padding: 25px;
+  width: 420px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .profile-card:hover {
-  transform: scale(1.02);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
 }
 
-/* 📷 Imagen del perfil */
-.profile-picture img {
+.profile-header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.profile-header img {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -31,35 +35,60 @@
   border: 3px solid #4A90E2;
 }
 
-/* 📂 Sección de subida de imagen */
-.upload-section {
-  margin-top: 10px;
-}
-
-.file-label {
-  display: inline-block;
-  background: #4A90E2;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
+.upload-label {
   cursor: pointer;
-  transition: background 0.3s;
+  font-size: 0.9rem;
+  color: #4A90E2;
+  display: inline-block;
+  margin-top: 10px;
+  transition: color 0.3s;
 }
 
-.file-label:hover {
-  background: #357ABD;
+.upload-label:hover {
+  color: #357ABD;
 }
 
-/* 📑 Detalles del usuario */
+.profile-info {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.profile-info h2 {
+  color: #34495e;
+  font-size: 1.6rem;
+}
+
+.email {
+  color: #7f8c8d;
+  font-size: 0.95rem;
+}
+
+.input-edit {
+  padding: 8px;
+  width: 100%;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: border 0.3s;
+}
+
+.input-edit:focus {
+  border-color: #4A90E2;
+}
+
 .profile-details {
-  padding: 15px 0;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
 }
 
 .detail-item {
   display: flex;
   justify-content: space-between;
-  padding: 8px;
-  border-bottom: 1px solid #f1f1f1;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #f4f4f4;
 }
 
 .detail-item:last-child {
@@ -67,58 +96,51 @@
 }
 
 .label {
-  font-weight: bold;
   color: #555;
+  font-weight: 600;
 }
 
-.value {
-  color: #222;
-  font-weight: bold;
+.profile-actions {
+  margin-top: 20px;
+  text-align: center;
 }
 
-.value.active {
-  color: #2ECC71;
-}
-
-/* ✏️ Botón de edición */
-.edit-profile-btn,
-.save-profile-btn {
-  background: #4A90E2;
-  color: white;
+.edit-btn, .save-btn, .back-btn {
   border: none;
   padding: 10px 15px;
-  font-size: 16px;
+  margin: 5px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease-in-out;
-  margin-top: 15px;
+  color: #fff;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-.edit-profile-btn:hover {
-  background: #357ABD;
+.edit-btn {
+  background-color: #4A90E2;
 }
 
-.save-profile-btn {
-  background: #2ECC71;
+.edit-btn:hover {
+  background-color: #357ABD;
 }
 
-.save-profile-btn:hover {
-  background: #27AE60;
+.save-btn {
+  background-color: #27ae60;
 }
 
-/* 🏠 Botón para volver */
-.home-button {
-  background: #ff9800;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease-in-out;
-  margin-top: 10px;
+.save-btn:hover {
+  background-color: #219150;
 }
 
-.home-button:hover {
-  background: #e68900;
+.back-btn {
+  background-color: #f39c12;
+}
+
+.back-btn:hover {
+  background-color: #d88b0f;
+}
+
+.edit-btn:hover, .save-btn:hover, .back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }

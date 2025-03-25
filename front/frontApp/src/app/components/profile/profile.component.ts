@@ -54,23 +54,25 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  // ✅ Guardar cambios en el perfil
   saveProfileChanges(): void {
     if (!this.editedProfile) return;
-
+  
     this.profileService.updateUserProfile(this.editedProfile).subscribe({
       next: (response) => {
         console.log("✅ Perfil actualizado:", response);
-        this.userProfile = response;
-        this.editMode = false;
         alert("✅ Profile updated successfully!");
-        this.navigateToHome();
+        
+        this.loadUserProfile(); 
+        this.editMode = false;
+        setTimeout(() => this.navigateToHome(), 2500);
       },
       error: (error) => {
         console.error("❌ Error updating profile:", error);
+        alert("⚠️ Error al actualizar el perfil. Inténtalo nuevamente.");
       }
     });
   }
+  
 
   // ✅ Seleccionar y subir imagen de perfil
   onFileSelected(event: Event): void {

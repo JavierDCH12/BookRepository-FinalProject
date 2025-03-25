@@ -1,57 +1,54 @@
 <div class="profile-container">
   <div class="profile-card">
-    
-    <!-- 🖼️ Foto de perfil y carga -->
-    <div class="profile-picture">
-      <img [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture"
-           alt="Profile Picture">
+
+    <!-- 🖼️ Imagen de Perfil -->
+    <div class="profile-header">
+      <img [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture" alt="Profile Picture">
+      <label for="fileInput" class="upload-label">
+        📂 Cambiar foto
+      </label>
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>
     </div>
 
-    <!-- 📤 Subir nueva imagen -->
-    <div class="upload-section">
-      <input type="file" id="fileInput" (change)="onFileSelected($event)" style="display: none;">
-      <label for="fileInput" class="file-label">📂 Choose profile</label>
-    </div>
-
-    <!-- 🏷️ Información del usuario -->
+    <!-- ✨ Información básica -->
     <div class="profile-info">
       <h2 *ngIf="!editMode">{{ userProfile?.username }}</h2>
-      <input *ngIf="editMode" [(ngModel)]="editedProfile.username" placeholder="Username">
+      <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.username" placeholder="Username">
 
-      <p class="email">📧 <span *ngIf="!editMode">{{ userProfile?.email }}</span></p>
-      <input *ngIf="editMode" [(ngModel)]="editedProfile.email" placeholder="Email">
+      <p class="email" *ngIf="!editMode">📧 {{ userProfile?.email }}</p>
+      <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.email" placeholder="Email">
     </div>
 
-    <!-- 📅 Información detallada -->
+    <!-- 📌 Detalles del perfil -->
     <div class="profile-details">
       <div class="detail-item">
-        <span class="label">📝 First Name:</span>
-        <span *ngIf="!editMode">{{ userProfile?.first_name || 'Not set' }}</span>
-        <input *ngIf="editMode" [(ngModel)]="editedProfile.first_name" placeholder="First Name">
+        <span class="label">📝 Nombre:</span>
+        <span *ngIf="!editMode">{{ userProfile?.first_name || '—' }}</span>
+        <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.first_name" placeholder="Nombre">
       </div>
 
       <div class="detail-item">
-        <span class="label">📝 Last Name:</span>
-        <span *ngIf="!editMode">{{ userProfile?.last_name || 'Not set' }}</span>
-        <input *ngIf="editMode" [(ngModel)]="editedProfile.last_name" placeholder="Last Name">
+        <span class="label">📝 Apellidos:</span>
+        <span *ngIf="!editMode">{{ userProfile?.last_name || '—' }}</span>
+        <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.last_name" placeholder="Apellidos">
+      </div>
+
+      <div class="detail-item" *ngIf="editMode">
+        <span class="label">🔑 Nueva contraseña:</span>
+        <input class="input-edit" type="password" [(ngModel)]="editedProfile.password" placeholder="Contraseña">
       </div>
 
       <div class="detail-item">
-        <span class="label">🔒 New Password:</span>
-        <input *ngIf="editMode" type="password" [(ngModel)]="editedProfile.password" placeholder="New Password">
-      </div>
-
-      <div class="detail-item">
-        <span class="label">📅 Member since:</span>
-        <span class="value">{{ userProfile?.register_date | date: 'longDate' }}</span>
+        <span class="label">📅 Miembro desde:</span>
+        <span>{{ userProfile?.register_date | date: 'dd/MM/yyyy' }}</span>
       </div>
     </div>
 
-    <!-- 🔧 Acciones de perfil -->
+    <!-- ⚙️ Botones de acción -->
     <div class="profile-actions">
-      <button *ngIf="!editMode" (click)="toggleEditMode()" class="edit-profile-btn">✏️ Edit Profile</button>
-      <button *ngIf="editMode" (click)="saveProfileChanges()" class="save-profile-btn">💾 Save Changes</button>
-      <button class="home-button" (click)="navigateToHome()">🏠 Back to Home</button>
+      <button *ngIf="!editMode" class="edit-btn" (click)="toggleEditMode()">✏️ Editar Perfil</button>
+      <button *ngIf="editMode" class="save-btn" (click)="saveProfileChanges()">💾 Guardar Cambios</button>
+      <button class="back-btn" (click)="navigateToHome()">🏠 Inicio</button>
     </div>
 
   </div>
