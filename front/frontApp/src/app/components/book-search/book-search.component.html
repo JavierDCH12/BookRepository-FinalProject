@@ -57,15 +57,20 @@
     </div>
   </div>
 
-  <div class="modal" *ngIf="isModalOpen">
-    <div class="modal-content">
-      <span class="close" (click)="closeModal()">&times;</span>
-      <h3>{{ selectedBookTitle }}</h3>
-      <p *ngIf="isLoadingDescription" class="loading">Cargando descripción...</p>
-      <p *ngIf="selectedBookDescription">{{ selectedBookDescription }}</p>
-      <p *ngIf="!selectedBookDescription && !isLoadingDescription" class="error-message">No hay descripción disponible.</p>
+  <!-- 🔑 Modal de autenticación -->
+<div class="modal" *ngIf="isModalAuthOpen">
+  <div class="modal-content">
+    <span class="close" (click)="closeAuthModal()">&times;</span>
+    <h3>🔐 Inicia sesión para guardar favoritos</h3>
+    <p>Debes iniciar sesión o registrarte para guardar libros en favoritos.</p>
+
+    <div class="auth-modal-buttons">
+      <button (click)="navigateToLogin()">🔑 Iniciar sesión</button>
+      <button (click)="navigateToRegister()">📝 Registrarme</button>
     </div>
   </div>
+</div>
+
 
   <!-- 📊 Paginación -->
   <div *ngIf="results.length" class="pagination">

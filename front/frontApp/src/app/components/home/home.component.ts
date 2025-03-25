@@ -52,11 +52,17 @@ export class HomeComponent implements OnInit {
     this.profileService.currentUser$.subscribe((profile: any) => {
       this.userProfile = profile;
     });
+
+    this.userAuthService.loginSuccessSourceAddBook$.subscribe(() => {
+      this.isAuthenticated = true;
+      this.loadUserProfile();
+      this.checkPendingFavorite(); 
+    });
   }
 
   private loadUserProfile(): void {
     this.profileService.getUserProfile().subscribe({
-      next: (profile: any) => { this.userProfile = profile; }, // ✅ Asegúrate de cargar el perfil
+      next: (profile: any) => { this.userProfile = profile; }, 
       error: (error: any) => {
         console.error('⚠️ Error loading profile:', error);
       }

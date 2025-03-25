@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, Subject, tap, throwError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../environ/environ';
 import { LOCAL_STORAGE_KEYS } from '../utils/constants';
@@ -10,6 +10,8 @@ import { LOCAL_STORAGE_KEYS } from '../utils/constants';
 })
 export class UserAuthServiceService {
   private baseUrl = environment.apiUrl;
+  private loginSuccessSourceAddBook = new Subject<void>();
+  loginSuccessSourceAddBook$ = this.loginSuccessSourceAddBook.asObservable();
 
   /** ✅ Estado reactivo de autenticación */
   private authStatus = new BehaviorSubject<boolean>(this.hasValidToken());
@@ -43,7 +45,8 @@ export class UserAuthServiceService {
     return this.http.post(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response: any) => {
         this.storeTokens(response.access, response.refresh, username);
-        this.authStatus.next(true); // 🔄 Notificamos que ahora está autenticado
+        this.authStatus.next(true); 
+        this.loginSuccessSourceAddBook.next();
       }),
       catchError((error: HttpErrorResponse) => {
         console.error('Login error:', error);

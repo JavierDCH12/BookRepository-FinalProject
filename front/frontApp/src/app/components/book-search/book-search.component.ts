@@ -205,4 +205,6 @@ export class BookSearchComponent implements OnInit {
       this.onSearch(this.currentPage - 1);
     }
   }
+
+ 
 }
