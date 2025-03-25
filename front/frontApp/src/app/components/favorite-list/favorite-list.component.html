@@ -14,14 +14,14 @@
   <div class="favorite-grid">
     <div *ngFor="let book of favoriteBooks" class="favorite-card">
 
-      <!-- 🖼️ Imagen del libro con navegación -->
+      <!-- 🖼️ Imagen del libro -->
       <div class="book-image" (click)="navigateToBookDetail(book.book_key)">
         <img *ngIf="book.cover_url && book.cover_url !== 'None'" 
              [src]="book.cover_url" 
              alt="Book cover">
       </div>
 
-      <!-- 📖 Información del libro con título clicable -->
+      <!-- 📖 Información del libro -->
       <div class="book-info">
         <h4 (click)="navigateToBookDetail(book.book_key)" class="clickable-title">
           {{ book.title }}
@@ -45,37 +45,7 @@
           </div>
         </div>
 
-        <!-- 📝 Sección de reseñas 
-        <div class="review-container">
-          <h5>📝 Your Review</h5>
-          
-          <div *ngIf="!editingReview[book.book_key]" class="review-display">
-            <blockquote *ngIf="reviewTexts[book.book_key]; else noReview">
-              "{{ reviewTexts[book.book_key] }}"
-            </blockquote>
-            <ng-template #noReview>
-              <p class="review-placeholder">No review yet. ✍️ Click below to add one!</p>
-            </ng-template>
-            <button class="edit-review-button" (click)="toggleReviewEdit(book.book_key)">
-              ✏️ Add or Edit Review
-            </button>
-          </div>
-
-          <div *ngIf="editingReview[book.book_key]" class="review-edit">
-            <textarea [(ngModel)]="reviewTexts[book.book_key]"
-                      placeholder="Write your review here..."></textarea>
-            <div class="review-actions">
-              <button class="save-review-button" (click)="saveReview(book.book_key)">
-                💾 Save
-              </button>
-              <button class="cancel-review-button" (click)="toggleReviewEdit(book.book_key)">
-                ❌ Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-        -->
-
+        <!-- ❌ Botón eliminar favorito -->
         <button class="remove-button" (click)="removeFavorite(book.book_key)">❌ Remove from Favorites</button>
       </div>
     </div>
@@ -92,7 +62,4 @@
       </div>
     </div>
   </div>
-  
-  <!-- 🔙 Botón de volver -->
-  <button class="home-button" (click)="navigateToHome()">🏠 Back to Home</button>
 </div>

@@ -1,244 +1,170 @@
-/* 🏠 Contenedor principal, centrado y contenido compacto */
 .favorites-container {
   max-width: 1000px;
-  margin: 50px auto;
-  padding: 30px;
-  background: linear-gradient(135deg, #ffffff, #f4f6f8);
+  margin: 40px auto;
+  padding: 25px;
+  background: linear-gradient(135deg, #ffffff, #f0f4f8);
   border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
   font-family: 'Poppins', sans-serif;
   text-align: center;
 }
 
-/* 📚 Grid centrado */
 .favorite-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 25px;
-  justify-items: center;
-  padding: 20px 0;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 18px;
+  margin-top: 20px;
 }
 
-/* 📖 Tarjeta del libro, más proporcionada y elegante */
 .favorite-card {
-  width: 100%;
-  max-width: 280px;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  padding: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 18px;
-  transition: transform 0.25s, box-shadow 0.25s;
+  justify-content: space-between;
 }
 
 .favorite-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 14px rgba(0,0,0,0.1);
 }
 
-/* 📷 Imagen centrada */
 .book-image img {
-  width: 170px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  height: auto; /* ✅ Mostrar cover completa */
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-/* 📖 Información del libro */
 .book-info h4 {
-  font-size: 18px;
-  margin-top: 12px;
-  color: #222;
+  font-size: 0.95rem;
+  color: #34495e;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: color 0.2s ease;
+}
+
+.book-info h4:hover {
+  color: #2980b9;
 }
 
 .author a {
-  color: #007bff;
+  font-size: 0.8rem;
+  color: #7f8c8d;
   text-decoration: none;
-  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 .author a:hover {
-  color: #0056b3;
+  color: #2980b9;
 }
 
-/* 📝 Review container muy integrado y discreto */
-.review-container {
-  width: 80%;
-  background: #fafafa;
-  border-radius: 10px;
-  padding: 10px;
-  margin-top: 12px;
-  border: 1px solid #e0e0e0;
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.03);
-  margin-left: 7%;
+.publish-year {
+  font-size: 0.75rem;
+  color: #95a5a6;
+  margin-top: 4px;
 }
 
-.review-text {
-  font-size: 14px;
-  color: #555;
-  padding: 8px 10px;
-  background: #fff;
-  border-radius: 6px;
-  margin-bottom: 8px;
-  min-height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.rating-section h5 {
+  font-size: 0.8rem;
+  color: #606f7b;
+  margin-top: 8px;
 }
 
-.review-placeholder {
-  color: #999;
-  font-style: italic;
-  background: #f0f0f0;
-  border-radius: 6px;
-  padding: 6px;
-}
-
-/* ✏️ Edit review button */
-.edit-review-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.25s;
-  font-size: 12px;
-}
-
-.edit-review-button:hover {
-  background-color: #0056b3;
-}
-
-/* 📝 Área de edición */
-.review-edit textarea {
-  width: 100%;
-  height: 80px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  resize: none;
-  margin-bottom: 10px;
-}
-
-.review-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.save-review-button {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.save-review-button:hover {
-  background-color: #218838;
-}
-
-.cancel-review-button {
-  background-color: #ff9800;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.cancel-review-button:hover {
-  background-color: #e68900;
-}
-
-/* ⭐ Rating stars */
 .stars {
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #ffd700;
   display: flex;
   justify-content: center;
-  gap: 4px;
-  margin: 8px 0;
-  cursor: pointer;
-  font-size: 28px;
 }
 
-.filled-star {
-  color: #ffd700;
-}
-
-.empty-star {
-  color: #ccc;
+.stars .empty-star {
+  color: #d1d8e0;
 }
 
 .remove-button {
-  background-color: #e53935;
+  background-color: #e74c3c;
   color: white;
   border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
+  padding: 5px 8px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 0.75rem;
+  transition: background-color 0.3s ease;
   margin-top: 10px;
-  transition: background 0.2s;
 }
 
 .remove-button:hover {
-  background-color: #c62828;
+  background-color: #c0392b;
 }
 
+/* 🔥 Libros populares compactos */
 .popular-section {
-  margin-top: 40px;
-  text-align: center;
+  margin-top: 30px;
 }
 
 .popular-carousel {
   display: flex;
   overflow-x: auto;
-  gap: 16px;
-  padding: 10px;
+  gap: 15px;
+  padding-bottom: 10px;
 }
 
 .popular-card {
-  min-width: 150px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  padding: 8px;
-  flex-shrink: 0;
+  min-width: 120px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.07);
+  padding: 6px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.popular-card:hover {
+  transform: scale(1.03);
 }
 
 .popular-card img {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 6px;
+  height: auto;
 }
 
 .popular-title {
-  font-weight: bold;
-  font-size: 14px;
-  margin-top: 6px;
+  font-size: 0.85rem;
+  margin-top: 4px;
 }
 
 .popular-author {
-  font-size: 12px;
-  color: #555;
+  font-size: 0.75rem;
+  color: #7f8c8d;
 }
 
-.clickable-title {
-  cursor: pointer;
-  text-decoration: underline;
-  color: #007bff;
-}
-.clickable-title:hover {
-  color: #0056b3;
-}
-.book-image {
-  cursor: pointer;
-}
-.popular-card {
-  cursor: pointer;
+/* Scrollbar personalizado */
+.popular-carousel::-webkit-scrollbar {
+  height: 5px;
 }
 
+.popular-carousel::-webkit-scrollbar-thumb {
+  background-color: #bdc3c7;
+  border-radius: 3px;
+}
 
+.no-favorites {
+  padding: 12px;
+  background: #ecf0f1;
+  border-radius: 8px;
+  color: #7f8c8d;
+  font-size: 0.85rem;
+}
+
+.loading,
+.error-message {
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
