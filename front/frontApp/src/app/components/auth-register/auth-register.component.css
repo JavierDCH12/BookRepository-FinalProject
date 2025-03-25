@@ -42,17 +42,17 @@ h2 {
 
 input {
   flex: 1;
-  padding: 12px;
+  padding: 10px;
   border: none;
   background: transparent;
   font-size: 15px;
   outline: none;
-  transition: all 0.3s ease;
 }
 
 input:focus {
-  border-bottom: 2px solid #4a90e2;
-  box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  outline: none;
 }
 
 input.ng-touched.ng-invalid {
@@ -63,12 +63,22 @@ input.ng-touched.ng-valid {
   border-bottom: 2px solid green;
 }
 
+.toggle-password {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .error-text {
   color: #d9534f;
   font-size: 13px;
   margin-bottom: 10px;
   display: block;
-  text-align: left;
 }
 
 .error-message {
@@ -78,17 +88,8 @@ input.ng-touched.ng-valid {
   font-size: 14px;
 }
 
-.password-mismatch-message {
-  color: #d9534f;
-  font-size: 13px;
-  margin-top: -8px;
-  margin-bottom: 10px;
-  text-align: left;
-  font-style: italic;
-}
-
 .success-message {
-  color: #28a745;
+  color: #5bc0de;
   text-align: center;
   margin-top: 10px;
   font-size: 14px;
@@ -108,8 +109,8 @@ button[type="submit"],
   transition: background 0.3s, transform 0.2s;
 }
 
-button[type="submit"]:hover:not(:disabled),
-.login-button:hover:not(:disabled) {
+button[type="submit"]:hover,
+.login-button:hover {
   background-color: #357ab8;
   transform: scale(1.02);
 }
@@ -119,23 +120,12 @@ button[type="submit"]:disabled {
   cursor: not-allowed;
 }
 
-.login-redirect {
+.register-section {
   text-align: center;
   margin-top: 20px;
 }
 
-.login-redirect p {
+.register-section p {
+  margin-bottom: 10px;
   color: #555;
-  font-size: 15px;
-}
-
-.login-redirect a {
-  color: #4a90e2;
-  cursor: pointer;
-  text-decoration: underline;
-  transition: color 0.3s;
-}
-
-.login-redirect a:hover {
-  color: #357ab8;
 }

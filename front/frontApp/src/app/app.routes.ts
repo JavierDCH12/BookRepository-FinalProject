@@ -5,7 +5,6 @@ import { HomeComponent } from './components/home/home.component';
 import { FavoriteListComponent } from './components/favorite-list/favorite-list.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
-import {AuthGuard} from './auth/auth.guard';
 import { BookDetailComponent } from './components/book-detail/book-detail.component';
 
 export const routes: Routes = [
@@ -13,10 +12,10 @@ export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'login', component: AuthLoginComponent },
     { path: 'home', component: HomeComponent },
-    { path: 'favorites', component: FavoriteListComponent, canActivate:[AuthGuard] },
-    { path: 'profile', component: ProfileComponent, canActivate:[AuthGuard] },
-    { path: 'user/:username', component: PublicProfileComponent },
-    { path: 'book-detail/:bookKey', component: BookDetailComponent },
+    { path: 'favorites', component: FavoriteListComponent },
+    { path: 'profile', component: ProfileComponent },
+    { path: 'user/:username', component: PublicProfileComponent }, 
+    { path: 'book-detail/:bookKey', component: BookDetailComponent },  // Add BookDetailComponent here when it's ready  
     { path: '**', redirectTo: 'home' }
 ];
 

@@ -1,21 +1,21 @@
 from django.views.decorators.cache import cache_page
-from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from rest_framework import status
 import requests
 
-@cache_page(60)  # Usamos el decorador cache_page de DRF
+
+@cache_page(60)
 @api_view(['GET'])
 @permission_classes([AllowAny])
-
 def search_books(request):
     title = request.GET.get('title', '')
     author = request.GET.get('author', '')
     genre = request.GET.get('genre', '')
-    page = int(request.GET.get('page', 1))
-    per_page = 20  # Queremos mostrar 20 resultados por página
-    max_results = 60  # Limitar el total a 60 resultados
+    page = int(request.GET.get('page', 1))  # Número de página, por defecto es 1
+    per_page = 20  # Mostrar 20 resultados por página
+    max_results = 60  # Limitar a un total de 60 resultados
 
     if not (title or author or genre):
         return Response({"detail": "Debes proporcionar al menos un parámetro (title, author o genre)"},
@@ -30,21 +30,22 @@ def search_books(request):
         query_parts.append(f"subject:{genre}")
 
     query = "+".join(query_parts)
-    offset = (page - 1) * per_page
-    url = f'https://openlibrary.org/search.json?q={query}&limit={per_page}&offset={offset}'
-
+    offset = (page - 1) * per_page  # Desplazamiento según la página
+    # Solicitar solo 60 libros como máximo
+    url = f'https://openlibrary.org/search.json?q={query}&limit={max_results}&offset={offset}'  # Limitar a 60 libros
     response = requests.get(url)
 
     if response.status_code == 200:
         data = response.json()
         resultados = []
 
-        # Limitar a 60 resultados
+        # Asegúrate de limitar la respuesta a 60 libros
         for book in data.get('docs', [])[:max_results]:
             title = book.get('title', 'Desconocido')
             author = ", ".join(book.get('author_name', ['Desconocido'])[:3])
             genres = [", ".join(book.get('subject', [])[:3])] if book.get('subject') else None
 
+            # Extraer correctamente el book_key desde OpenLibrary
             openlibrary_key = book.get('key', '')
             if openlibrary_key.startswith("/works/"):
                 book_key = openlibrary_key.replace("/works/", "")
@@ -58,16 +59,19 @@ def search_books(request):
                 'isbn': book.get('isbn', [None])[0],
                 'genres': genres,
                 'book_key': book_key,
-                'cover_url': f"https://covers.openlibrary.org/b/id/{book['cover_i']}-M.jpg" if book.get(
-                    'cover_i') else None
+                'cover_url': f"https://covers.openlibrary.org/b/id/{book['cover_i']}-M.jpg" if book.get('cover_i') else None
             }
             resultados.append(book_info)
 
-        total_pages = 3  # Queremos mostrar solo 3 páginas con un máximo de 60 resultados
+        # Calcular el total de páginas basado en los 60 libros disponibles
+        total_count = min(len(resultados), max_results)  # El total de libros encontrados, hasta 60
+        total_pages = (total_count // per_page) + (1 if total_count % per_page > 0 else 0)
+
         return Response({
             "books": resultados,
-            "total_count": len(resultados),
-            "total_pages": total_pages
+            "total_count": total_count,
+            "total_pages": total_pages,
+            "current_page": page,
         }, status=status.HTTP_200_OK)
 
     return Response({"detail": "Error en la consulta a OpenLibrary"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

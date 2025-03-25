@@ -2,11 +2,10 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  /* ...existing code... */
+  font-family: 'Poppins', sans-serif;
 }
 
 .home-container {
-  font-family: 'Poppins', sans-serif;
   padding: 20px;
   background: linear-gradient(135deg, #f3f8ff, #ffffff);
   border-radius: 15px;
@@ -14,14 +13,15 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;  /* Ensure it occupies the full height of the screen */
+  height: 100vh;
+  justify-content: flex-start; /* Ajustamos para que el contenido quede bien alineado */
 }
 
 .home-content {
   width: 100%;
   max-width: 900px;
   margin-bottom: 30px;
-  text-align: center;  /* Asegura que el contenido esté centrado */
+  text-align: center;
 }
 
 .profile-card {
@@ -113,6 +113,10 @@ html, body {
 
 .public-profile-search {
   margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .public-profile-search input {
@@ -145,7 +149,7 @@ html, body {
   justify-content: center;
   margin-top: 30px;
   padding: 20px 0;
-  background-color: #f9f9f9; /* Le damos un fondo más suave para diferenciarla */
+  background-color: #f9f9f9;
   border-radius: 10px;
 }
 
@@ -155,4 +159,24 @@ html, body {
   border-radius: 15px;
   background: #ffffff;
   padding: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    padding: 15px;
+  }
+
+  .profile-card {
+    padding: 15px;
+  }
+
+  .main-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
 }

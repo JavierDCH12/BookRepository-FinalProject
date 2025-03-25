@@ -1,57 +1,63 @@
 <div class="book-detail-container" *ngIf="!isLoading && book; else loading">
-  <div class="book-header">
-    <img *ngIf="book.cover_url" [src]="book.cover_url" alt="Book Cover" class="book-cover">
-    <div class="book-info">
-      <h1>{{ book.title }}</h1>
-      <p><strong>Autor:</strong> {{ book.author }}</p>
-      <p *ngIf="book.first_publish_year"><strong>Publicado en:</strong> {{ book.first_publish_year }}</p>
-
-      <p *ngIf="book.genres && book.genres.length > 0">
-        <strong>Géneros:</strong> {{ formatGenres(book.genres) }}
-      </p>
-
-      <p *ngIf="book.isbn"><strong>ISBN:</strong> {{ book.isbn }}</p>
-    </div>
-  </div>
-
-  <div class="description-section">
-    <h3>Descripción</h3>
-    <p class="description">{{ book.description || 'No hay descripción disponible.' }}</p>
-  </div>
-
-  <div class="actions">
-    <button *ngIf="!isFavorite" (click)="addToFavorites()">⭐ Añadir a Favoritos</button>
-    <button *ngIf="isFavorite" (click)="removeFromFavorites()">❌ Quitar de Favoritos</button>
-  </div>
-
-  <div *ngIf="isFavorite" class="review-section">
-    <h3>Tu reseña y valoración</h3>
-
-    <div *ngIf="!isEditingReview">
-      <blockquote *ngIf="reviewText; else noReview">{{ reviewText }}</blockquote>
-      <ng-template #noReview>
-        <p class="review-placeholder">Aún no has escrito una reseña. Haz clic abajo para escribir una.</p>
-      </ng-template>
-      <button (click)="startEditReview()">✏️ Escribir o editar reseña</button>
-    </div>
-
-    <div *ngIf="isEditingReview" class="edit-review-form">
-      <textarea [(ngModel)]="reviewText" placeholder="Escribe tu reseña aquí..."></textarea>
-      <div class="review-actions">
-        <button (click)="saveReview()">💾 Guardar</button>
-        <button (click)="cancelEditReview()">❌ Cancelar</button>
+    <div class="book-header">
+      <img *ngIf="book.cover_url" [src]="book.cover_url" alt="Book Cover" class="book-cover">
+      <div class="book-info">
+        <h1>{{ book.title }}</h1>
+        <p><strong>Autor:</strong> {{ book.author }}</p>
+        <p *ngIf="book.first_publish_year"><strong>Publicado en:</strong> {{ book.first_publish_year }}</p>
+  
+        <p *ngIf="book.genres && book.genres.length > 0">
+          <strong>Géneros:</strong> {{ formatGenres(book.genres) }}
+        </p>
+    
+        <p *ngIf="book.isbn"><strong>ISBN:</strong> {{ book.isbn }}</p>
       </div>
     </div>
-
-    <h4>Tu valoración:</h4>
-    <div class="stars">
-      <span *ngFor="let star of [1,2,3,4,5]" 
-            (click)="setRating(star)" 
-            [class.filled-star]="star <= rating">★</span>
+  
+    <div class="description-section">
+      <h3>Descripción</h3>
+      <p class="description">{{ book.description || 'No hay descripción disponible.' }}</p>
+    </div>
+  
+    <div class="actions">
+      <button *ngIf="!isFavorite" (click)="addToFavorites()">⭐ Añadir a Favoritos</button>
+      <button *ngIf="isFavorite" (click)="removeFromFavorites()">❌ Quitar de Favoritos</button>
+    </div>
+  
+    <div *ngIf="isFavorite" class="review-section">
+      <h3>Tu reseña y valoración</h3>
+  
+      <div *ngIf="!isEditingReview">
+        <blockquote *ngIf="reviewText; else noReview">{{ reviewText }}</blockquote>
+        <ng-template #noReview>
+          <p class="review-placeholder">Aún no has escrito una reseña. Haz clic abajo para escribir una.</p>
+        </ng-template>
+        <button (click)="startEditReview()">✏️ Escribir o editar reseña</button>
+      </div>
+  
+      <div *ngIf="isEditingReview" class="edit-review-form">
+        <textarea [(ngModel)]="reviewText" placeholder="Escribe tu reseña aquí..."></textarea>
+        <div class="review-actions">
+          <button (click)="saveReview()">💾 Guardar</button>
+          <button (click)="cancelEditReview()">❌ Cancelar</button>
+        </div>
+      </div>
+  
+      <h4>Tu valoración:</h4>
+      <div class="stars">
+        <span *ngFor="let star of [1,2,3,4,5]" 
+              (click)="setRating(star)" 
+              [class.filled-star]="star <= rating">★</span>
+      </div>
+    </div>
+  
+    <!-- Botón de regreso a la página de inicio -->
+    <div class="go-home">
+      <button type="button" (click)="navigateToHome()">🏠 Volver al inicio</button>
     </div>
   </div>
-</div>
-
-<ng-template #loading>
-  <p class="loading-text">⏳ Cargando detalles del libro...</p>
-</ng-template>
+  
+  <ng-template #loading>
+    <p class="loading-text">⏳ Cargando detalles del libro...</p>
+  </ng-template>
+  

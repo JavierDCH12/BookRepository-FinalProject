@@ -1,3 +1,4 @@
+/* Estilo para el contenedor de detalles del libro */
 .book-detail-container {
   max-width: 900px;
   margin: 40px auto;
@@ -9,6 +10,29 @@
   color: #333;
 }
 
+/* Estilo para el botón de "Volver al inicio" */
+.go-home {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.go-home button {
+  padding: 10px 20px;
+  background: #007bff;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.go-home button:hover {
+  background: #0056b3;
+}
+
+/* Resto de los estilos de los detalles del libro */
 .book-header {
   display: flex;
   gap: 30px;

@@ -63,7 +63,20 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '15/minute',
+        'user': '100/minute',
+        'login': '5/minute',
+        'register': '3/minute',
+        'favorites': '25/minute',
+        'profile_update': '5/minute',
+    }
 }
+
 
 ###########################CACHES
 CACHES = {
@@ -100,39 +113,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
 
 
 
 
-REST_FRAMEWORK= {
-
-    'DEFAULT_THROTTLE_CLASSES' : [
-        'rest_framework.throttling.AnonRateThrottle', #For anon user
-        'rest_framework.throttling.UserRateThrottle',
-    ],
-    'DEFAULT_THROTTLE_RATES': {
-
-        'anon': '15/minute',
-        'user': '100/minute',
-        'login' : '5/minute',
-        'register': '3/minute',
-        'favorites': '25/minute',
-        'profile_update': '5/minute',
-
-    }
 
 
-
-
-}
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -158,7 +145,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 ###########################DATABASE: POSTGRESQL & RAILWAY
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME'),
@@ -167,7 +154,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
     }
-}"""
+}
 
 
 ###########################SEND EMAIL: MAILTRAP
@@ -252,5 +239,4 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 
 """
-
 
