@@ -289,4 +289,42 @@
   background-color: #357ab8;
 }
 
+/* ❤️ Wishlist button */
+.wishlist-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 1.6rem;
+  transition: transform 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.heart-icon {
+  color: #e91e63;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.wishlist-button:hover .heart-icon {
+  animation: pulse 0.6s ease-in-out infinite;
+}
+
+.in-wishlist .heart-icon {
+  color: #c2185b;
+  animation: pulse 0.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+
+
+
+
 

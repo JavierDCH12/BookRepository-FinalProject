@@ -3,15 +3,30 @@
 
   <form (ngSubmit)="onSearch()" class="search-form">
     <div class="input-group">
-      <input type="text" [(ngModel)]="searchParams.title" name="title" placeholder="📖 Título del libro">
+      <input
+        type="text"
+        [(ngModel)]="searchParams.title"
+        name="title"
+        placeholder="📖 Título del libro"
+      />
     </div>
 
     <div class="input-group">
-      <input type="text" [(ngModel)]="searchParams.author" name="author" placeholder="✍️ Autor">
+      <input
+        type="text"
+        [(ngModel)]="searchParams.author"
+        name="author"
+        placeholder="✍️ Autor"
+      />
     </div>
 
     <div class="input-group">
-      <input type="text" [(ngModel)]="searchParams.genre" name="genre" placeholder="📚 Género">
+      <input
+        type="text"
+        [(ngModel)]="searchParams.genre"
+        name="genre"
+        placeholder="📚 Género"
+      />
     </div>
 
     <button type="submit" [disabled]="isLoading" class="search-button">
@@ -27,55 +42,95 @@
     <div class="book-grid">
       <div *ngFor="let book of results" class="book-card">
         <div class="book-cover-container">
-          <img *ngIf="book.cover_url" [src]="book.cover_url" alt="Portada" class="book-cover"
-               (click)="navigateToBookDetail(book.book_key)">
+          <img
+            *ngIf="book.cover_url"
+            [src]="book.cover_url"
+            alt="Portada"
+            class="book-cover"
+            (click)="navigateToBookDetail(book.book_key)"
+          />
         </div>
 
         <div class="book-info">
-          <h4 (click)="navigateToBookDetail(book.book_key)" class="clickable-title">
+          <h4
+            (click)="navigateToBookDetail(book.book_key)"
+            class="clickable-title"
+          >
             {{ book.title }}
           </h4>
           <p *ngIf="book.author" class="author">
-            👤 <a href="#" (click)="$event.preventDefault(); getAuthorWikipediaLink(book.author)">
+            👤
+            <a
+              href="#"
+              (click)="
+                $event.preventDefault(); getAuthorWikipediaLink(book.author)
+              "
+            >
               {{ book.author }}
             </a>
           </p>
-          <p *ngIf="book.first_publish_year" class="publish-year">📅 {{ book.first_publish_year }}</p>
-          <p *ngIf="book.genres" class="genres">🏷️ Género: {{ formatGenres(book.genres) }}</p>
+          <p *ngIf="book.first_publish_year" class="publish-year">
+            📅 {{ book.first_publish_year }}
+          </p>
+          <p *ngIf="book.genres" class="genres">
+            🏷️ Género: {{ formatGenres(book.genres) }}
+          </p>
 
-          <button (click)="toggleFavorite(book); $event.stopPropagation()" class="fav-button">
-            {{ isFavorite(book.book_key) ? "⭐ Quitar de Favoritos" : "☆ Añadir a Favoritos" }}
+          <button
+            (click)="toggleFavorite(book); $event.stopPropagation()"
+            class="fav-button"
+          >
+            {{
+              isFavorite(book.book_key)
+                ? "⭐ Quitar de Favoritos"
+                : "☆ Añadir a Favoritos"
+            }}
           </button>
+
+          <button class="wishlist-button" 
+        [class.in-wishlist]="isInWishlist(book.book_key)"
+        (click)="toggleWishlist(book); $event.stopPropagation()">
+  <span class="heart-icon">❤️</span>
+</button>
         </div>
       </div>
     </div>
 
     <div class="pagination">
-      <button (click)="previousPage()" [disabled]="currentPage <= 1">◀️ Anterior</button>
+      <button (click)="previousPage()" [disabled]="currentPage <= 1">
+        ◀️ Anterior
+      </button>
       <span>Página {{ currentPage }} de {{ totalPages }}</span>
-      <button (click)="nextPage()" [disabled]="currentPage >= totalPages">Siguiente ▶️</button>
+      <button (click)="nextPage()" [disabled]="currentPage >= totalPages">
+        Siguiente ▶️
+      </button>
     </div>
   </div>
 
   <!-- 🔑 Modal de autenticación -->
-<div class="modal" *ngIf="isModalAuthOpen">
-  <div class="modal-content">
-    <span class="close" (click)="closeAuthModal()">&times;</span>
-    <h3>🔐 Inicia sesión para guardar favoritos</h3>
-    <p>Debes iniciar sesión o registrarte para guardar libros en favoritos.</p>
+  <div class="modal" *ngIf="isModalAuthOpen">
+    <div class="modal-content">
+      <span class="close" (click)="closeAuthModal()">&times;</span>
+      <h3>🔐 Inicia sesión para guardar favoritos</h3>
+      <p>
+        Debes iniciar sesión o registrarte para guardar libros en favoritos.
+      </p>
 
-    <div class="auth-modal-buttons">
-      <button (click)="navigateToLogin()">🔑 Iniciar sesión</button>
-      <button (click)="navigateToRegister()">📝 Registrarme</button>
+      <div class="auth-modal-buttons">
+        <button (click)="navigateToLogin()">🔑 Iniciar sesión</button>
+        <button (click)="navigateToRegister()">📝 Registrarme</button>
+      </div>
     </div>
   </div>
-</div>
-
 
   <!-- 📊 Paginación -->
   <div *ngIf="results.length" class="pagination">
-    <button (click)="previousPage()" [disabled]="currentPage <= 1">◀️ Anterior</button>
+    <button (click)="previousPage()" [disabled]="currentPage <= 1">
+      ◀️ Anterior
+    </button>
     <span>Página {{ currentPage }} de {{ totalPages }}</span>
-    <button (click)="nextPage()" [disabled]="currentPage >= totalPages">Siguiente ▶️</button>
+    <button (click)="nextPage()" [disabled]="currentPage >= totalPages">
+      Siguiente ▶️
+    </button>
   </div>
 </div>

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from '../../environ/environ';
+import { LOCAL_STORAGE_KEYS } from '../utils/constants';
 
 export interface WishlistBook {
   book_key: string;
@@ -19,45 +21,67 @@ export interface WishlistBook {
 export class WishlistService {
   private baseUrl = `${environment.apiUrl}wishlist/`;
 
-  private wishlistCountSubject = new BehaviorSubject<number>(0);
-  wishlistCount$ = this.wishlistCountSubject.asObservable();
-
-  private currentWishlist: WishlistBook[] = [];
-
   constructor(private http: HttpClient) {}
 
-  /** Obtener todos los libros en la wishlist */
+  private wishlistCountSubject = new BehaviorSubject<number>(0);
+wishlistCount$ = this.wishlistCountSubject.asObservable();
+
+
+  /** ✅ Obtener encabezados con token */
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
+    
+    if (!token) {
+      console.error('❌ No token found in localStorage.');
+      return new HttpHeaders();
+    }
+
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  }
+
+  /** ✅ Obtener libros en la wishlist */
   getWishlist(): Observable<WishlistBook[]> {
-    return this.http.get<WishlistBook[]>(this.baseUrl).pipe(
-      tap((books) => {
-        this.currentWishlist = books;
-        this.wishlistCountSubject.next(books.length);
-      })
+    return this.http.get<WishlistBook[]>(this.baseUrl, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError(this.handleError)
     );
   }
 
-  /** Cargar la wishlist y actualizar el contador */
-  loadWishlist(): void {
-    this.getWishlist().subscribe(); // Solo dispara el efecto del tap
-  }
-
-  /** Añadir un libro a la wishlist */
+  /** ✅ Añadir libro a la wishlist */
   addToWishlist(book: WishlistBook): Observable<WishlistBook> {
-    return this.http.post<WishlistBook>(this.baseUrl, book).pipe(
-      tap(() => {
-        this.currentWishlist.push(book);
-        this.wishlistCountSubject.next(this.currentWishlist.length);
-      })
+    const formattedBook = {
+      book_key: book.book_key,
+      title: book.title,
+      author: book.author || '',
+      isbn: book.isbn || undefined,
+      genres: Array.isArray(book.genres) ? book.genres.join(', ') : '',
+      cover_url: book.cover_url || '',
+      first_publish_year: book.first_publish_year || undefined
+    };
+
+    return this.http.post<WishlistBook>(this.baseUrl, formattedBook, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError(this.handleError)
     );
   }
 
-  /** Eliminar un libro de la wishlist */
+  /** ✅ Eliminar libro de la wishlist */
   removeFromWishlist(bookKey: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}${bookKey}/`).pipe(
-      tap(() => {
-        this.currentWishlist = this.currentWishlist.filter(b => b.book_key !== bookKey);
-        this.wishlistCountSubject.next(this.currentWishlist.length);
-      })
+    return this.http.delete(`${this.baseUrl}${bookKey}/`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError(this.handleError)
     );
+  }
+
+  /** ✅ Manejo de errores */
+  private handleError(error: any) {
+    console.error('❌ Error en wishlist:', error);
+    return throwError(() => new Error(error.message || 'Ha ocurrido un error en WishlistService.'));
   }
 }

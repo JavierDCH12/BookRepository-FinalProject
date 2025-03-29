@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
     if (this.isAuthenticated) {
       this.loadUserProfile();
       this.checkPendingFavorite();
-      this.wishlistService.loadWishlist(); // inicializamos la carga
+      this.wishlistService.getWishlist(); // inicializamos la carga
     }
 
     // Suscribirse al contador de wishlist
@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit {
       this.isAuthenticated = true;
       this.loadUserProfile();
       this.checkPendingFavorite(); 
-      this.wishlistService.loadWishlist(); // volvemos a cargar
+      this.wishlistService.getWishlist(); // volvemos a cargar
     });
   }
 

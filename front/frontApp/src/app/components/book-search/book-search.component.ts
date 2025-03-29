@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WikipediaService } from '../../services/WikipediaService.service';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
+import { WishlistBook, WishlistService } from '../../services/WishlistService.service';
 
 @Component({
   selector: 'app-book-search',
@@ -22,6 +23,8 @@ export class BookSearchComponent implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
   isAuthenticated: boolean = false;
+  wishlistBooks = new Set<string>();
+
   
   // Paginación
   currentPage: number = 1;
@@ -40,7 +43,8 @@ export class BookSearchComponent implements OnInit {
     private favoriteService: FavoriteService,
     private router: Router,
     private wikipediaService: WikipediaService,
-    private userAuthService: UserAuthServiceService
+    private userAuthService: UserAuthServiceService,
+    private wishlistService: WishlistService
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +54,54 @@ export class BookSearchComponent implements OnInit {
       this.loadFavorites();
     }
   }
+
+  toggleWishlist(book: Book): void {
+    if (!this.isAuthenticated) {
+      localStorage.setItem('pendingWishlistBook', JSON.stringify(book));
+      this.openAuthModal();
+      return;
+    }
+  
+    if (this.isInWishlist(book.book_key)) {
+      this.wishlistService.removeFromWishlist(book.book_key).subscribe({
+        next: () => {
+          this.wishlistBooks.delete(book.book_key);
+        },
+        error: () => console.error('⚠️ Error removing from wishlist'),
+      });
+    } else {
+      const wishlistBook: WishlistBook = {
+        book_key: book.book_key,
+        title: book.title,
+        author: book.author || '',
+        isbn: book.isbn || undefined,
+        genres: Array.isArray(book.genres) ? book.genres : [],
+        cover_url: book.cover_url || undefined,
+        first_publish_year: book.first_publish_year || undefined,
+      };
+  
+      this.wishlistService.addToWishlist(wishlistBook).subscribe({
+        next: () => {
+          this.wishlistBooks.add(book.book_key);
+        },
+        error: () => console.error('⚠️ Error adding to wishlist'),
+      });
+    }
+  }
+  
+  isInWishlist(bookKey: string): boolean {
+    return this.wishlistBooks.has(bookKey);
+  }
+
+  loadWishlist(): void {
+    this.wishlistService.getWishlist().subscribe({
+      next: (wishlist: WishlistBook[]) => {
+        this.wishlistBooks = new Set(wishlist.map(w => w.book_key));
+      },
+      error: () => console.error('⚠️ Error loading wishlist'),
+    });
+  }
+  
 
   /** 🔍 Buscar libros */
   onSearch(page: number = 1): void {
