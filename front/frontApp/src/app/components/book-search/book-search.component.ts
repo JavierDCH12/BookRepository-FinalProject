@@ -52,8 +52,10 @@ export class BookSearchComponent implements OnInit {
     console.log('🟢 User authenticated?', this.isAuthenticated);
     if (this.isAuthenticated) {
       this.loadFavorites();
+      this.loadWishlist(); 
     }
   }
+  
 
   toggleWishlist(book: Book): void {
     if (!this.isAuthenticated) {

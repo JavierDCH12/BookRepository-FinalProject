@@ -48,31 +48,31 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAuthenticated = this.userAuthService.isAuthenticated();
-
+  
     if (this.isAuthenticated) {
       this.loadUserProfile();
       this.checkPendingFavorite();
-      this.wishlistService.getWishlist(); // inicializamos la carga
+      this.checkPendingWishlist(); // <-- ✅ AÑADE AQUÍ
+      this.wishlistService.getWishlist();
     }
-
-    // Suscribirse al contador de wishlist
+  
     this.wishlistService.wishlistCount$.subscribe(count => {
       this.wishlistCount = count;
     });
-
-    // Perfil actual actualizado
+  
     this.profileService.currentUser$.subscribe((profile: any) => {
       this.userProfile = profile;
     });
-
-    // Evento tras login con favorito pendiente
+  
     this.userAuthService.loginSuccessSourceAddBook$.subscribe(() => {
       this.isAuthenticated = true;
       this.loadUserProfile();
-      this.checkPendingFavorite(); 
-      this.wishlistService.getWishlist(); // volvemos a cargar
+      this.checkPendingFavorite();
+      this.checkPendingWishlist(); // <-- ✅ Y AQUÍ TAMBIÉN
+      this.wishlistService.getWishlist();
     });
   }
+  
 
   get username(): string {
     return this.userProfile?.username || localStorage.getItem('username') || 'Usuario';
@@ -155,4 +155,44 @@ export class HomeComponent implements OnInit {
       });
     }
   }
+
+
+  private checkPendingWishlist() {
+    const pendingWishlistData = localStorage.getItem('pendingWishlistBook');
+    if (pendingWishlistData) {
+      const pendingBook: Book = JSON.parse(pendingWishlistData);
+  
+      const wishlistBook = {
+        book_key: pendingBook.book_key,
+        title: pendingBook.title,
+        author: pendingBook.author || '',
+        isbn: pendingBook.isbn || undefined,
+        genres: Array.isArray(pendingBook.genres) ? pendingBook.genres : [],
+        first_publish_year: pendingBook.first_publish_year || undefined,
+        cover_url: pendingBook.cover_url || undefined,
+      };
+  
+      this.wishlistService.addToWishlist(wishlistBook).subscribe({
+        next: () => {
+          console.log(`🎁 Libro '${wishlistBook.title}' añadido a wishlist tras login.`);
+          localStorage.removeItem('pendingWishlistBook');
+          this.toastr.success(
+            `'${wishlistBook.title}' se ha añadido a tu wishlist 🎁`,
+            'Libro añadido'
+          );
+        },
+        error: (err: any) => {
+          console.error('⚠️ Error añadiendo wishlist post-login:', err);
+          localStorage.removeItem('pendingWishlistBook');
+          this.toastr.error(
+            'No se pudo añadir el libro automáticamente a la wishlist.',
+            'Error'
+          );
+        },
+      });
+    }
+  }
+  
+
+
 }

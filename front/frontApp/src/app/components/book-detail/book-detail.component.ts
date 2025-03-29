@@ -6,20 +6,21 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
 
-
 @Component({
   selector: 'app-book-detail',
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.css'],
+  standalone: true,
   imports: [CommonModule, FormsModule]
 })
 export class BookDetailComponent implements OnInit {
   book: Book | null = null;
-  isFavorite: boolean = false;
-  reviewText: string = '';
-  isEditingReview: boolean = false;
-  isLoading: boolean = true;
-  rating: number = 0;
+  isFavorite = false;
+  reviewText = '';
+  isEditingReview = false;
+  isLoading = true;
+  rating = 0;
+  tempRating = 0; // ⭐ Para hover visual
 
   constructor(
     private route: ActivatedRoute,
@@ -35,7 +36,6 @@ export class BookDetailComponent implements OnInit {
     }
   }
 
-  // Cargar los detalles del libro desde la API
   loadBookDetails(bookKey: string): void {
     this.searchService.getBookDetails(bookKey).subscribe({
       next: (response: Book) => {
@@ -50,7 +50,6 @@ export class BookDetailComponent implements OnInit {
     });
   }
 
-  // Verificar si el libro está en los favoritos
   checkIfFavorite(bookKey: string): void {
     this.favoriteService.getFavorites().subscribe({
       next: (favorites) => {
@@ -58,102 +57,98 @@ export class BookDetailComponent implements OnInit {
         if (foundFavorite) {
           this.isFavorite = true;
           this.reviewText = foundFavorite.review || '';
-          this.rating = foundFavorite.rating || 0; // Traer rating de los favoritos
+          this.rating = foundFavorite.rating || 0;
         }
       },
       error: () => console.error('⚠️ Error loading favorites'),
     });
   }
 
-  // Agregar a favoritos
   addToFavorites(): void {
     if (!this.book) return;
-
-    const firstPublishYear = typeof this.book.first_publish_year === 'number'
-      ? this.book.first_publish_year
-      : parseInt((this.book.first_publish_year ?? '') as unknown as string, 10); 
 
     const favoriteBook = {
       book_key: this.book.book_key,
       title: this.book.title,
       author: this.book.author || '',
+      isbn: this.book.isbn || undefined,
       genres: this.book.genres || [],
-      first_publish_year: firstPublishYear,
+      first_publish_year: this.book.first_publish_year || undefined,
       cover_url: this.book.cover_url || '',
       review: this.reviewText || '',
-      rating: 0
+      rating: this.rating || 0
     };
 
     this.favoriteService.addFavorite(favoriteBook).subscribe({
       next: () => {
         this.isFavorite = true;
-        console.log(`✅ Book ${this.book?.title} added to favorites`);
+        console.log(`✅ ${this.book?.title} añadido a favoritos`);
       },
-      error: (err) => console.error('❌ Error adding book to favorites:', err)
+      error: (err) => console.error('❌ Error al añadir a favoritos:', err)
     });
   }
 
-  // Eliminar de favoritos
   removeFromFavorites(): void {
     if (!this.book) return;
     this.favoriteService.removeFavorite(this.book.book_key).subscribe({
       next: () => {
         this.isFavorite = false;
-        console.log(`✅ Book ${this.book?.title} removed from favorites`);
+        this.reviewText = '';
+        this.rating = 0;
+        console.log(`✅ ${this.book?.title} eliminado de favoritos`);
       },
-      error: (err) => console.error('❌ Error removing book from favorites:', err)
+      error: (err) => console.error('❌ Error al eliminar de favoritos:', err)
     });
   }
 
-  // Guardar la reseña
   saveReview(): void {
     if (!this.book || !this.reviewText.trim()) return;
     this.favoriteService.manageReview(this.book.book_key, this.reviewText).subscribe({
       next: () => {
-        console.log('✅ Review updated');
+        console.log('✅ Reseña guardada');
         this.isEditingReview = false;
       },
-      error: () => console.error('❌ Error saving review'),
+      error: () => console.error('❌ Error al guardar la reseña'),
     });
   }
 
-  // Empezar a editar la reseña
   startEditReview(): void {
     this.isEditingReview = true;
   }
 
-  // Cancelar la edición de la reseña
   cancelEditReview(): void {
     this.isEditingReview = false;
   }
 
-  // Formatear los géneros
-  formatGenres(genres: string | string[]): string {
-    // Si 'genres' no es un arreglo, lo convertimos en uno
-    if (typeof genres === 'string') {
-      return genres;
-    }
-    return genres.join(', ');  // Si es un arreglo, lo unimos en una cadena separada por comas
-  }
-  
-
-  // Navegar hacia la lista de libros
-  navigateToHome(): void {
-    this.router.navigate([NAVIGATION_ROUTES.FAVORITES]);
+  formatGenres(genres: string[] | string): string {
+    return Array.isArray(genres) ? genres.join(', ') : genres;
   }
 
-  // Actualizar la valoración
   setRating(star: number): void {
     if (this.isFavorite && this.book) {
       this.rating = star;
-      this.favoriteService.updateRating(this.book.book_key, this.rating).subscribe({
-        next: () => {
-          console.log(`✅ Rating updated for ${this.book?.title}`);
-        },
-        error: (err) => console.error('❌ Error updating rating:', err)
+      this.favoriteService.updateRating(this.book.book_key, star).subscribe({
+        next: () => console.log(`✅ Rating actualizado a ${star} estrellas`),
+        error: () => console.error('❌ Error al guardar el rating')
       });
-    } else {
-      console.warn('⚠️ The book must be in favorites to rate it.');
     }
   }
+
+  // Hover visual para estrellas
+  onStarHover(star: number): void {
+    if (this.isFavorite) {
+      this.tempRating = star;
+    }
+  }
+
+  onStarLeave(): void {
+    this.tempRating = 0;
+  }
+
+  navigateToHome(): void {
+    this.router.navigate([NAVIGATION_ROUTES.HOME]);
+  }
+
+
+  
 }

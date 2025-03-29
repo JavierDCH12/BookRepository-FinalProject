@@ -309,14 +309,17 @@
   transition: transform 0.3s ease;
 }
 
-.wishlist-button:hover .heart-icon {
-  animation: pulse 0.6s ease-in-out infinite;
-}
-
 .in-wishlist .heart-icon {
   color: #c2185b;
-  animation: pulse 0.6s ease-in-out infinite;
+  animation: pop 0.4s ease;
 }
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
 
 @keyframes pulse {
   0%, 100% { transform: scale(1); }

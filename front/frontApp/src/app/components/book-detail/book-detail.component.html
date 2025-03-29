@@ -43,12 +43,25 @@
         </div>
       </div>
   
-      <h4>Tu valoración:</h4>
-      <div class="stars">
-        <span *ngFor="let star of [1,2,3,4,5]" 
-              (click)="setRating(star)" 
-              [class.filled-star]="star <= rating">★</span>
-      </div>
+      <!-- ⭐ Valoración -->
+<div class="rating-section" *ngIf="isFavorite">
+  <h4>⭐ Tu valoración</h4>
+  <div class="stars">
+    <span *ngFor="let star of [1,2,3,4,5]"
+          (click)="setRating(star)"
+          (mouseenter)="onStarHover(star)"
+          (mouseleave)="onStarLeave()"
+          [ngClass]="{ 'filled-star': star <= (tempRating || rating), 'empty-star': star > (tempRating || rating) }">
+      ★
+    </span>
+  </div>
+  
+  
+</div>
+
+
+      
+      
     </div>
   
     <!-- Botón de regreso a la página de inicio -->

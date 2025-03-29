@@ -87,11 +87,17 @@
             }}
           </button>
 
-          <button class="wishlist-button" 
-        [class.in-wishlist]="isInWishlist(book.book_key)"
-        (click)="toggleWishlist(book); $event.stopPropagation()">
-  <span class="heart-icon">❤️</span>
-</button>
+          <button
+            class="wishlist-button"
+            [class.in-wishlist]="isInWishlist(book.book_key)"
+            (click)="toggleWishlist(book); $event.stopPropagation()"
+          >
+            <span
+              class="heart-icon"
+              [innerHTML]="isInWishlist(book.book_key) ? '❤️' : '🤍'"
+            >
+            </span>
+          </button>
         </div>
       </div>
     </div>
@@ -111,9 +117,10 @@
   <div class="modal" *ngIf="isModalAuthOpen">
     <div class="modal-content">
       <span class="close" (click)="closeAuthModal()">&times;</span>
-      <h3>🔐 Inicia sesión para guardar favoritos</h3>
+      <h3>🔐 Inicia sesión para guardar tus libros</h3>
       <p>
-        Debes iniciar sesión o registrarte para guardar libros en favoritos.
+        Debes iniciar sesión o registrarte para añadir libros a favoritos o a tu
+        wishlist.
       </p>
 
       <div class="auth-modal-buttons">

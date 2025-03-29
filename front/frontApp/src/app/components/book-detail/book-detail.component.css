@@ -1,40 +1,25 @@
-/* Estilo para el contenedor de detalles del libro */
+/* 📘 Contenedor principal del detalle */
 .book-detail-container {
   max-width: 900px;
   margin: 40px auto;
-  padding: 30px;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+  padding: 35px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
+  animation: fadeIn 0.4s ease;
 }
 
-/* Estilo para el botón de "Volver al inicio" */
-.go-home {
-  margin-top: 30px;
-  text-align: center;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.go-home button {
-  padding: 10px 20px;
-  background: #007bff;
-  border: none;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.go-home button:hover {
-  background: #0056b3;
-}
-
-/* Resto de los estilos de los detalles del libro */
+/* 📖 Cabecera del libro */
 .book-header {
   display: flex;
+  flex-wrap: wrap;
   gap: 30px;
   align-items: flex-start;
   margin-bottom: 30px;
@@ -42,21 +27,28 @@
 
 .book-cover {
   max-width: 220px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.book-cover:hover {
+  transform: scale(1.03);
 }
 
 .book-info h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
-  color: #222;
+  font-size: 30px;
+  color: #1a1a1a;
+  margin-bottom: 12px;
 }
 
 .book-info p {
   font-size: 16px;
-  margin: 5px 0;
+  color: #555;
+  margin: 6px 0;
 }
 
+/* 📝 Descripción */
 .description-section {
   margin-top: 30px;
   text-align: justify;
@@ -64,71 +56,86 @@
 
 .description-section h3 {
   border-bottom: 2px solid #007bff;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+  font-size: 20px;
+  color: #007bff;
 }
 
 .description {
   line-height: 1.6;
-  color: #555;
+  font-size: 15px;
+  color: #444;
 }
 
+/* ⭐ Favoritos */
 .actions {
-  margin-top: 25px;
+  margin-top: 30px;
   display: flex;
-  gap: 15px;
   justify-content: center;
+  gap: 16px;
 }
 
 .actions button {
+  padding: 10px 22px;
   background: #007bff;
+  color: white;
   border: none;
-  padding: 10px 20px;
-  color: #fff;
-  border-radius: 6px;
+  font-size: 15px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s;
+  font-weight: 600;
 }
 
 .actions button:hover {
   background: #0056b3;
+  transform: translateY(-2px);
 }
 
+/* ✍️ Reseña */
 .review-section {
-  margin-top: 35px;
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
+  margin-top: 40px;
+  background: #f6f9fc;
+  padding: 25px;
+  border-radius: 12px;
 }
 
-.review-section h3, 
+.review-section h3,
 .review-section h4 {
+  color: #333;
   margin-bottom: 10px;
 }
 
 .review-placeholder {
-  color: #777;
+  color: #888;
   font-style: italic;
+  font-size: 14px;
 }
 
 .edit-review-form textarea {
   width: 100%;
-  height: 100px;
-  padding: 10px;
-  border-radius: 6px;
+  height: 110px;
+  padding: 12px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   resize: vertical;
-  margin-bottom: 10px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.review-actions {
+  display: flex;
+  gap: 10px;
 }
 
 .review-actions button {
-  margin-right: 10px;
   padding: 8px 16px;
+  font-weight: bold;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
+  transition: transform 0.2s;
 }
 
 .review-actions button:first-child {
@@ -141,28 +148,66 @@
   color: white;
 }
 
+.review-actions button:hover {
+  transform: scale(1.05);
+}
+
+/* 🌟 Estrellas de valoración */
 .stars {
   margin-top: 15px;
-  font-size: 30px;
+  font-size: 28px;
+  display: flex;
+  gap: 6px;
 }
 
 .stars span {
   cursor: pointer;
-  color: #ccc;
-  transition: color 0.2s;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.stars span:hover,
-.stars span:hover ~ span {
-  color: #ffcc00;
-}
-
+/* ⭐ Estrella rellena */
 .filled-star {
-  color: #FFD700;
+  color: #FFD700; /* dorado */
 }
 
+/* ☆ Estrella vacía */
+.empty-star {
+  color: #ccc; /* gris claro */
+}
+
+/* ✨ Efecto al pasar el ratón (sin sobrescribir si ya está marcada) */
+.stars span:hover {
+  transform: scale(1.2);
+  color: #ffc107 !important;
+}
+
+/* 🔙 Botón de volver */
+.go-home {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.go-home button {
+  padding: 10px 24px;
+  background: #007bff;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.go-home button:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* ⏳ Cargando */
 .loading-text {
   text-align: center;
   font-size: 18px;
   color: #555;
+  margin-top: 60px;
 }
