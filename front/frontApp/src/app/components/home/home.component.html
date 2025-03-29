@@ -3,16 +3,32 @@
   <div class="home-container">
 
     <!-- Tarjeta de Perfil (Sidebar) -->
-    <div class="sidebar" *ngIf="isAuthenticated">
-      <div class="profile-card">
-        <img class="profile-picture"
-             [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture"
-             alt="Profile Picture">
-        <h3>{{ username }}</h3>
-        <p class="user-email">📧 {{ userProfile?.email }}</p>
-        <button class="profile-button" (click)="navigateToProfile()">👤 Ver Perfil Privado</button>
-      </div>
+<div class="sidebar" *ngIf="isAuthenticated">
+  <div class="profile-card">
+    <img class="profile-picture"
+         [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture"
+         alt="Profile Picture">
+    <h3>{{ username }}</h3>
+    <p class="user-email">📧 {{ userProfile?.email }}</p>
+    <button class="profile-button" (click)="navigateToProfile()">👤 Ver Perfil Privado</button>
+  </div>
+
+  <!-- 🔍 Buscador de perfil público (debajo del perfil privado) -->
+  <div class="public-profile-search-sidebar">
+    <h4>🔎 Ver perfil público</h4>
+    <div class="search-bar">
+      <input 
+        type="text" 
+        [(ngModel)]="searchedUsername" 
+        placeholder="Introduce un username"
+        (keyup.enter)="navigateToPublicProfile()" 
+      />
+      <button (click)="navigateToPublicProfile()">Ir</button>
     </div>
+    <p class="search-hint">Explora los favoritos de otros usuarios.</p>
+  </div>
+</div>
+
 
     <!-- Sección Principal -->
     <div class="main-content">
@@ -39,20 +55,7 @@
           <button *ngIf="isAuthenticated" (click)="logout()">🚪 Cerrar Sesión</button>
         </div>
 
-        <!-- 🔍 Buscador de perfil público -->
-        <div class="public-profile-search">
-          <h4>🔎 Ver perfil público</h4>
-          <div class="search-bar">
-            <input 
-              type="text" 
-              [(ngModel)]="searchedUsername" 
-              placeholder="Introduce un nombre de usuario"
-              (keyup.enter)="navigateToPublicProfile()" 
-            />
-            <button (click)="navigateToPublicProfile()">Ir</button>
-          </div>
-          <p class="search-hint">Puedes explorar los libros favoritos de cualquier usuario público.</p>
-        </div>
+        
 
       </div>
 

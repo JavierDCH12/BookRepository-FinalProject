@@ -15,8 +15,10 @@ export interface PublicFavoriteBook {
 export interface PublicUserProfile {
   username: string;
   email: string;
-  register_date: string;  
-  profile_picture?: string;  
+  register_date: string;
+  profile_picture?: string;
+  first_name?: string;
+  last_name?: string;
   favorites: PublicFavoriteBook[];
 }
 

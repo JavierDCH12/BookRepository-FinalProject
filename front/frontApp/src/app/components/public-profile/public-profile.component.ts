@@ -43,21 +43,33 @@ export class PublicProfileComponent implements OnInit {
     }
     
 
-  private loadPublicProfile(username: string): void {
-    this.isLoading = true;
-    this.publicProfileService.getPublicProfile(username).subscribe({
-      next: (profile) => {
-        this.userProfile = profile;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('❌ Error al cargar perfil público:', err);
-        this.errorMessage = `El usuario "${username}" no existe o no se pudo cargar.`;
-        this.userProfile = null;
-        this.isLoading = false;
-      }
-    });
-  }
+    private loadPublicProfile(username: string): void {
+      this.isLoading = true;
+      this.publicProfileService.getPublicProfile(username).subscribe({
+        next: (profile) => {
+          console.log('📡 Perfil recibido del backend:', profile); // ✅ Mostrar datos completos
+    
+          // Mostrar cada campo por separado para debugging
+          console.log(`👤 Username: ${profile.username}`);
+          console.log(`📧 Email: ${profile.email}`);
+          console.log(`📅 Fecha de registro: ${profile.register_date}`);
+          console.log(`🖼️ Foto de perfil: ${profile.profile_picture || 'No disponible'}`);
+          console.log(`🧑 Nombre: ${profile.first_name || '(No especificado)'}`);
+          console.log(`👪 Apellido: ${profile.last_name || '(No especificado)'}`);
+          console.log(`📚 Libros favoritos (${profile.favorites.length}):`, profile.favorites);
+    
+          this.userProfile = profile;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('❌ Error al cargar perfil público:', err);
+          this.errorMessage = `El usuario "${username}" no existe o no se pudo cargar.`;
+          this.userProfile = null;
+          this.isLoading = false;
+        }
+      });
+    }
+    
 
   navigateToHome() {
       this.router.navigate([NAVIGATION_ROUTES.HOME]);
