@@ -1,0 +1,101 @@
+.favorites-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 25px;
+    background: linear-gradient(135deg, #ffffff, #f0f4f8);
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+  }
+  
+  .favorite-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+  }
+  
+  .favorite-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    padding: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .favorite-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 14px rgba(0,0,0,0.1);
+  }
+  
+  .book-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .book-info h4 {
+    font-size: 0.95rem;
+    color: #34495e;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: color 0.2s ease;
+  }
+  
+  .book-info h4:hover {
+    color: #2980b9;
+  }
+  
+  .author a {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  .author a:hover {
+    color: #2980b9;
+  }
+  
+  .publish-year {
+    font-size: 0.75rem;
+    color: #95a5a6;
+    margin-top: 4px;
+  }
+  
+  .remove-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  .remove-button:hover {
+    background-color: #c0392b;
+  }
+  
+  .no-favorites {
+    padding: 12px;
+    background: #ecf0f1;
+    border-radius: 8px;
+    color: #7f8c8d;
+    font-size: 0.85rem;
+  }
+  
+  .loading,
+  .error-message {
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+  }
+  

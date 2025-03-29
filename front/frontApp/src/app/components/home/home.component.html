@@ -25,6 +25,12 @@
           <button *ngIf="!isAuthenticated" (click)="navigateToLogin()">🔑 Login</button>
           <button *ngIf="!isAuthenticated" (click)="navigateToRegister()">📝 Registro</button>
           <button *ngIf="isAuthenticated" (click)="setView('favorites')">⭐ Mis Favoritos</button>
+          <button *ngIf="isAuthenticated" (click)="setView('wishlist')">
+            💖 Mi Wishlist <span class="wishlist-counter">({{ wishlistCount }})</span>
+          </button>
+                    
+          
+
           <button *ngIf="isAuthenticated" (click)="setView('search')" [disabled]="currentView === 'search'">
             🔍 Buscar Libros
           </button>
@@ -42,6 +48,7 @@
       <div class="dynamic-content-container">
         <app-book-search *ngIf="currentView === 'search'"></app-book-search>
         <app-favorite-list *ngIf="currentView === 'favorites'"></app-favorite-list>
+        <app-wishlist *ngIf="currentView === 'wishlist'"></app-wishlist>
       </div>
     </div>
 

@@ -6,6 +6,7 @@ import { FavoriteListComponent } from './components/favorite-list/favorite-list.
 import { ProfileComponent } from './components/profile/profile.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 import { BookDetailComponent } from './components/book-detail/book-detail.component';
+import { WishlistComponent } from './components/wishlist/wishlist.component';
 
 export const routes: Routes = [
     { path: 'register', component: AuthRegisterComponent },
@@ -15,7 +16,10 @@ export const routes: Routes = [
     { path: 'favorites', component: FavoriteListComponent },
     { path: 'profile', component: ProfileComponent },
     { path: 'user/:username', component: PublicProfileComponent }, 
-    { path: 'book-detail/:bookKey', component: BookDetailComponent },  // Add BookDetailComponent here when it's ready  
-    { path: '**', redirectTo: 'home' }
+    { path: 'book-detail/:bookKey', component: BookDetailComponent },  
+    { path: '**', redirectTo: 'home' },
+    { path: 'wishlist', component: WishlistComponent },
+
+
 ];
 

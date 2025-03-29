@@ -226,6 +226,30 @@ body {
   font-size: 0.9rem;
 }
 
+.wishlist-button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #ec407a; /* rosa vibrante */
+  color: white;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+}
+
+.wishlist-button:hover {
+  background-color: #d81b60;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(216, 27, 96, 0.3);
+}
+
+.wishlist-counter {
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+
+
 /* ✅ Responsive (pantallas pequeñas) */
 @media (max-width: 800px) {
   .home-container {
@@ -249,4 +273,8 @@ body {
   .footer {
     padding: 20px 10px;
   }
+
+
+
+
 }
