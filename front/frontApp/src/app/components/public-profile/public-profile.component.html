@@ -1,36 +1,40 @@
 <div class="public-profile-container">
-  
-  <!-- 🔄 Loading Spinner -->
+
+  <!-- 🔄 Cargando -->
   <div class="loading-container" *ngIf="isLoading">
     <span class="spinner"></span>
-    <p>⏳ Loading profile...</p>
+    <p>⏳ Cargando perfil...</p>
   </div>
 
-  <!-- ❌ Error message -->
-  <div class="error-container" *ngIf="errorMessage">
+  <!-- ❌ Error -->
+  <div class="error-container" *ngIf="!isLoading && errorMessage">
     <p>⚠️ {{ errorMessage }}</p>
-    <button class="back-home-button" (click)="navigateToHome()">🏠 Go to Home</button>
+    <button class="back-home-button" (click)="navigateToHome()">🏠 Volver al inicio</button>
   </div>
 
-  <!-- ✅ Loaded Profile -->
-  <div *ngIf="!isLoading && userProfile">
+  <!-- ✅ Perfil cargado -->
+  <section *ngIf="!isLoading && userProfile" class="profile-content">
+
+    <!-- 👤 Cabecera del perfil -->
     <div class="profile-header">
       <img 
         class="profile-picture"
         [src]="userProfile.profile_picture ? 'http://127.0.0.1:8000' + userProfile.profile_picture : 'assets/default-avatar.png'"
-        alt="{{ userProfile.username }}'s Profile Picture"
-        >
+        [alt]="userProfile.username + ' avatar'"
+      />
       <div class="user-info">
-        <h2>👤 {{ userProfile.username }} Profile</h2>
+        <h2>👤 {{ userProfile.username }}</h2>
+        <p>📧 {{ userProfile.email }}</p>
+        <p>📅 Se unió el {{ userProfile.register_date | date:'longDate' }}</p>
       </div>
     </div>
 
-    <!-- 📚 Favorites section -->
+    <!-- ⭐ Libros favoritos -->
     <section class="favorites-section">
-      <h3>📚 Favorite Books</h3>
+      <h3>📚 Libros favoritos</h3>
 
       <div *ngIf="userProfile.favorites.length === 0" class="no-favorites">
-        <p>✨ This user hasn't added any favorite books yet.</p>
+        <p>✨ Este usuario aún no ha añadido libros a favoritos.</p>
       </div>
 
       <div class="favorites-grid" *ngIf="userProfile.favorites.length > 0">
@@ -39,27 +43,28 @@
             class="book-cover" 
             [src]="book.cover_url || 'assets/default-cover.png'" 
             [alt]="book.title + ' cover'"
-            >
-          
-          <h4>{{ book.title }}</h4>
-          <p *ngIf="book.author" class="author">✍️ By {{ book.author }}</p>
+          />
+          <div class="book-info">
+            <h4>{{ book.title }}</h4>
+            <p *ngIf="book.author" class="author">✍️ {{ book.author }}</p>
 
-          <div class="rating-display" *ngIf="book.rating && book.rating > 0">
-            <ng-container *ngFor="let star of [1,2,3,4,5]">
-              <span [class.filled-star]="star <= book.rating">★</span>
-            </ng-container>
+            <div class="rating-display" *ngIf="book.rating && book.rating > 0">
+              <ng-container *ngFor="let star of [1,2,3,4,5]">
+                <span [class.filled-star]="star <= book.rating">★</span>
+              </ng-container>
+            </div>
+
+            <blockquote class="review" *ngIf="book.review">
+              “{{ book.review }}”
+            </blockquote>
           </div>
-
-          <blockquote class="review" *ngIf="book.review">
-            "{{ book.review }}"
-          </blockquote>
         </div>
       </div>
     </section>
 
-    <!-- 🔙 Back button -->
+    <!-- 🔙 Botón de volver -->
     <div class="back-button-container">
-      <button class="back-home-button" (click)="navigateToHome()">🏠 Back to Home</button>
+      <button class="back-home-button" (click)="navigateToHome()">🏠 Volver al inicio</button>
     </div>
-  </div>
+  </section>
 </div>

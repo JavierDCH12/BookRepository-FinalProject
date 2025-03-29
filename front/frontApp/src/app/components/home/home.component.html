@@ -16,45 +16,58 @@
 
     <!-- Sección Principal -->
     <div class="main-content">
+
       <div class="main-section">
         <h2>📚 Bienvenido a BookFinder</h2>
         <p *ngIf="!isAuthenticated">Encuentra tus libros favoritos o regístrate para guardar favoritos.</p>
         <p *ngIf="isAuthenticated">Hola, {{ username }} 👋 ¡Explora y guarda tus libros preferidos!</p>
 
+        <!-- Botones principales -->
         <div class="buttons">
           <button *ngIf="!isAuthenticated" (click)="navigateToLogin()">🔑 Login</button>
           <button *ngIf="!isAuthenticated" (click)="navigateToRegister()">📝 Registro</button>
+
           <button *ngIf="isAuthenticated" (click)="setView('favorites')">⭐ Mis Favoritos</button>
           <button *ngIf="isAuthenticated" (click)="setView('wishlist')">
             💖 Mi Wishlist <span class="wishlist-counter">({{ wishlistCount }})</span>
           </button>
-                    
-          
 
           <button *ngIf="isAuthenticated" (click)="setView('search')" [disabled]="currentView === 'search'">
             🔍 Buscar Libros
           </button>
+
           <button *ngIf="isAuthenticated" (click)="logout()">🚪 Cerrar Sesión</button>
         </div>
 
+        <!-- 🔍 Buscador de perfil público -->
         <div class="public-profile-search">
-          <h4>🔎 Ver perfil público:</h4>
-          <input type="text" [(ngModel)]="searchedUsername" placeholder="Introduce username">
-          <button (click)="navigateToPublicProfile()">Ir</button>
+          <h4>🔎 Ver perfil público</h4>
+          <div class="search-bar">
+            <input 
+              type="text" 
+              [(ngModel)]="searchedUsername" 
+              placeholder="Introduce un nombre de usuario"
+              (keyup.enter)="navigateToPublicProfile()" 
+            />
+            <button (click)="navigateToPublicProfile()">Ir</button>
+          </div>
+          <p class="search-hint">Puedes explorar los libros favoritos de cualquier usuario público.</p>
         </div>
+
       </div>
 
-      <!-- Sección Dinámica -->
+      <!-- 📚 Sección Dinámica -->
       <div class="dynamic-content-container">
         <app-book-search *ngIf="currentView === 'search'"></app-book-search>
         <app-favorite-list *ngIf="currentView === 'favorites'"></app-favorite-list>
         <app-wishlist *ngIf="currentView === 'wishlist'"></app-wishlist>
       </div>
-    </div>
 
-  </div>
+    </div> <!-- Fin de .main-content -->
 
-  <!-- ⚡ Footer fuera del home-container -->
+  </div> <!-- Fin de .home-container -->
+
+  <!-- ⚡ Footer -->
   <footer class="footer">
     <div class="footer-content">
       <p>📖 <strong>BookFinder</strong> © 2024. Todos los derechos reservados.</p>

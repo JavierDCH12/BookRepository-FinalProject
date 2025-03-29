@@ -249,6 +249,68 @@ body {
 }
 
 
+/* 🔍 Buscador de perfil público dentro de main-section */
+.public-profile-search {
+  margin-top: 30px;
+  background-color: #f0f4f8;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.public-profile-search h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #37474f;
+}
+
+.public-profile-search .search-bar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.public-profile-search input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #b0bec5;
+  background-color: #ffffff;
+  font-size: 0.95rem;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.public-profile-search button {
+  padding: 10px 16px;
+  border-radius: 10px;
+  background-color: #42a5f5;
+  color: white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.public-profile-search button:hover {
+  background-color: #1e88e5;
+  transform: translateY(-1px);
+}
+
+.public-profile-search .search-hint {
+  font-size: 0.85rem;
+  color: #607d8b;
+  margin-top: 6px;
+}
+
+
+
 
 /* ✅ Responsive (pantallas pequeñas) */
 @media (max-width: 800px) {

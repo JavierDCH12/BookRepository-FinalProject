@@ -33,6 +33,9 @@ export class PublicProfileComponent implements OnInit {
       }
     }
 
+    
+    
+
     reloadProfile(): void {
       if (this.userProfile?.username) {
         this.loadPublicProfile(this.userProfile.username);
@@ -47,8 +50,10 @@ export class PublicProfileComponent implements OnInit {
         this.userProfile = profile;
         this.isLoading = false;
       },
-      error: () => {
-        this.errorMessage = 'User not found or failed to load profile.';
+      error: (err) => {
+        console.error('❌ Error al cargar perfil público:', err);
+        this.errorMessage = `El usuario "${username}" no existe o no se pudo cargar.`;
+        this.userProfile = null;
         this.isLoading = false;
       }
     });
