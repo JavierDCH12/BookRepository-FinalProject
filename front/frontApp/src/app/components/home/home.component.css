@@ -89,6 +89,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-height: 0; /* importante para permitir overflow y scroll correcto */
 }
 
 .main-section {
@@ -96,6 +97,9 @@ body {
   padding: 30px;
   border-radius: 20px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+  max-height: 240px;
+  overflow: hidden;
 }
 
 .main-section h2 {
@@ -170,12 +174,13 @@ body {
 }
 
 .dynamic-content-container {
-  background: #add8e6;
+  flex: 1; /* que crezca al máximo posible */
+  background: #fdfdfd;
   padding: 25px;
   border-radius: 20px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   overflow-y: auto;
-  max-height: calc(100vh - 400px);
+  min-height: 0;
 }
 
 .dynamic-content-container::-webkit-scrollbar {
