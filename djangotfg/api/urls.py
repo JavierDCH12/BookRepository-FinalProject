@@ -20,5 +20,7 @@ urlpatterns = [
     path('users/favorites/<str:book_key>/rating/', views.update_rating, name='update_rating'),
     path('users/public-profile/<str:username>/', views.public_profile_view, name='public-profile'),
     path('books/popular/', views.popular_books, name='popular-books'),
+    path('wishlist/', views.manage_wishlist, name='manage-wishlist'),
+    path('wishlist/<str:book_key>/', views.delete_from_wishlist, name='wishlist-delete'),
 
 ]

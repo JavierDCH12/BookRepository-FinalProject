@@ -10,10 +10,11 @@ from constants import SUCCESS_DEACTIVATE, ERROR_REGISTER, SUCCESS_UPDATE_PROFILE
     INFO_ALREADY_FAVS, INFO_BOOK_REMOVED_FAVS, ERROR_BOOK_NOT_FOUND_IN_FAVS, ERROR_UPLOAD_PHOTO, \
     SUCCESS_UPLOAD_PHOTO, ERROR_EMPTY, SUCCESS_SAVED_REVIEW, ERROR_INVALID_REVIEW, SUCCESS_UPDATE_REVIEW, \
     ERROR_USER_NOT_FOUND
-from .models import FavoriteBook
+from .models import FavoriteBook, WishlistBook
 from .notifications.email import send_welcome_email
 from .security.throttles import FavoriteRateThrottle, ProfileUpdateRateThrottle, RegisterRateThrottle
-from .serializers import UserProfileSerializer, RegisterSerializer, FavoriteBookSerializer, PublicUserProfileSerializer
+from .serializers import UserProfileSerializer, RegisterSerializer, FavoriteBookSerializer, PublicUserProfileSerializer, \
+    WishlistBookSerializer
 from django.contrib.auth import get_user_model
 import logging
 from api.security import throttles
@@ -236,3 +237,31 @@ def popular_books(request):
     )
 
     return Response(list(top_books), status=status.HTTP_200_OK)
+
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def manage_wishlist(request):
+    if request.method == 'GET':
+        wishlist = WishlistBook.objects.filter(user=request.user)
+        serializer = WishlistBookSerializer(wishlist, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = WishlistBookSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_from_wishlist(request, book_key):
+    try:
+        wishlist_item = WishlistBook.objects.get(user=request.user, book_key=book_key)
+    except WishlistBook.DoesNotExist:
+        return Response({'detail': 'Book not found in wishlist.'}, status=status.HTTP_404_NOT_FOUND)
+
+    wishlist_item.delete()
+    return Response({'detail': 'Book removed from wishlist.'}, status=status.HTTP_204_NO_CONTENT)

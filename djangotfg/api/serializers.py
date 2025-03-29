@@ -1,10 +1,7 @@
 from rest_framework import serializers
 
 from mysite import settings
-from .models import Book, User, FavoriteBook
-
-
-
+from .models import Book, User, FavoriteBook, WishlistBook
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -107,3 +104,11 @@ class PublicUserProfileSerializer(serializers.ModelSerializer):
     def get_favorites(self, obj):
         favorites = FavoriteBook.objects.filter(user=obj)
         return PublicFavoriteBookSerializer(favorites, many=True).data
+
+class WishlistBookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WishlistBook
+        fields = '__all__'
+        read_only_fields = ['user', 'added_at']
+
+
