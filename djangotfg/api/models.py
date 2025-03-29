@@ -27,6 +27,19 @@ class User(AbstractUser):
         return self.username
 
 
+class WishlistBook(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="wishlist")
+    book_key = models.CharField(max_length=100)
+    title = models.CharField(max_length=255)
+    author = models.CharField(max_length=255, blank=True, null=True)
+    isbn = models.CharField(max_length=20, blank=True, null=True)
+    cover_url = models.URLField(blank=True, null=True)
+    genres = models.JSONField(default=list, blank=True)
+    first_publish_year = models.IntegerField(blank=True, null=True)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'book_key')
 
 
 class FavoriteBook(models.Model):
