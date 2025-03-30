@@ -1,4 +1,5 @@
 from django.db.models import Count
+from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -24,15 +25,6 @@ logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
-
-### ✅ OBTENER TODOS LOS USUARIOS (Solo si es necesario)
-@cache_page(60)  # Cache de 1 minuto
-@api_view(['GET'])
-def get_all_users(request):
-    """Retrieve all users."""
-    users = User.objects.all()
-    serializer = UserProfileSerializer(users, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 ### ✅ PERFIL DE USUARIO (GET & DELETE)
@@ -222,6 +214,42 @@ def public_profile_view(request, username):
 
     serializer = PublicUserProfileSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def public_user_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    serializer = UserProfileSerializer(user)
+
+    # Filtra solo los campos públicos que quieras mostrar
+    public_data = {
+        "username": serializer.data.get("username"),
+        "email": serializer.data.get("email"),  # ❗ Opcional
+        "register_date": serializer.data.get("register_date"),
+        "profile_picture": serializer.data.get("profile_picture"),
+        "first_name": serializer.data.get("first_name"),
+        "last_name": serializer.data.get("last_name"),
+        # Si tienes más campos públicos (bio, website, etc.), agrégalos aquí.
+    }
+
+    # Opcional: añade favoritos públicos si quieres
+    favorites = FavoriteBook.objects.filter(user=user)
+    public_data["favorites"] = [
+        {
+            "book_key": fav.book_key,
+            "title": fav.title,
+            "author": fav.author,
+            "cover_url": fav.cover_url,
+            "rating": fav.rating,
+            "review": fav.review
+        }
+        for fav in favorites
+    ]
+
+    return Response(public_data, status=status.HTTP_200_OK)
+
+
 
 
 @api_view(['GET'])

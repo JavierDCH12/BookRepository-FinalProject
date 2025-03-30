@@ -9,6 +9,10 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = ["id", "title", "author", "genre", "added_date"]
 
+
+
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     profile_picture = serializers.SerializerMethodField()
     first_name = serializers.CharField(required=False, allow_blank=True)
@@ -96,19 +100,36 @@ class PublicFavoriteBookSerializer(serializers.ModelSerializer):
 
 class PublicUserProfileSerializer(serializers.ModelSerializer):
     favorites = serializers.SerializerMethodField()
+    profile_picture = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['username', 'date_joined', 'favorites']
+        fields = [
+            'username',
+            'email',
+            'date_joined',
+            'profile_picture',
+            'first_name',
+            'last_name',
+            'favorites',
+        ]
 
     def get_favorites(self, obj):
         favorites = FavoriteBook.objects.filter(user=obj)
         return PublicFavoriteBookSerializer(favorites, many=True).data
+
+    def get_profile_picture(self, obj):
+        if obj.profile_picture:
+            return obj.profile_picture.url
+        return None
+
+
 
 class WishlistBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = WishlistBook
         fields = '__all__'
         read_only_fields = ['user', 'added_at']
+
 
 
