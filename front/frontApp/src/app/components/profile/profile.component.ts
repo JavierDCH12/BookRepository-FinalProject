@@ -3,7 +3,7 @@ import { ProfileService, UserProfile } from '../../services/ProfileService.servi
 import { Router } from '@angular/router';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // ✅ SOLUCIÓN: Importar FormsModule
+import { FormsModule } from '@angular/forms'; 
 import Swal from 'sweetalert2';
 
 @Component({
@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule] // ✅ SOLUCIÓN: Añadir FormsModule aquí
+  imports: [CommonModule, FormsModule] 
 })
 export class ProfileComponent implements OnInit {
 
@@ -20,7 +20,7 @@ export class ProfileComponent implements OnInit {
   errorMessage: string | null = null;
   selectedFile: File | null = null;
 
-  // ✅ Variables para la edición del perfil
+  //Variables para la edición del perfil
   editMode = false;
   editedProfile: Partial<UserProfile> = {};
 
@@ -30,7 +30,7 @@ export class ProfileComponent implements OnInit {
     this.loadUserProfile();
   }
 
-  // ✅ Cargar el perfil del usuario
+  //Cargar el perfil del usuario
   loadUserProfile(): void {
     this.isLoading = true;
     this.profileService.getUserProfile().subscribe({
@@ -47,7 +47,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  // ✅ Alternar modo edición
+  //Alternar modo edición
   toggleEditMode(): void {
     this.editMode = !this.editMode;
     if (this.editMode && this.userProfile) {
@@ -55,6 +55,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+    //  Guardar cambios en el perfil
   saveProfileChanges(): void {
     if (!this.editedProfile) return;
   
@@ -68,7 +69,7 @@ export class ProfileComponent implements OnInit {
           text: 'Tu perfil ha sido actualizado correctamente.',
           icon: 'success',
           confirmButtonText: 'Volver al Inicio',
-          timer: 3000,  // ⏳ opcional, auto-cierra en 3 segundos
+          timer: 3000,  
           timerProgressBar: true
         }).then(() => {
           this.navigateToHome();
@@ -90,7 +91,7 @@ export class ProfileComponent implements OnInit {
   
   
 
-  // ✅ Seleccionar y subir imagen de perfil
+  // Seleccionar y subir imagen de perfil
   onFileSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
@@ -99,6 +100,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  // Subir imagen de perfil
   uploadProfilePicture(): void {
     if (!this.selectedFile) return;
   
@@ -135,7 +137,7 @@ export class ProfileComponent implements OnInit {
   }
   
 
-  // ✅ Volver a la página de inicio
+  // Volver a la página de inicio
   navigateToHome(): void {
     this.router.navigate([NAVIGATION_ROUTES.HOME]);
   }

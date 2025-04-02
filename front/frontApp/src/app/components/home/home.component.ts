@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
     if (this.isAuthenticated) {
       this.loadUserProfile();
       this.checkPendingFavorite();
-      this.checkPendingWishlist(); // <-- ✅ AÑADE AQUÍ
+      this.checkPendingWishlist(); 
       this.wishlistService.getWishlist();
     }
   
@@ -82,6 +82,7 @@ export class HomeComponent implements OnInit {
     this.currentView = view;
   }
 
+  // Función para navegar a la página de perfil público de un usuario
   navigateToPublicProfile() {
     if (this.searchedUsername.trim()) {
       this.router.navigate([`/user/${this.searchedUsername.trim()}`]);
@@ -109,6 +110,8 @@ export class HomeComponent implements OnInit {
     this.router.navigate([NAVIGATION_ROUTES.PROFILE]);
   }
 
+
+  // Función para cargar el perfil del usuario
   private loadUserProfile(): void {
     this.profileService.getUserProfile().subscribe({
       next: (profile: any) => { this.userProfile = profile; },
@@ -118,6 +121,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  // Función para comprobar si hay un libro pendiente de añadir a favoritos tras el login
   private checkPendingFavorite() {
     const pendingBookData = localStorage.getItem('pendingFavoriteBook');
     if (pendingBookData) {

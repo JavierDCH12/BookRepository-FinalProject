@@ -1,11 +1,10 @@
 <div class="favorites-container">
   <h2>❤️ My Favorite Books</h2>
 
-  <!-- 🔄 Carga y errores -->
   <div *ngIf="isLoading" class="loading">⏳ Loading favorites...</div>
   <div *ngIf="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
 
-  <!-- 📖 Si no hay favoritos -->
+
   <div *ngIf="favoriteBooks.length === 0 && !isLoading" class="no-favorites">
     <p>No favorite books yet. ⭐ Add some from the search page!</p>
   </div>
@@ -21,18 +20,17 @@
   </div>
   
 
-  <!-- 📚 Lista de favoritos -->
+  
   <div class="favorite-grid">
     <div *ngFor="let book of favoriteBooks" class="favorite-card">
 
-      <!-- 🖼️ Imagen del libro -->
+    
       <div class="book-image" (click)="navigateToBookDetail(book.book_key)">
         <img *ngIf="book.cover_url && book.cover_url !== 'None'" 
              [src]="book.cover_url" 
              alt="Book cover">
       </div>
 
-      <!-- 📖 Información del libro -->
       <div class="book-info">
         <h4 (click)="navigateToBookDetail(book.book_key)" class="clickable-title">
           {{ book.title }}
@@ -44,7 +42,6 @@
         </p>
         <p *ngIf="book.first_publish_year" class="publish-year">📅 {{ book.first_publish_year }}</p>
 
-        <!-- ⭐ Rating -->
         <div class="rating-section">
           <h5>⭐ Your Rating</h5>
           <div class="stars" *ngIf="book?.rating !== undefined">
@@ -56,13 +53,12 @@
           </div>
         </div>
 
-        <!-- ❌ Botón eliminar favorito -->
+        
         <button class="remove-button" (click)="removeFavorite(book.book_key)">❌ Remove from Favorites</button>
       </div>
     </div>
   </div>
 
-  <!-- 🔥 Libros populares -->
   <div *ngIf="popularBooks.length > 0" class="popular-section">
     <h3>🔥 Popular Books Among Users</h3>
     <div class="popular-carousel">

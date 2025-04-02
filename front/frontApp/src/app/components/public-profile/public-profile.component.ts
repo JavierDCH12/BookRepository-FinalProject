@@ -35,19 +35,19 @@ export class PublicProfileComponent implements OnInit {
 
     
     
-
+    // Método para recargar el perfil público
     reloadProfile(): void {
       if (this.userProfile?.username) {
         this.loadPublicProfile(this.userProfile.username);
       }
     }
     
-
+    // Método para cargar el perfil público
     private loadPublicProfile(username: string): void {
       this.isLoading = true;
       this.publicProfileService.getPublicProfile(username).subscribe({
         next: (profile) => {
-          console.log('📡 Perfil recibido del backend:', profile); // ✅ Mostrar datos completos
+          console.log('📡 Perfil recibido del backend:', profile); 
     
           // Mostrar cada campo por separado para debugging
           console.log(`👤 Username: ${profile.username}`);
@@ -70,7 +70,7 @@ export class PublicProfileComponent implements OnInit {
       });
     }
     
-
+  // Método para navegar a la página de inicio
   navigateToHome() {
       this.router.navigate([NAVIGATION_ROUTES.HOME]);
     }

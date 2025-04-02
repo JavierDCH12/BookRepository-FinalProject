@@ -1,21 +1,17 @@
 <div class="public-profile-container">
 
-  <!-- 🔄 Cargando -->
   <div class="loading-container" *ngIf="isLoading">
     <span class="spinner"></span>
     <p>⏳ Cargando perfil...</p>
   </div>
 
-  <!-- ❌ Error -->
   <div class="error-container" *ngIf="!isLoading && errorMessage">
     <p>⚠️ {{ errorMessage }}</p>
     <button class="back-home-button" (click)="navigateToHome()">🏠 Volver al inicio</button>
   </div>
 
-  <!-- ✅ Perfil cargado -->
   <section *ngIf="!isLoading && userProfile" class="profile-content">
 
-    <!-- 👤 Cabecera del perfil -->
     <div class="profile-header">
       <img 
         class="profile-picture"
@@ -29,7 +25,6 @@
       </div>
     </div>
 
-    <!-- ⭐ Libros favoritos -->
     <section class="favorites-section">
       <h3>📚 Libros favoritos</h3>
 
@@ -61,8 +56,6 @@
         </div>
       </div>
     </section>
-
-    <!-- 🔙 Botón de volver -->
     <div class="back-button-container">
       <button class="back-home-button" (click)="navigateToHome()">🏠 Volver al inicio</button>
     </div>

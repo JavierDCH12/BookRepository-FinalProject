@@ -1,27 +1,20 @@
 <div class="favorites-container">
     <h2>🎁 My Wishlist</h2>
   
-    <!-- 🔄 Carga y errores -->
     <div *ngIf="isLoading" class="loading">⏳ Loading wishlist...</div>
     <div *ngIf="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
   
-    <!-- 📖 Si no hay libros en wishlist -->
     <div *ngIf="wishlistBooks.length === 0 && !isLoading" class="no-favorites">
       <p>No books in your wishlist yet. 💡 Add some from the search page!</p>
     </div>
-  
-    <!-- 📚 Lista de libros en wishlist -->
-    <div class="favorite-grid">
+      <div class="favorite-grid">
       <div *ngFor="let book of wishlistBooks" class="favorite-card">
-  
-        <!-- 🖼️ Imagen del libro -->
-        <div class="book-image" (click)="navigateToBookDetail(book.book_key)">
+          <div class="book-image" (click)="navigateToBookDetail(book.book_key)">
           <img *ngIf="book.cover_url && book.cover_url !== 'None'" 
                [src]="book.cover_url" 
                alt="Book cover">
         </div>
   
-        <!-- 📖 Información del libro -->
         <div class="book-info">
           <h4 (click)="navigateToBookDetail(book.book_key)" class="clickable-title">
             {{ book.title }}
@@ -33,7 +26,6 @@
           </p>
           <p *ngIf="book.first_publish_year" class="publish-year">📅 {{ book.first_publish_year }}</p>
   
-          <!-- ❌ Botón eliminar de wishlist -->
           <button class="remove-button" (click)="removeFromWishlist(book.book_key)">🗑️ Remove from Wishlist</button>
         </div>
       </div>

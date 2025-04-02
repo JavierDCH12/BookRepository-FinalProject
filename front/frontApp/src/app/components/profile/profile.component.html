@@ -1,7 +1,5 @@
 <div class="profile-container">
   <div class="profile-card">
-
-    <!-- 🖼️ Imagen de Perfil -->
     <div class="profile-header">
       <img [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture" alt="Profile Picture">
       <label for="fileInput" class="upload-label">
@@ -9,8 +7,6 @@
       </label>
       <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>
     </div>
-
-    <!-- ✨ Información básica -->
     <div class="profile-info">
       <h2 *ngIf="!editMode">{{ userProfile?.username }}</h2>
       <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.username" placeholder="Username">
@@ -18,8 +14,6 @@
       <p class="email" *ngIf="!editMode">📧 {{ userProfile?.email }}</p>
       <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.email" placeholder="Email">
     </div>
-
-    <!-- 📌 Detalles del perfil -->
     <div class="profile-details">
       <div class="detail-item">
         <span class="label">📝 Nombre:</span>
@@ -44,7 +38,6 @@
       </div>
     </div>
 
-    <!-- ⚙️ Botones de acción -->
     <div class="profile-actions">
       <button *ngIf="!editMode" class="edit-btn" (click)="toggleEditMode()">✏️ Editar Perfil</button>
       <button *ngIf="editMode" class="save-btn" (click)="saveProfileChanges()">💾 Guardar Cambios</button>

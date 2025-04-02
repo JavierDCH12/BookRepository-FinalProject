@@ -27,6 +27,8 @@ export class WishlistComponent implements OnInit {
     this.fetchWishlist();
   }
 
+
+  // Get link para el autor en Wikipedia
   getAuthorWikipediaLink(author: string): void {
     console.log(`🔎 Buscando en Wikipedia: ${author}`);
 
@@ -47,6 +49,7 @@ export class WishlistComponent implements OnInit {
     });
   }
 
+  // Coger lista de wishlist
   fetchWishlist(): void {
     this.isLoading = true;
     this.wishlistService.getWishlist().subscribe({
@@ -61,6 +64,7 @@ export class WishlistComponent implements OnInit {
     });
   }
 
+  // Eliminar libro de la wishlist
   removeFromWishlist(bookKey: string): void {
     this.wishlistService.removeFromWishlist(bookKey).subscribe({
       next: () => {
@@ -72,6 +76,7 @@ export class WishlistComponent implements OnInit {
     });
   }
 
+  // Navegar a la página de detalles del libro
   navigateToBookDetail(bookKey: string): void {
     this.router.navigate([`${NAVIGATION_ROUTES.BOOK_DETAIL}/${bookKey}`]);
   }

@@ -17,10 +17,10 @@ export class FavoriteListComponent implements OnInit {
   favoriteBooks: FavoriteBook[] = [];
   isLoading = false;
   errorMessage: string | null = null;
-  editingReview: { [key: string]: boolean } = {}; // Estado de edición de reseñas
-  reviewTexts: { [key: string]: string } = {}; // Contiene las reseñas por `book_key`
+  editingReview: { [key: string]: boolean } = {}; 
+  reviewTexts: { [key: string]: string } = {}; 
   popularBooks: FavoriteBook[] = [];
-  sortAscending: boolean = true; // Estado de ordenación
+  sortAscending: boolean = true; 
 
 
   constructor(
@@ -29,13 +29,14 @@ export class FavoriteListComponent implements OnInit {
     private wikipediaService: WikipediaService
   ) {}
 
-  /** 🔄 Cargar los favoritos del usuario */
+  // Cargar los favoritos del usuario y los libros populares al iniciar el componente
   ngOnInit(): void {
     this.loadFavorites();
     this.loadPopularBooks();
 
   }
 
+  // Cargar los libros populares
   loadPopularBooks(): void {
     this.favoriteService.getPopularBooks().subscribe({
       next: (books: FavoriteBook[]) => {
@@ -44,7 +45,7 @@ export class FavoriteListComponent implements OnInit {
       error: (err) => console.error('⚠️ Error loading popular books:', err),
     });
   }
-
+  // Cargar los favoritos del usuario
   loadFavorites(): void {
     this.isLoading = true;
     this.favoriteService.getFavorites().subscribe({
@@ -52,12 +53,12 @@ export class FavoriteListComponent implements OnInit {
         console.log("📸 Libros favoritos recibidos:", favorites);
         this.favoriteBooks = favorites;
 
-        // ✅ Inicializar textos de reseñas
+        // Inicializar textos de reseñas
         favorites.forEach(book => {
           this.reviewTexts[book.book_key] = book.review || '';
         });
 
-        this.sortFavorites(); // Ordenar los favoritos después de cargarlos
+        this.sortFavorites(); 
 
         this.isLoading = false;
       },
@@ -69,18 +70,18 @@ export class FavoriteListComponent implements OnInit {
     });
   }
 
-  /** 🔄 Ordenar los favoritos por rating */
+  // Ordenar los favoritos por rating 
   sortFavorites(): void {
     this.favoriteBooks.sort((a, b) => this.sortAscending ? a.rating - b.rating : b.rating - a.rating);
   }
 
-  /** 🔄 Alternar el orden de clasificación */
+  // Alternar el orden de clasificación 
   toggleSortOrder(): void {
     this.sortAscending = !this.sortAscending;
     this.sortFavorites();
   }
 
-  /** ❌ Eliminar un libro de favoritos */
+  // Eliminar un libro de favoritos 
   removeFavorite(bookKey: string): void {
     if (!bookKey) {
       console.error('⚠️ Error: bookKey no válido.');
@@ -100,12 +101,12 @@ export class FavoriteListComponent implements OnInit {
     });
   }
 
-  /** ✅ Alternar el estado de edición de reseñas */
+  // Alternar el estado de edición de reseñas 
   toggleReviewEdit(bookKey: string): void {
     this.editingReview[bookKey] = !this.editingReview[bookKey];
   }
 
-  /** ✅ Guardar la reseña de un libro */
+  // Guardar la reseña de un libro 
   saveReview(bookKey: string): void {
     const reviewText = this.reviewTexts[bookKey];
 
@@ -127,7 +128,7 @@ export class FavoriteListComponent implements OnInit {
     });
   }
 
-  /** 🔗 Obtener enlace de Wikipedia del autor */
+  // Obtener enlace de Wikipedia del autor 
   getAuthorWikipediaLink(author: string): void {
     console.log(`🔎 Buscando en Wikipedia: ${author}`);
 
@@ -148,12 +149,12 @@ export class FavoriteListComponent implements OnInit {
     });
   }
 
-  /** 🏠 Volver a la página de inicio */
+  // Volver a la página de inicio 
   navigateToHome() {
     this.router.navigate([NAVIGATION_ROUTES.HOME]);
   }
 
-
+  // Actualizar el rating de un libro
   updateBookRating(bookKey: string, rating: number) {
     this.favoriteService.updateRating(bookKey, rating).subscribe({
       next: () => {
@@ -165,7 +166,7 @@ export class FavoriteListComponent implements OnInit {
     });
   }
 
-
+  // Navegar a la página de detalles de un libro
   navigateToBookDetail(bookKey: string) {
     console.log('Navigating to book:', bookKey);
 
