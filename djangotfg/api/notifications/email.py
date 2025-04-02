@@ -12,7 +12,7 @@ import constants
 # Configure the logger
 logger = logging.getLogger(__name__)
 
-def send_welcome_email(email, username):
+def send_welcome_email(email, username): # Enviar email de bienvenida
     subject = constants.EMAIL_WELCOME_SUBJECT
     from_email = settings.DEFAULT_FROM_EMAIL
     to = [email]

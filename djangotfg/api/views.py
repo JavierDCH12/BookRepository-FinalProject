@@ -27,7 +27,7 @@ User = get_user_model()
 
 
 
-### ✅ PERFIL DE USUARIO (GET & DELETE)
+### PERFIL DE USUARIO (GET & DELETE)
 @api_view(['GET', 'DELETE'])
 @cache_page(60)
 @permission_classes([IsAuthenticated])
@@ -45,7 +45,7 @@ def user_profile(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-### ✅ REGISTRO DE USUARIO
+### REGISTRO DE USUARIO
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @throttle_classes([RegisterRateThrottle])
@@ -65,7 +65,6 @@ def register_user(request):
 
 
 ### UPDATE PROFILE
-
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 @throttle_classes([ProfileUpdateRateThrottle])
@@ -85,7 +84,7 @@ def update_profile(request):
 
 
 
-### ✅ OBTENER FAVORITOS (GET) & AÑADIR FAVORITO (POST)
+### OBTENER FAVORITOS (GET) & AÑADIR FAVORITO (POST)
 @api_view(['GET', 'POST'])
 @cache_page(60)
 @permission_classes([IsAuthenticated])
@@ -100,7 +99,7 @@ def manage_favorites(request):
             serializer = FavoriteBookSerializer(favorites, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
-            logger.error(f"❌ Error fetching favorites: {str(e)}")
+            logger.error(f"Error fetching favorites: {str(e)}")
             return Response({"error": ERROR_FETCHING_FAVS}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     elif request.method == 'POST':
@@ -109,7 +108,7 @@ def manage_favorites(request):
         if serializer.is_valid():
             book_key = serializer.validated_data.get('book_key')
 
-            # ✅ Verificar si ya existe el favorito
+            #Verificar si ya existe el favorito
             if FavoriteBook.objects.filter(user=user, book_key=book_key).exists():
                 logger.warning(f"⚠️ Book {book_key} is already in favorites for user {user.username}")
                 return Response({'message': INFO_ALREADY_FAVS}, status=status.HTTP_400_BAD_REQUEST)
@@ -118,11 +117,11 @@ def manage_favorites(request):
             logger.info(f"✅ Book {book_key} added to favorites for user {user.username}")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        logger.error(f"❌ Error adding favorite: {serializer.errors}")
+        logger.error(f"Error adding favorite: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-### ✅ ELIMINAR UN FAVORITO
+###ELIMINAR UN FAVORITO
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def remove_favorite(request, book_key):
@@ -139,7 +138,7 @@ def remove_favorite(request, book_key):
     return Response({'message': ERROR_BOOK_NOT_FOUND_IN_FAVS}, status=status.HTTP_404_NOT_FOUND)
 
 
-
+# UPLOAD LA FOTO DE PERFIL
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def upload_profile_picture(request):
@@ -161,6 +160,7 @@ def upload_profile_picture(request):
     )
 
 
+# CREAR O ACTUALIZAR RESEÑA
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def manage_review(request, book_key):
@@ -181,6 +181,8 @@ def manage_review(request, book_key):
 
     return Response({'message': SUCCESS_SAVED_REVIEW, 'review': favorite.review}, status=status.HTTP_200_OK)
 
+
+### ACTUALIZAR VALORACIÓN
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def update_rating(request, book_key):
@@ -204,6 +206,7 @@ def update_rating(request, book_key):
     return Response({'message': SUCCESS_UPDATE_REVIEW, 'rating': favorite.rating})
 
 
+## PERFIL PÚBLICO
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def public_profile_view(request, username):
@@ -216,24 +219,22 @@ def public_profile_view(request, username):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+## PERFIL PÚBLICO (SIN CAMPOS PRIVADOS)
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def public_user_profile(request, username):
     user = get_object_or_404(User, username=username)
     serializer = UserProfileSerializer(user)
 
-    # Filtra solo los campos públicos que quieras mostrar
     public_data = {
         "username": serializer.data.get("username"),
-        "email": serializer.data.get("email"),  # ❗ Opcional
+        "email": serializer.data.get("email"),  
         "register_date": serializer.data.get("register_date"),
         "profile_picture": serializer.data.get("profile_picture"),
         "first_name": serializer.data.get("first_name"),
         "last_name": serializer.data.get("last_name"),
-        # Si tienes más campos públicos (bio, website, etc.), agrégalos aquí.
     }
 
-    # Opcional: añade favoritos públicos si quieres
     favorites = FavoriteBook.objects.filter(user=user)
     public_data["favorites"] = [
         {
@@ -251,7 +252,7 @@ def public_user_profile(request, username):
 
 
 
-
+## LIBROS POPULARES
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def popular_books(request):
@@ -266,7 +267,7 @@ def popular_books(request):
 
     return Response(list(top_books), status=status.HTTP_200_OK)
 
-
+## GESTIONAR LISTA DE DESEOS
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def manage_wishlist(request):
@@ -282,7 +283,7 @@ def manage_wishlist(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+## ELIMINAR DE LA LISTA DE DESEOS
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_from_wishlist(request, book_key):

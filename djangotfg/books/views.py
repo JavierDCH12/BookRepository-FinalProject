@@ -6,10 +6,12 @@ from rest_framework import status
 import requests
 
 
+
+#
 @cache_page(60)
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def search_books(request):
+def search_books(request): # Función para buscar libros en OpenLibrary
     title = request.GET.get('title', '')
     author = request.GET.get('author', '')
     genre = request.GET.get('genre', '')
@@ -30,7 +32,7 @@ def search_books(request):
         query_parts.append(f"subject:{genre}")
 
     query = "+".join(query_parts)
-    offset = (page - 1) * per_page  # Desplazamiento según la página
+    offset = (page - 1) * per_page 
     # Solicitar solo 60 libros como máximo
     url = f'https://openlibrary.org/search.json?q={query}&limit={max_results}&offset={offset}'  # Limitar a 60 libros
     response = requests.get(url)
@@ -39,7 +41,6 @@ def search_books(request):
         data = response.json()
         resultados = []
 
-        # Asegúrate de limitar la respuesta a 60 libros
         for book in data.get('docs', [])[:max_results]:
             title = book.get('title', 'Desconocido')
             author = ", ".join(book.get('author_name', ['Desconocido'])[:3])
@@ -79,11 +80,11 @@ def search_books(request):
 
 @cache_page(60)
 @api_view(['GET'])
-def get_book_description(request, book_key):
+def get_book_description(request, book_key): # Función para obtener la descripción de un libro en OpenLibrary
     """
     Obtiene la descripción de un libro usando su `key` en Open Library.
     """
-    url = f'https://openlibrary.org{book_key}.json'  # 🔥 Consultamos la API con el key
+    url = f'https://openlibrary.org{book_key}.json'  # Consultamos la API con el key
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -102,15 +103,13 @@ def get_book_description(request, book_key):
 @cache_page(60)
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def get_book_details(request, book_key):
+def get_book_details(request, book_key): # Función para obtener los detalles de un libro en OpenLibrary
     url = f'https://openlibrary.org/works/{book_key}.json'
 
     response = requests.get(url)
 
     if response.status_code == 200:
         data = response.json()
-
-        # Título y descripción
         title = data.get('title', 'Unknown title')
         description = data.get('description', {})
         if isinstance(description, dict):
@@ -120,7 +119,6 @@ def get_book_details(request, book_key):
         else:
             description = 'No description available.'
 
-        # Autores (requiere segunda consulta)
         authors_data = data.get('authors', [])
         authors = []
         for author_ref in authors_data:
@@ -132,14 +130,9 @@ def get_book_details(request, book_key):
                     if author_name:
                         authors.append(author_name)
 
-        # Portada
         cover_id = data.get('covers', [None])[0]
         cover_url = f"https://covers.openlibrary.org/b/id/{cover_id}-L.jpg" if cover_id else None
-
-        # Año de publicación (fecha de creación)
         publish_year = data.get('created', {}).get('value', '')[:4] if data.get('created') else None
-
-        # Géneros
         subjects = data.get('subjects', [])[:3] if data.get('subjects') else None
 
         book_info = {

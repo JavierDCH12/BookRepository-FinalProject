@@ -1,9 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-
 from django.conf import settings
 
+
+# Modelos de la aplicación
 
 def default_profile_picture():
     return 'profile_pics/default_avatar.jpg'

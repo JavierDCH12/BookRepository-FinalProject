@@ -1,5 +1,7 @@
 from rest_framework.throttling import SimpleRateThrottle
 
+ # Clases para limitar el número de peticiones por segundo
+
 class LoginRateThrottle(SimpleRateThrottle):
     scope = 'login'
     def get_cache_key(self, request, view):
