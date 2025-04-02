@@ -13,19 +13,19 @@ export class UserAuthServiceService {
   private loginSuccessSourceAddBook = new Subject<void>();
   loginSuccessSourceAddBook$ = this.loginSuccessSourceAddBook.asObservable();
 
-  /** ✅ Estado reactivo de autenticación */
+  // Estado  de autenticación 
   private authStatus = new BehaviorSubject<boolean>(this.hasValidToken());
-  authStatus$ = this.authStatus.asObservable(); // Se puede suscribir a cambios
+  authStatus$ = this.authStatus.asObservable(); // Se puede suscribir a cambios para mostrarlo en otros componentes
 
   constructor(private http: HttpClient) {}
 
-  /** ✅ Verificar si hay un token válido */
+  // Verificar si hay un token válido 
   private hasValidToken(): boolean {
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
     return token ? !this.isTokenExpired(token) : false;
   }
 
-  /** ✅ REGISTRO DE USUARIO */
+  // Registrar usuario
   registerUser(username: string, email: string, password: string): Observable<any> {
     return this.http.post(`${this.baseUrl}users/register/`, { username, email, password }).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -40,7 +40,7 @@ export class UserAuthServiceService {
     );
   }
 
-  /** ✅ LOGIN DE USUARIO */
+  // Login de usuario
   loginUser(username: string, password: string): Observable<any> {
     return this.http.post(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response: any) => {
@@ -55,14 +55,14 @@ export class UserAuthServiceService {
     );
   }
 
-  /** ✅ GUARDAR TOKENS EN LOCALSTORAGE */
+  // Almacenar tokens en localStorage
   private storeTokens(access: string, refresh: string, username: string): void {
     localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, access);
     localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH, refresh);
     localStorage.setItem(LOCAL_STORAGE_KEYS.USERNAME, username);
   }
 
-  /** ✅ REFRESCAR TOKEN */
+  // Refrescar token
   refreshToken(): Observable<any> {
     const refresh = localStorage.getItem(LOCAL_STORAGE_KEYS.REFRESH);
     if (!refresh) {
@@ -80,8 +80,7 @@ export class UserAuthServiceService {
     );
   }
 
-  /** ✅ VERIFICAR SI EL USUARIO ESTÁ AUTENTICADO */
-  /** ✅ VERIFICAR SI EL USUARIO ESTÁ AUTENTICADO */
+  // Verificar si el usuario está autenticado
 isAuthenticated(): boolean {
   const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
   console.log("🔍 Estado autenticación:", !!token && !this.isTokenExpired(token)); 
@@ -89,7 +88,7 @@ isAuthenticated(): boolean {
 }
 
 
-  /** ✅ VALIDAR SI EL TOKEN HA EXPIRADO */
+  // Verificar si el token ha expirado
   private isTokenExpired(token: string): boolean {
     try {
       const decoded: any = jwtDecode(token);
@@ -101,11 +100,11 @@ isAuthenticated(): boolean {
     }
   }
 
-  /** ✅ CERRAR SESIÓN */
+  // Cerrar sesión
   logout(): void {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.USERNAME);
-    this.authStatus.next(false); // 🔄 Notificamos que ha cerrado sesión
+    this.authStatus.next(false); //  Notificamos que ha cerrado sesión
   }
 }

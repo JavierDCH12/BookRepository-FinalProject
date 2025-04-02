@@ -32,7 +32,7 @@ export class ProfileService {
   private currentUserSubject = new BehaviorSubject<UserProfile | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  /** 🔐 Obtener headers de autenticación */
+  // Obtener headers de autenticación 
   private getAuthHeaders(isFormData: boolean = false): HttpHeaders {
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
 
@@ -48,7 +48,7 @@ export class ProfileService {
     return isFormData ? headers : headers.set('Content-Type', 'application/json');
   }
 
-  /** 👤 Obtener información del perfil del usuario */
+  // Obtener información del perfil del usuario con su info interna
   getUserProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>(this.profileUrl, { headers: this.getAuthHeaders() }).pipe(
       tap(profile => this.currentUserSubject.next(profile)), 
@@ -59,6 +59,7 @@ export class ProfileService {
     );
   }
 
+  //Subir foto al perfil
   uploadProfilePicture(formData: FormData): Observable<any> {
     return this.http.post(this.uploadUrl, formData, { 
       headers: this.getAuthHeaders(true) 
@@ -69,11 +70,13 @@ export class ProfileService {
     );
   }
 
+  // Actualizar información del perfil del usuario
   updateUserProfile(profileData: Partial<UserProfile>): Observable<UserProfile> {
     const url = `${this.profileUrl}update-profile/`;
     return this.http.put<UserProfile>(url, profileData, { headers: this.getAuthHeaders() });
   }
-  
+
+ 
   setCurrentUser(user: UserProfile) {
     this.currentUserSubject.next(user);
   }

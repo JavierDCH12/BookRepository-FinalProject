@@ -30,6 +30,7 @@ export class PublicProfileService {
 
   constructor(private http: HttpClient) {}
 
+  // Obtener perfil público de usuario
   getPublicProfile(username: string): Observable<PublicUserProfile> {
     return this.http.get<PublicUserProfile>(`${this.apiUrl}${username}/`);
   }

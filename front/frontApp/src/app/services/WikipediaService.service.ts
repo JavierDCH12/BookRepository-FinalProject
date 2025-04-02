@@ -10,6 +10,7 @@ export class WikipediaService {
 
   constructor(private http: HttpClient) {}
 
+  // Obtener enlace de Wikipedia de un autor concreto
   getWikipediaLink(author: string): Observable<string | null> {
     const params = {
       action: 'query',

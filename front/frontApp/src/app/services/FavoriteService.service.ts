@@ -25,7 +25,7 @@ export class FavoriteService {
 
   constructor(private http: HttpClient) {}
 
-  /** ✅ Obtener encabezados con token */
+  // Obtener encabezados con token para la autenticación 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
     
@@ -42,7 +42,7 @@ export class FavoriteService {
     });
   }
 
-  /** ✅ Obtener libros favoritos */
+  // Obtener libros favoritos
   getFavorites(): Observable<FavoriteBook[]> {
     return this.http.get<FavoriteBook[]>(this.favoritesUrl, { headers: this.getAuthHeaders() })
       .pipe(
@@ -50,7 +50,7 @@ export class FavoriteService {
       );
   }
 
-  /** ✅ Agregar libro a favoritos */
+  // Agregar libro a favoritos 
   addFavorite(book: FavoriteBook): Observable<any> {
     const formattedBook = {
       book_key: book.book_key,
@@ -72,13 +72,14 @@ export class FavoriteService {
       );
   }
 
-  /** ✅ Eliminar favorito */
+  // Eliminar favorito 
   removeFavorite(bookKey: string): Observable<void> {
     return this.http.delete<void>(`${this.favoritesUrl}${bookKey}/`, { headers: this.getAuthHeaders() })
       .pipe(
         catchError(this.handleError)
       );
   }
+  // Metodo para la recomendación de libros populares
 
   getPopularBooks(): Observable<FavoriteBook[]> {
     return this.http.get<FavoriteBook[]>(`${environment.apiUrl}books/popular/`)
@@ -87,7 +88,7 @@ export class FavoriteService {
       );
   }
 
-  /** ✅ Crear o actualizar reseña */
+  // Crear o actualizar reseña
   manageReview(bookKey: string, review: string): Observable<any> {
     return this.http.patch(`${this.favoritesUrl}${bookKey}/review/`, { review }, { headers: this.getAuthHeaders() })
       .pipe(
@@ -95,7 +96,7 @@ export class FavoriteService {
       );
   }
 
-  /** ✅ Actualizar la valoración */
+  // Actualizar la valoración 
   updateRating(bookKey: string, rating: number): Observable<any> {
     return this.http.patch(`${this.favoritesUrl}${bookKey}/rating/`, { rating }, { headers: this.getAuthHeaders() })
       .pipe(
@@ -103,7 +104,7 @@ export class FavoriteService {
       );
   }
 
-  /** ✅ Manejo de errores global */
+  // Manejo de errores globales
   private handleError(error: any) {
     console.error('❌ Error en la solicitud:', error);
     return throwError(() => new Error(error.message || 'Ha ocurrido un error en la solicitud.'));

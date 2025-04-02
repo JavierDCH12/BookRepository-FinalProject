@@ -27,7 +27,7 @@ export class WishlistService {
 wishlistCount$ = this.wishlistCountSubject.asObservable();
 
 
-  /** ✅ Obtener encabezados con token */
+  // Obtener encabezados con token 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
     
@@ -42,7 +42,7 @@ wishlistCount$ = this.wishlistCountSubject.asObservable();
     });
   }
 
-  /** ✅ Obtener libros en la wishlist */
+  // Obtener libros en la wishlist
   getWishlist(): Observable<WishlistBook[]> {
     return this.http.get<WishlistBook[]>(this.baseUrl, {
       headers: this.getAuthHeaders()
@@ -51,7 +51,7 @@ wishlistCount$ = this.wishlistCountSubject.asObservable();
     );
   }
 
-  /** ✅ Añadir libro a la wishlist */
+  // Añadir libro a la wishlist 
   addToWishlist(book: WishlistBook): Observable<WishlistBook> {
     const formattedBook = {
       book_key: book.book_key,
@@ -70,7 +70,7 @@ wishlistCount$ = this.wishlistCountSubject.asObservable();
     );
   }
 
-  /** ✅ Eliminar libro de la wishlist */
+  // Eliminar libro de la wishlist 
   removeFromWishlist(bookKey: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}${bookKey}/`, {
       headers: this.getAuthHeaders()
@@ -79,7 +79,7 @@ wishlistCount$ = this.wishlistCountSubject.asObservable();
     );
   }
 
-  /** ✅ Manejo de errores */
+  // Manejo de errores 
   private handleError(error: any) {
     console.error('❌ Error en wishlist:', error);
     return throwError(() => new Error(error.message || 'Ha ocurrido un error en WishlistService.'));

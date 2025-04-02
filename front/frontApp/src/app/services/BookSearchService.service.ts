@@ -30,7 +30,7 @@ export interface BookSearchResponse {
 })
 export class SearchService {
   private baseUrl = `${environment.apiUrl}books/search`; // La URL base para las búsquedas
-  private openLibraryBaseUrl = 'https://openlibrary.org'; // Para obtener descripciones de los libros
+  private openLibraryBaseUrl = 'https://openlibrary.org'; 
 
   constructor(private http: HttpClient) {}
 
