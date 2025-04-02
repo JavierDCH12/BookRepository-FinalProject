@@ -35,10 +35,12 @@ export class AuthLoginComponent {
     });
   }
 
+  // Mostrar contraseña
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
 
+  // Enviar formulario
   onSubmit() {
     if (this.loginForm.valid) {
       this.isSubmitting = true;
@@ -60,6 +62,7 @@ export class AuthLoginComponent {
     }
   }
 
+  // Navegar a la página de registro
     navigateToRegister() {
     this.router.navigate([NAVIGATION_ROUTES.REGISTER]);
   }

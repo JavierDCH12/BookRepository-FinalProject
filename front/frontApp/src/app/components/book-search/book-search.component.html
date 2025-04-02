@@ -113,7 +113,6 @@
     </div>
   </div>
 
-  <!-- 🔑 Modal de autenticación -->
   <div class="modal" *ngIf="isModalAuthOpen">
     <div class="modal-content">
       <span class="close" (click)="closeAuthModal()">&times;</span>
@@ -130,7 +129,6 @@
     </div>
   </div>
 
-  <!-- 📊 Paginación -->
   <div *ngIf="results.length" class="pagination">
     <button (click)="previousPage()" [disabled]="currentPage <= 1">
       ◀️ Anterior

@@ -56,7 +56,7 @@ export class BookSearchComponent implements OnInit {
     }
   }
   
-
+  // Wishlist
   toggleWishlist(book: Book): void {
     if (!this.isAuthenticated) {
       localStorage.setItem('pendingWishlistBook', JSON.stringify(book));
@@ -91,10 +91,11 @@ export class BookSearchComponent implements OnInit {
     }
   }
   
+  // Wishlist
   isInWishlist(bookKey: string): boolean {
     return this.wishlistBooks.has(bookKey);
   }
-
+  // Cargar Wishlist
   loadWishlist(): void {
     this.wishlistService.getWishlist().subscribe({
       next: (wishlist: WishlistBook[]) => {
@@ -105,7 +106,7 @@ export class BookSearchComponent implements OnInit {
   }
   
 
-  /** 🔍 Buscar libros */
+  // Buscar libros 
   onSearch(page: number = 1): void {
     this.isLoading = true;
     this.errorMessage = null;
@@ -128,7 +129,7 @@ export class BookSearchComponent implements OnInit {
     });
   }
 
-  /** ⭐ Cargar favoritos */
+  // Cargar favoritos 
   loadFavorites(): void {
     this.favoriteService.getFavorites().subscribe({
       next: (favorites: FavoriteBook[]) => {
@@ -150,7 +151,7 @@ export class BookSearchComponent implements OnInit {
     this.isModalAuthOpen = false;
   }
 
-  /** ⭐ Añadir o quitar favoritos */
+  //Añadir o quitar favoritos 
   toggleFavorite(book: Book): void { 
     if (!this.isAuthenticated) {
       localStorage.setItem('pendingFavoriteBook', JSON.stringify(book));
@@ -191,33 +192,7 @@ export class BookSearchComponent implements OnInit {
     return this.favoriteBooks.has(bookKey);
   }
 
-  /** 📖 Modal descripción */
-  openModal(book_key: string, title: string): void {
-    if (!book_key) {
-      this.selectedBookDescription = 'No description available.';
-      return;
-    }
-
-    this.selectedBookTitle = title;
-    this.selectedBookDescription = 'Loading description...';
-    this.isModalOpen = true;
-    this.isLoadingDescription = true;
-
-    this.searchService.getBookDescription(book_key).subscribe({
-      next: (response) => {
-        this.selectedBookDescription = response.description || 'No description available.';
-        this.isLoadingDescription = false;
-      },
-      error: () => {
-        this.selectedBookDescription = 'No description available.';
-        this.isLoadingDescription = false;
-      }
-    });
-  }
-
-  closeModal(): void {
-    this.isModalOpen = false;
-  }
+ 
 
   getAuthorWikipediaLink(author: string): void {
     console.log(`🔎 Buscando en Wikipedia: ${author}`);

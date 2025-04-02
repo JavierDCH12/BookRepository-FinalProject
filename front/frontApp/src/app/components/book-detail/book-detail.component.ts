@@ -20,7 +20,7 @@ export class BookDetailComponent implements OnInit {
   isEditingReview = false;
   isLoading = true;
   rating = 0;
-  tempRating = 0; // ⭐ Para hover visual
+  tempRating = 0; 
 
   constructor(
     private route: ActivatedRoute,
@@ -36,6 +36,7 @@ export class BookDetailComponent implements OnInit {
     }
   }
 
+    // Cargar detalles del libro
   loadBookDetails(bookKey: string): void {
     this.searchService.getBookDetails(bookKey).subscribe({
       next: (response: Book) => {
@@ -50,6 +51,7 @@ export class BookDetailComponent implements OnInit {
     });
   }
 
+  // Comprobar si el libro está en favoritos
   checkIfFavorite(bookKey: string): void {
     this.favoriteService.getFavorites().subscribe({
       next: (favorites) => {
@@ -63,7 +65,7 @@ export class BookDetailComponent implements OnInit {
       error: () => console.error('⚠️ Error loading favorites'),
     });
   }
-
+  // Añadir a favoritos
   addToFavorites(): void {
     if (!this.book) return;
 
@@ -87,7 +89,7 @@ export class BookDetailComponent implements OnInit {
       error: (err) => console.error('❌ Error al añadir a favoritos:', err)
     });
   }
-
+  // Eliminar de favoritos
   removeFromFavorites(): void {
     if (!this.book) return;
     this.favoriteService.removeFavorite(this.book.book_key).subscribe({
@@ -100,7 +102,7 @@ export class BookDetailComponent implements OnInit {
       error: (err) => console.error('❌ Error al eliminar de favoritos:', err)
     });
   }
-
+  // Guardar reseña
   saveReview(): void {
     if (!this.book || !this.reviewText.trim()) return;
     this.favoriteService.manageReview(this.book.book_key, this.reviewText).subscribe({
@@ -111,7 +113,7 @@ export class BookDetailComponent implements OnInit {
       error: () => console.error('❌ Error al guardar la reseña'),
     });
   }
-
+  // Editar reseña
   startEditReview(): void {
     this.isEditingReview = true;
   }
@@ -123,7 +125,7 @@ export class BookDetailComponent implements OnInit {
   formatGenres(genres: string[] | string): string {
     return Array.isArray(genres) ? genres.join(', ') : genres;
   }
-
+  // Actualizar rating
   setRating(star: number): void {
     if (this.isFavorite && this.book) {
       this.rating = star;
@@ -145,6 +147,7 @@ export class BookDetailComponent implements OnInit {
     this.tempRating = 0;
   }
 
+    // Navegar a la página de inicio
   navigateToHome(): void {
     this.router.navigate([NAVIGATION_ROUTES.HOME]);
   }

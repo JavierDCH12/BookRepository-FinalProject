@@ -8,6 +8,7 @@ import { UserAuthServiceService } from '../services/UserAuthService.service';
 export class AuthGuard implements CanActivate {
   constructor(private authService: UserAuthServiceService, private router: Router) {}
 
+  // Check if the user is authenticated, if not redirect to login page
   canActivate(): boolean {
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']); 

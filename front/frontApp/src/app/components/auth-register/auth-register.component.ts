@@ -33,7 +33,7 @@ export class AuthRegisterComponent {
     );
   }
 
-  /** ✅ Validador de contraseñas coincidentes */
+  // Validador de contraseñas coincidentes 
   passwordsMatch(group: FormGroup): { [key: string]: boolean } | null {
     const password = group.get('password')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
@@ -41,7 +41,7 @@ export class AuthRegisterComponent {
     return password === confirmPassword ? null : { passwordsDoNotMatch: true };
   }
 
-  /** ✅ Enviar formulario */
+  // Enviar formulario 
   onSubmit() {
     if (this.form.valid) {
       const { username, email, password } = this.form.value;
@@ -74,6 +74,7 @@ export class AuthRegisterComponent {
     }
   }
 
+  // Navegar a la página de inicio de sesión
   navigateToLogin() {
     this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
   }

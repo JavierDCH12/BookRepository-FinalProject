@@ -12,7 +12,7 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-  gap: 20px; /* Add spacing between inputs */
+  gap: 20px; 
 }
 
 .input-group {
@@ -57,7 +57,7 @@
 .book-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 30px; /* Add spacing between book cards */
+  gap: 30px;
 }
 
 .book-card {
@@ -134,7 +134,7 @@
   background-color: #0056b3;
 }
 
-/* Modal */
+
 .modal {
   position: fixed;
   top: 0;
@@ -289,7 +289,6 @@
   background-color: #357ab8;
 }
 
-/* ❤️ Wishlist button */
 .wishlist-button {
   background: none;
   border: none;
