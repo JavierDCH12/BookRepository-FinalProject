@@ -1,48 +1,73 @@
 <div class="profile-container">
   <div class="profile-card">
+    <!-- 🧷 Header con imagen y subida -->
     <div class="profile-header">
       <img [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture" alt="Profile Picture">
-      <label for="fileInput" class="upload-label">
-        📂 Cambiar foto
-      </label>
-      <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>
+
+      <div class="upload-container">
+        <p-fileUpload
+          #fu
+          mode="basic"
+          chooseLabel="📁 Cambiar foto"
+          chooseIcon="pi pi-upload"
+          name="profile_picture"
+          [customUpload]="true"
+          accept="image/*"
+          maxFileSize="1000000"
+          (uploadHandler)="onFileSelected($event)"
+          class="custom-upload"
+        />
+        <p-button label="Subir" (onClick)="fu.upload()" severity="secondary" class="upload-btn" />
+      </div>
     </div>
+
+    <!-- 🧾 Info básica -->
     <div class="profile-info">
       <h2 *ngIf="!editMode">{{ userProfile?.username }}</h2>
-      <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.username" placeholder="Username">
+      <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.username" placeholder="Nombre de usuario">
 
-      <p class="email" *ngIf="!editMode">📧 {{ userProfile?.email }}</p>
+      <p class="email" *ngIf="!editMode">
+        <i class="pi pi-envelope"></i> {{ userProfile?.email }}
+      </p>
       <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.email" placeholder="Email">
     </div>
+
+    <!-- 📑 Detalles -->
     <div class="profile-details">
       <div class="detail-item">
-        <span class="label">📝 Nombre:</span>
+        <span class="label">Nombre:</span>
         <span *ngIf="!editMode">{{ userProfile?.first_name || '—' }}</span>
         <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.first_name" placeholder="Nombre">
       </div>
 
       <div class="detail-item">
-        <span class="label">📝 Apellidos:</span>
+        <span class="label">Apellidos:</span>
         <span *ngIf="!editMode">{{ userProfile?.last_name || '—' }}</span>
         <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.last_name" placeholder="Apellidos">
       </div>
 
       <div class="detail-item" *ngIf="editMode">
-        <span class="label">🔑 Nueva contraseña:</span>
-        <input class="input-edit" type="password" [(ngModel)]="editedProfile.password" placeholder="Contraseña">
+        <span class="label">Contraseña:</span>
+        <input class="input-edit" type="password" [(ngModel)]="editedProfile.password" placeholder="Nueva contraseña">
       </div>
 
       <div class="detail-item">
-        <span class="label">📅 Miembro desde:</span>
+        <span class="label">Miembro desde:</span>
         <span>{{ userProfile?.register_date | date: 'dd/MM/yyyy' }}</span>
       </div>
     </div>
 
+    <!-- 🎯 Botones -->
     <div class="profile-actions">
-      <button *ngIf="!editMode" class="edit-btn" (click)="toggleEditMode()">✏️ Editar Perfil</button>
-      <button *ngIf="editMode" class="save-btn" (click)="saveProfileChanges()">💾 Guardar Cambios</button>
-      <button class="back-btn" (click)="navigateToHome()">🏠 Inicio</button>
+      <button *ngIf="!editMode" class="edit-btn" (click)="toggleEditMode()">
+        <i class="pi pi-pencil"></i> Editar Perfil
+      </button>
+      <button *ngIf="editMode" class="save-btn" (click)="saveProfileChanges()">
+        <i class="pi pi-save"></i> Guardar
+      </button>
+      <button class="back-btn" (click)="navigateToHome()">
+        <i class="pi pi-home"></i> Inicio
+      </button>
     </div>
-
   </div>
 </div>

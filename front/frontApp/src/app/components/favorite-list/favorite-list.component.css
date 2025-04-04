@@ -103,54 +103,90 @@
 }
 
 .popular-section {
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .popular-carousel {
   display: flex;
   overflow-x: auto;
-  gap: 15px;
-  padding-bottom: 10px;
+  gap: 20px;
+  padding: 10px 0;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 10px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-color: #b0bec5 transparent;
+  background: linear-gradient(90deg, #f5f7fa, #e3f2fd);
+  border-radius: 16px;
+  padding-left: 10px;
+}
+
+.popular-carousel::-webkit-scrollbar {
+  height: 6px;
+}
+
+.popular-carousel::-webkit-scrollbar-thumb {
+  background-color: #90a4ae;
+  border-radius: 4px;
 }
 
 .popular-card {
-  min-width: 120px;
+  scroll-snap-align: start;
+  min-width: 140px;
   background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.07);
-  padding: 6px;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  padding: 10px;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .popular-card:hover {
-  transform: scale(1.03);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(66, 165, 245, 0.2);
 }
 
 .popular-card img {
   width: 100%;
-  border-radius: 6px;
-  height: auto;
+  height: 180px;
+  object-fit: contain;
+  border-radius: 12px;
+  background-color: #fafafa;
+  padding: 6px;
 }
 
 .popular-title {
-  font-size: 0.85rem;
-  margin-top: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 8px;
+  text-align: center;
+  color: #37474f;
+  line-height: 1.2;
+  max-height: 2.4em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .popular-author {
   font-size: 0.75rem;
-  color: #7f8c8d;
+  color: #78909c;
+  text-align: center;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.popular-carousel::-webkit-scrollbar {
-  height: 5px;
+.popular-card:hover {
+  transform: scale(1.05) translateY(-2px);
 }
 
-.popular-carousel::-webkit-scrollbar-thumb {
-  background-color: #bdc3c7;
-  border-radius: 3px;
-}
 
 .no-favorites {
   padding: 12px;

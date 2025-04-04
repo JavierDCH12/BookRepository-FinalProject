@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "primeicons": "^7.0.0"
+    "primeicons": "^7.0.0",
+    "primeng": "^19.0.10"
   }
 }
