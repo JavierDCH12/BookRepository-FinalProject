@@ -5,7 +5,6 @@ from rest_framework.decorators import api_view, permission_classes, throttle_cla
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from sympy.codegen.fnodes import use_rename
 
 from constants import SUCCESS_DEACTIVATE, ERROR_REGISTER, SUCCESS_UPDATE_PROFILE, ERROR_FETCHING_FAVS, \
     INFO_ALREADY_FAVS, INFO_BOOK_REMOVED_FAVS, ERROR_BOOK_NOT_FOUND_IN_FAVS, ERROR_UPLOAD_PHOTO, \
