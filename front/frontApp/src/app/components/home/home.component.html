@@ -1,53 +1,56 @@
 <body>
-
   <div class="home-container">
 
-    <div class="sidebar" *ngIf="isAuthenticated">
-      <div class="profile-card">
+    <!-- 🧭 Layout superior en horizontal: Sidebar + Main section -->
+    <div class="top-layout">
+
+      <!-- 🧍 Sidebar con perfil -->
+      <div class="profile-card" *ngIf="isAuthenticated">
         <img class="profile-picture" [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture"
-          alt="Profile Picture">
+             alt="Profile Picture">
         <h3>{{ username }}</h3>
         <p class="user-email">📧 {{ userProfile?.email }}</p>
         <button class="profile-button" (click)="navigateToProfile()">👤 Ver Perfil Privado</button>
       </div>
 
+      <!-- 🎯 Sección principal -->
+      <div class="main-section">
+        <h2>📚 Bienvenido a BookFinder</h2>
+        <p *ngIf="!isAuthenticated">Encuentra tus libros favoritos o regístrate para guardar favoritos.</p>
+        <p *ngIf="isAuthenticated">Hola, {{ username }} 👋 ¡Explora y guarda tus libros preferidos!</p>
+
+        <div class="buttons">
+          <button *ngIf="!isAuthenticated" (click)="navigateToLogin()">🔑 Login</button>
+          <button *ngIf="!isAuthenticated" (click)="navigateToRegister()">📝 Registro</button>
+
+          <button *ngIf="isAuthenticated" (click)="setView('favorites')">⭐ Mis Favoritos</button>
+          <button *ngIf="isAuthenticated" (click)="setView('wishlist')">
+            💖 Mi Wishlist <span class="wishlist-counter">({{ wishlistCount }})</span>
+          </button>
+
+          <button *ngIf="isAuthenticated" (click)="setView('search')" [disabled]="currentView === 'search'">
+            🔍 Buscar Libros
+          </button>
+
+          <button *ngIf="isAuthenticated" (click)="logout()">🚪 Cerrar Sesión</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔍 Buscador público debajo del layout -->
+    <div class="search-container" *ngIf="isAuthenticated">
       <div class="public-profile-search-sidebar">
         <h4>🔎 Ver perfil público</h4>
         <div class="search-bar">
           <input type="text" [(ngModel)]="searchedUsername" placeholder="Introduce un username"
-            (keyup.enter)="navigateToPublicProfile()" />
+                 (keyup.enter)="navigateToPublicProfile()" />
           <button (click)="navigateToPublicProfile()">Ir</button>
         </div>
         <p class="search-hint">Explora los favoritos de otros usuarios.</p>
       </div>
     </div>
 
-    <div class="main-content">
-
-      <h2>📚 Bienvenido a BookFinder</h2>
-      <p *ngIf="!isAuthenticated">Encuentra tus libros favoritos o regístrate para guardar favoritos.</p>
-      <p *ngIf="isAuthenticated">Hola, {{ username }} 👋 ¡Explora y guarda tus libros preferidos!</p>
-
-      <div class="buttons">
-        <button *ngIf="!isAuthenticated" (click)="navigateToLogin()">🔑 Login</button>
-        <button *ngIf="!isAuthenticated" (click)="navigateToRegister()">📝 Registro</button>
-
-        <button *ngIf="isAuthenticated" (click)="setView('favorites')">⭐ Mis Favoritos</button>
-        <button *ngIf="isAuthenticated" (click)="setView('wishlist')">
-          💖 Mi Wishlist <span class="wishlist-counter">({{ wishlistCount }})</span>
-        </button>
-
-        <button *ngIf="isAuthenticated" (click)="setView('search')" [disabled]="currentView === 'search'">
-          🔍 Buscar Libros
-        </button>
-
-        <button *ngIf="isAuthenticated" (click)="logout()">🚪 Cerrar Sesión</button>
-      </div>
-
-
-
-    </div>
-
+    <!-- 📦 Contenido dinámico -->
     <div class="dynamic-content-container">
       <app-book-search *ngIf="currentView === 'search'"></app-book-search>
       <app-favorite-list *ngIf="currentView === 'favorites'"></app-favorite-list>
@@ -56,8 +59,7 @@
 
   </div>
 
-
-
+  <!-- 📎 Footer -->
   <footer class="footer">
     <div class="footer-content">
       <p>📖 <strong>BookFinder</strong> © 2024. Todos los derechos reservados.</p>
@@ -68,5 +70,4 @@
       </nav>
     </div>
   </footer>
-
 </body>
