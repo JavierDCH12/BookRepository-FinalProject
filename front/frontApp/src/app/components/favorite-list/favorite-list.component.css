@@ -178,7 +178,7 @@
   color: #78909c;
   text-align: center;
   margin-top: 4px;
-  white-space: nowrap;
+  white-space: wrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }

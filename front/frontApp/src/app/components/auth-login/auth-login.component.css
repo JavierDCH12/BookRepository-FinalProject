@@ -59,7 +59,7 @@ input::placeholder {
 .toggle-password {
   background: none;
   color: #4a90e2;
-  font-size: 3rem;
+  font-size: 1rem;
   cursor: pointer;
   margin-left: 10px;
   padding: 4px;
