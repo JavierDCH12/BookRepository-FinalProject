@@ -119,20 +119,22 @@
 
 .loading,
 .error-message {
-  margin-top: 20px;
+  margin-top: 25px;
   font-size: 0.9rem;
   color: #607d8b;
 }
 
+/* 🌀 Spinner PrimeNG */
 ::ng-deep .custom-spinner {
   display: block;
-  margin: 0 auto 12px;
-  width: 48px;
-  height: 48px;
-  color: #42a5f5;
+  margin: 0 auto 20px;
+  width: 50px !important;
+  height: 50px !important;
+  animation-duration: 1s !important;
+  color: #42a5f5 !important;
 }
 
-/* Responsive */
+/* 📱 Responsive */
 @media (max-width: 768px) {
   .favorite-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -141,4 +143,16 @@
   .favorite-card {
     padding: 12px;
   }
+}
+
+.favorite-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 💡 Brillo sutil en la portada del libro */
+.favorite-card:hover .book-image img {
+  filter: brightness(1.05);
+  transition: filter 0.3s ease;
 }

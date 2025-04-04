@@ -269,6 +269,8 @@ def popular_books(request):
 
 ## GESTIONAR LISTA DE DESEOS
 @api_view(['GET', 'POST'])
+@cache_page(60)
+
 @permission_classes([IsAuthenticated])
 def manage_wishlist(request):
     if request.method == 'GET':

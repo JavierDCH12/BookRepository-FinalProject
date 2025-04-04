@@ -19,6 +19,9 @@ export const appConfig: ApplicationConfig = {
       progressBar: true,
       timeOut: 3000
     })),
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+
+    
+
   ]
 };
