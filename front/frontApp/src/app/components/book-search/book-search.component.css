@@ -1,55 +1,86 @@
 .search-container {
   margin: 0 auto;
   max-width: 1200px;
-  padding: 30px;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
   font-family: 'Poppins', sans-serif;
-  background: #f4f4f9;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.search-container:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
 }
 
 .search-form {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  margin-bottom: 20px;
-  gap: 20px; 
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .input-group {
   flex: 1;
-  margin: 0 10px;
   position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #f6f9fc;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  padding: 0 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group:focus-within {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
 }
 
 .input-group input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 18px;
+  flex: 1;
+  padding: 14px 10px;
+  font-size: 16px;
+  border: none;
+  background: transparent;
   outline: none;
-  transition: border 0.3s ease;
+  color: #2c3e50;
 }
 
-.input-group input:focus {
-  border: 1px solid #007bff;
+.input-group input::placeholder {
+  color: #aaa;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus::placeholder {
+  opacity: 0.6;
+  transform: translateX(4px);
 }
 
 .search-button {
-  padding: 12px 20px;
-  background-color: #007bff;
+  padding: 14px 24px;
+  font-size: 16px;
+  background-color: #4a90e2;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .search-button:hover {
-  background-color: #0056b3;
+  background-color: #357ab8;
+  transform: translateY(-1px);
 }
 
+.search-button:disabled {
+  background-color: #b0bec5;
+  cursor: not-allowed;
+}
+
+/* 📘 Resultados */
 .results-container {
   margin-top: 30px;
 }
@@ -63,14 +94,15 @@
 .book-card {
   background: white;
   padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .book-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 .book-cover-container {
@@ -88,19 +120,20 @@
 }
 
 .book-info {
-  padding-top: 10px;
+  padding-top: 12px;
   text-align: center;
 }
 
 .clickable-title {
   font-size: 1.2rem;
-  color: #333;
-  margin-bottom: 10px;
-  cursor: pointer;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  font-weight: 600;
+  transition: color 0.3s;
 }
 
 .clickable-title:hover {
-  color: #007bff;
+  color: #4a90e2;
 }
 
 .author {
@@ -108,187 +141,14 @@
   color: #555;
 }
 
-.publish-year {
-  font-size: 0.9rem;
-  color: #888;
-}
-
+.publish-year,
 .genres {
   font-size: 0.9rem;
-  color: #555;
-}
-
-.fav-button {
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: background-color 0.3s ease;
-}
-
-.fav-button:hover {
-  background-color: #0056b3;
-}
-
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 800px;
-  width: 90%;
-}
-
-.close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.modal-auth-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-auth {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 30px;
-  border-radius: 10px;
-  width: 400px;
-  text-align: center;
-}
-
-.auth-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.auth-buttons button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.auth-buttons button:hover {
-  background-color: #0056b3;
-}
-
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 0 10px;
-  transition: background-color 0.3s ease;
-}
-
-.pagination button:hover {
-  background-color: #0056b3;
-}
-
-.pagination button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.modal {
-  position: fixed;
-  z-index: 1000;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-content {
-  background-color: #fff;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  position: relative;
-}
-
-.close {
-  position: absolute;
-  top: 10px; right: 15px;
-  font-size: 30px;
-  cursor: pointer;
   color: #888;
-  transition: color 0.3s ease;
+  margin-top: 4px;
 }
 
-.close:hover {
-  color: #555;
-}
-
-.auth-modal-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.auth-modal-buttons button {
-  padding: 10px 15px;
-  border-radius: 8px;
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.auth-modal-buttons button:hover {
-  background-color: #357ab8;
-}
-
+/* ❤️ Wishlist */
 .wishlist-button {
   background: none;
   border: none;
@@ -319,14 +179,124 @@
   100% { transform: scale(1); }
 }
 
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
+/* ✅ Botón favoritos */
+.fav-button {
+  padding: 10px 15px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
 }
 
+.fav-button:hover {
+  background-color: #357ab8;
+}
 
+/* 📑 Modal general */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+}
 
+.close {
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 28px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
 
+.close:hover {
+  color: #555;
+}
 
+/* 🔒 Modal auth */
+.modal-auth {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.modal-auth-backdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.auth-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.auth-buttons button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-buttons button:hover {
+  background-color: #357ab8;
+}
+
+/* 📄 Paginación */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #357ab8;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
