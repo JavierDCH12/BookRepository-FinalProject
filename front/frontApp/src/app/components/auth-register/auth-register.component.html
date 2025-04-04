@@ -32,7 +32,6 @@
       <span *ngIf="form.get('password')?.hasError('minlength')">La contraseña debe tener al menos 5 caracteres.</span>
     </span>
 
-
     <div class="input-group">
       <span class="icon">🔑</span>
       <input id="confirmPassword" type="password" formControlName="confirmPassword" required
@@ -47,12 +46,14 @@
     <div *ngIf="backendErrorMessage" class="error-message">
       {{ backendErrorMessage }}
     </div>
-
     <div *ngIf="successfulRegistration" class="success-message">
       ¡Registro exitoso! Redirigiendo al inicio de sesión...
     </div>
 
-    <button type="submit" [disabled]="form.invalid">Registrar</button>
+    <button type="submit" [disabled]="form.invalid || isLoading">
+      <i *ngIf="isLoading" class="pi pi-spin pi-spinner" style="font-size: 1.2rem; margin-right: 6px;"></i>
+      Registrar
+    </button>
   </form>
 
   <div class="register-section">

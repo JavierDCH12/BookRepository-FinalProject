@@ -16,6 +16,7 @@ export class AuthRegisterComponent {
   form: FormGroup;
   backendErrorMessage: string | null = null;
   successfulRegistration: boolean = false;
+  isLoading: boolean = false; 
 
   constructor(
     private userAuthService: UserAuthServiceService,
@@ -33,28 +34,29 @@ export class AuthRegisterComponent {
     );
   }
 
-  // Validador de contraseñas coincidentes 
   passwordsMatch(group: FormGroup): { [key: string]: boolean } | null {
     const password = group.get('password')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
-
     return password === confirmPassword ? null : { passwordsDoNotMatch: true };
   }
 
-  // Enviar formulario 
   onSubmit() {
     if (this.form.valid) {
       const { username, email, password } = this.form.value;
+      this.isLoading = true; 
 
       this.userAuthService.registerUser(username, email, password).subscribe({
         next: () => {
           this.backendErrorMessage = null;
           this.successfulRegistration = true;
+          this.isLoading = false; 
+
           setTimeout(() => {
             this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
           }, 2000);
         },
         error: (error) => {
+          this.isLoading = false; 
           console.error('Registration error:', error);
           if (error.error) {
             if (error.error.username) {
@@ -74,7 +76,6 @@ export class AuthRegisterComponent {
     }
   }
 
-  // Navegar a la página de inicio de sesión
   navigateToLogin() {
     this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
   }

@@ -11,7 +11,6 @@
       <span *ngIf="loginForm.get('username')?.hasError('minlength')">Username must be at least 3 characters long.</span>
     </span>
 
-    
     <label class="input-group">
       <span class="icon">🔒</span>
       <input [type]="showPassword ? 'text' : 'password'" formControlName="password" required autocomplete="current-password" placeholder="Enter your password">
@@ -24,12 +23,12 @@
       <span *ngIf="loginForm.get('password')?.hasError('minlength')">Password must be at least 5 characters long.</span>
     </span>
 
-    
     <div *ngIf="backendErrorMessage" class="error-message">
       {{ backendErrorMessage }}
     </div>
 
     <button type="submit" [disabled]="loginForm.invalid || isSubmitting">
+      <i *ngIf="isSubmitting" class="pi pi-spin pi-spinner" style="font-size: 1.2rem; margin-right: 6px;"></i>
       {{ isSubmitting ? 'Logging in...' : 'Login' }}
     </button>
   </form>
