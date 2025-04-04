@@ -13,6 +13,21 @@ from datetime import timedelta
 from pathlib import Path
 
 from django.conf.global_settings import SECURE_HSTS_SECONDS, SECURE_HSTS_PRELOAD, SECRET_KEY
+import logging
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
