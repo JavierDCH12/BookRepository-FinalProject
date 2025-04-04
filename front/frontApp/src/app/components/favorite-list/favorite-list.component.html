@@ -60,13 +60,16 @@
   </div>
 
   <div *ngIf="popularBooks.length > 0" class="popular-section">
-    <h3>🔥 Popular Books Among Users</h3>
+    <h3 class="popular-heading">🔥 Libros Populares entre Usuarios</h3>
     <div class="popular-carousel">
       <div *ngFor="let book of popularBooks" class="popular-card" (click)="navigateToBookDetail(book.book_key)">
-        <img *ngIf="book.cover_url" [src]="book.cover_url" alt="{{ book.title }} cover">
-        <p class="popular-title">{{ book.title }}</p>
-        <p class="popular-author">{{ book.author }}</p>
+        <img *ngIf="book.cover_url" [src]="book.cover_url" [alt]="book.title + ' cover'">
+        <div class="popular-card-text">
+          <p class="popular-title">{{ book.title }}</p>
+          <p class="popular-author">{{ book.author }}</p>
+        </div>
       </div>
     </div>
   </div>
+  
 </div>
