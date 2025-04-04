@@ -2,60 +2,63 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <h2>Registro</h2>
 
+    <!-- Username -->
     <div class="input-group">
-      <span class="icon">👤</span>
-      <input id="username" type="text" formControlName="username" pattern="^.{5,}$" required
-        placeholder="Ingresa tu nombre de usuario">
+      <i class="pi pi-user icon"></i>
+      <input id="username" type="text" formControlName="username" required placeholder="Nombre de usuario" />
     </div>
-    <span *ngIf="form.get('username')?.invalid && form.get('username')?.touched" class="error-text">
-      <span *ngIf="form.get('username')?.hasError('required')">El nombre de usuario es requerido.</span>
-      <span *ngIf="form.get('username')?.hasError('minlength')">El nombre de usuario debe tener al menos 5
-        caracteres.</span>
+    <span *ngIf="form.get('username')?.touched && form.get('username')?.invalid" class="error-text">
+      <span *ngIf="form.get('username')?.hasError('required')">El nombre de usuario es obligatorio.</span>
+      <span *ngIf="form.get('username')?.hasError('minlength')">Debe tener al menos 5 caracteres.</span>
     </span>
 
+    <!-- Email -->
     <div class="input-group">
-      <span class="icon">📧</span>
-      <input id="email" type="email" formControlName="email" required placeholder="Ingresa tu correo electrónico">
+      <i class="pi pi-envelope icon"></i>
+      <input id="email" type="email" formControlName="email" required placeholder="Correo electrónico" />
     </div>
-    <span *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="error-text">
-      <span *ngIf="form.get('email')?.hasError('required')">El correo electrónico es requerido.</span>
-      <span *ngIf="form.get('email')?.hasError('email')">Correo electrónico inválido.</span>
+    <span *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="error-text">
+      <span *ngIf="form.get('email')?.hasError('required')">El correo electrónico es obligatorio.</span>
+      <span *ngIf="form.get('email')?.hasError('email')">Formato de correo no válido.</span>
     </span>
 
+    <!-- Contraseña -->
     <div class="input-group">
-      <span class="icon">🔒</span>
-      <input id="password" type="password" formControlName="password" pattern="^.{5,}$" required
-        placeholder="Ingresa tu contraseña">
+      <i class="pi pi-lock icon"></i>
+      <input id="password" type="password" formControlName="password" required placeholder="Contraseña" />
     </div>
-    <span *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="error-text">
-      <span *ngIf="form.get('password')?.hasError('required')">La contraseña es requerida.</span>
-      <span *ngIf="form.get('password')?.hasError('minlength')">La contraseña debe tener al menos 5 caracteres.</span>
+    <span *ngIf="form.get('password')?.touched && form.get('password')?.invalid" class="error-text">
+      <span *ngIf="form.get('password')?.hasError('required')">La contraseña es obligatoria.</span>
+      <span *ngIf="form.get('password')?.hasError('minlength')">Debe tener al menos 5 caracteres.</span>
     </span>
 
+    <!-- Confirmación de contraseña -->
     <div class="input-group">
-      <span class="icon">🔑</span>
-      <input id="confirmPassword" type="password" formControlName="confirmPassword" required
-        placeholder="Confirma tu contraseña">
+      <i class="pi pi-key icon"></i>
+      <input id="confirmPassword" type="password" formControlName="confirmPassword" required placeholder="Confirmar contraseña" />
     </div>
-    <span *ngIf="form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched" class="error-text">
-      <span *ngIf="form.get('confirmPassword')?.hasError('required')">La confirmación de la contraseña es
-        requerida.</span>
-      <span *ngIf="form.get('confirmPassword')?.hasError('passwordsDoNotMatch')">Las contraseñas no coinciden.</span>
+    <span *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid" class="error-text">
+      <span *ngIf="form.get('confirmPassword')?.hasError('required')">Debes confirmar la contraseña.</span>
+      <span *ngIf="form.hasError('passwordsDoNotMatch')">Las contraseñas no coinciden.</span>
     </span>
 
+    <!-- Mensajes de backend -->
     <div *ngIf="backendErrorMessage" class="error-message">
       {{ backendErrorMessage }}
     </div>
+
     <div *ngIf="successfulRegistration" class="success-message">
       ¡Registro exitoso! Redirigiendo al inicio de sesión...
     </div>
 
+    <!-- Botón de registro -->
     <button type="submit" [disabled]="form.invalid || isLoading">
       <i *ngIf="isLoading" class="pi pi-spin pi-spinner" style="font-size: 1.2rem; margin-right: 6px;"></i>
       Registrar
     </button>
   </form>
 
+  <!-- Enlace al login -->
   <div class="register-section">
     <p>¿Ya tienes una cuenta?</p>
     <button type="button" (click)="navigateToLogin()" class="login-button">Ir al Login</button>

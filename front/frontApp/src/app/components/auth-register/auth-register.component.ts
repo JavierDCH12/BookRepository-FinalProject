@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { UserAuthServiceService } from '../../services/UserAuthService.service';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
 
@@ -15,8 +15,8 @@ import { NAVIGATION_ROUTES } from '../../utils/constants';
 export class AuthRegisterComponent {
   form: FormGroup;
   backendErrorMessage: string | null = null;
-  successfulRegistration: boolean = false;
-  isLoading: boolean = false; 
+  successfulRegistration = false;
+  isLoading = false;
 
   constructor(
     private userAuthService: UserAuthServiceService,
@@ -28,55 +28,63 @@ export class AuthRegisterComponent {
         username: ['', [Validators.required, Validators.minLength(5)]],
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(5)]],
-        confirmPassword: ['', [Validators.required]]
+        confirmPassword: ['', Validators.required]
       },
       { validators: this.passwordsMatch }
     );
   }
 
-  passwordsMatch(group: FormGroup): { [key: string]: boolean } | null {
+  /**
+   * Validador personalizado para comprobar que ambas contraseñas coinciden
+   */
+  passwordsMatch(group: AbstractControl): ValidationErrors | null {
     const password = group.get('password')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { passwordsDoNotMatch: true };
+    return password && confirmPassword && password !== confirmPassword
+      ? { passwordsDoNotMatch: true }
+      : null;
   }
 
-  onSubmit() {
+  /**
+   * Manejo del envío del formulario de registro
+   */
+  onSubmit(): void {
     if (this.form.valid) {
       const { username, email, password } = this.form.value;
-      this.isLoading = true; 
+      this.isLoading = true;
+      this.backendErrorMessage = null;
 
       this.userAuthService.registerUser(username, email, password).subscribe({
         next: () => {
-          this.backendErrorMessage = null;
           this.successfulRegistration = true;
-          this.isLoading = false; 
-
+          this.isLoading = false;
           setTimeout(() => {
             this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
           }, 2000);
         },
         error: (error) => {
-          this.isLoading = false; 
+          this.isLoading = false;
           console.error('Registration error:', error);
-          if (error.error) {
-            if (error.error.username) {
-              this.backendErrorMessage = error.error.username[0];
-            } else if (error.error.email) {
-              this.backendErrorMessage = error.error.email[0];
-            } else if (error.error.password) {
-              this.backendErrorMessage = error.error.password[0];
-            } else {
-              this.backendErrorMessage = 'Error en el registro.';
-            }
+
+          if (error?.error) {
+            this.backendErrorMessage =
+              error.error.username?.[0] ||
+              error.error.email?.[0] ||
+              error.error.password?.[0] ||
+              'Error en el registro.';
+          } else {
+            this.backendErrorMessage = 'Error inesperado al registrar.';
           }
         }
       });
     } else {
       this.backendErrorMessage = 'Por favor, completa correctamente el formulario.';
+      this.form.markAllAsTouched(); 
     }
   }
 
-  navigateToLogin() {
+ 
+  navigateToLogin(): void {
     this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
   }
 }

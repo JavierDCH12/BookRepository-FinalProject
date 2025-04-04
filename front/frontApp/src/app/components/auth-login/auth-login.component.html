@@ -3,21 +3,18 @@
     <h2>Login</h2>
 
     <label class="input-group">
-      <span class="icon">👤</span>
-      <input type="text" formControlName="username" required autocomplete="username" placeholder="Enter your username">
+      <i class="pi pi-user icon"></i>
+      <input type="text" formControlName="username" required placeholder="Enter your username" />
     </label>
-    <span *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error-text">
-      <span *ngIf="loginForm.get('username')?.hasError('required')">Username is required.</span>
-      <span *ngIf="loginForm.get('username')?.hasError('minlength')">Username must be at least 3 characters long.</span>
-    </span>
-
+    
     <label class="input-group">
-      <span class="icon">🔒</span>
-      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" required autocomplete="current-password" placeholder="Enter your password">
+      <i class="pi pi-lock icon"></i>
+      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" required placeholder="Enter your password" />
       <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
-        {{ showPassword ? '🙈' : '👁️' }}
+        <i class="pi" [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"></i>
       </button>
     </label>
+    
     <span *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-text">
       <span *ngIf="loginForm.get('password')?.hasError('required')">Password is required.</span>
       <span *ngIf="loginForm.get('password')?.hasError('minlength')">Password must be at least 5 characters long.</span>
