@@ -179,24 +179,45 @@
   100% { transform: scale(1); }
 }
 
-/* ✅ Botón favoritos */
-.fav-button {
-  padding: 10px 15px;
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 8px;
+.fav-toggle-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
   font-size: 14px;
+  font-weight: 500;
+  background-color: #f0f4fa;
+  color: #4a90e2;
+  border: 1px solid #4a90e2;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.fav-button:hover {
-  background-color: #357ab8;
+.fav-toggle-button:hover {
+  background-color: #e3ecf9;
+  transform: translateY(-1px);
 }
 
-/* 📑 Modal general */
+.fav-toggle-button.active {
+  background-color: #e2cb4a;
+  color: #fff;
+  border: 1px solid #fff025;
+
+}
+
+.fav-toggle-button i {
+  transition: transform 0.3s ease, color 0.3s ease;
+  font-size: 16px;
+}
+
+.fav-toggle-button.active i {
+  color: #fff;
+  transform: scale(1.2);
+}
+
+
 .modal {
   position: fixed;
   top: 0; left: 0;
@@ -232,7 +253,6 @@
   color: #555;
 }
 
-/* 🔒 Modal auth */
 .modal-auth {
   background: #fff;
   padding: 30px;
@@ -272,7 +292,6 @@
   background-color: #357ab8;
 }
 
-/* 📄 Paginación */
 .pagination {
   display: flex;
   justify-content: center;
@@ -299,4 +318,19 @@
 .pagination button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.fade-in {
+  animation: fadeSlideIn 0.9s ease-in-out;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

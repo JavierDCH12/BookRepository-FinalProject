@@ -33,7 +33,11 @@
       </div>
 
       <div class="favorites-grid" *ngIf="userProfile.favorites.length > 0">
-        <div class="book-card" *ngFor="let book of userProfile.favorites">
+        <div
+          class="book-card"
+          *ngFor="let book of userProfile.favorites; let i = index"
+          [ngStyle]="{ 'animation-delay': (i * 100) + 'ms' }"
+        >
           <img 
             class="book-cover" 
             [src]="book.cover_url || 'assets/default-cover.png'" 
@@ -56,6 +60,7 @@
         </div>
       </div>
     </section>
+
     <div class="back-button-container">
       <button class="back-home-button" (click)="navigateToHome()">🏠 Volver al inicio</button>
     </div>
