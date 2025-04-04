@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
 import { CommonModule } from '@angular/common';
 import { WikipediaService } from '../../services/WikipediaService.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-wishlist',
   templateUrl: './wishlist.component.html',
   styleUrls: ['./wishlist.component.css'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ProgressSpinnerModule]
 })
 export class WishlistComponent implements OnInit {
   wishlistBooks: WishlistBook[] = [];

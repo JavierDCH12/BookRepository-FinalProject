@@ -14,6 +14,7 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* 👤 Header del perfil */
 .profile-header {
   display: flex;
   align-items: center;
@@ -38,6 +39,7 @@
   color: #2c3e50;
 }
 
+/* 📚 Favoritos */
 .favorites-section h3 {
   font-size: 1.8rem;
   margin-bottom: 20px;
@@ -52,21 +54,30 @@
   margin-top: 15px;
 }
 
+/* 🧱 Grid de libros */
 .favorites-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 30px;
   justify-items: center;
+  align-items: start;
 }
 
+/* 📘 Tarjeta de libro */
 .book-card {
   background: #ffffff;
   border-radius: 14px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
   padding: 15px;
-  text-align: center;
   width: 100%;
+  max-width: 200px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  animation: fadeSlideUp 0.5s ease forwards;
 }
 
 .book-card:hover {
@@ -74,15 +85,36 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 🖼️ Portada */
 .book-cover {
   width: 100%;
-  height: 230px;
+  aspect-ratio: 2 / 3;
   object-fit: cover;
   border-radius: 10px;
   margin-bottom: 12px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+  flex-shrink: 0;
 }
 
+.book-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* 📖 Título y autor */
 .book-card h4 {
   font-size: 1.1rem;
   margin: 5px 0;
@@ -95,6 +127,7 @@
   margin-bottom: 10px;
 }
 
+/* ⭐ Estrellas */
 .rating-display {
   color: #ffd700;
   margin-bottom: 8px;
@@ -116,6 +149,7 @@
   color: #ffc107;
 }
 
+/* 📝 Reseña */
 .review {
   font-size: 0.9rem;
   font-style: italic;
@@ -129,28 +163,34 @@
   transition: background-color 0.3s;
 }
 
-.loading-container,
+/* ⏳ Spinner PrimeNG */
+::ng-deep .custom-spinner {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  display: block;
+}
+
+.loading-container {
+  text-align: center;
+  margin-top: 30px;
+  animation: fadeIn 0.4s ease;
+}
+
+.loading-container p {
+  font-size: 1rem;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* ❌ Error */
 .error-container {
   text-align: center;
   margin-top: 30px;
+  color: #c62828;
 }
 
-.spinner {
-  width: 48px;
-  height: 48px;
-  border: 5px solid #e0e0e0;
-  border-top-color: #42a5f5;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin: 0 auto 12px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+/* 🔙 Botón volver */
 .back-home-button {
   background-color: #42a5f5;
   color: white;
@@ -172,18 +212,18 @@
   box-shadow: 0 6px 16px rgba(30, 136, 229, 0.25);
 }
 
-.book-card {
-  opacity: 0;
-  animation: fadeSlideUp 0.5s ease forwards;
-}
-
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .favorites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .book-cover {
+    height: auto;
   }
 }

@@ -1,34 +1,42 @@
 <div class="favorites-container">
-    <h2>🎁 My Wishlist</h2>
-  
-    <div *ngIf="isLoading" class="loading">⏳ Loading wishlist...</div>
-    <div *ngIf="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
-  
-    <div *ngIf="wishlistBooks.length === 0 && !isLoading" class="no-favorites">
-      <p>No books in your wishlist yet. 💡 Add some from the search page!</p>
-    </div>
-      <div class="favorite-grid">
-      <div *ngFor="let book of wishlistBooks" class="favorite-card">
-          <div class="book-image" (click)="navigateToBookDetail(book.book_key)">
-          <img *ngIf="book.cover_url && book.cover_url !== 'None'" 
-               [src]="book.cover_url" 
-               alt="Book cover">
-        </div>
-  
-        <div class="book-info">
-          <h4 (click)="navigateToBookDetail(book.book_key)" class="clickable-title">
-            {{ book.title }}
-          </h4>
-          <p *ngIf="book.author" class="author">
-            👤 <a href="#" (click)="$event.preventDefault(); getAuthorWikipediaLink(book.author)">
-              {{ book.author }}
-            </a>
-          </p>
-          <p *ngIf="book.first_publish_year" class="publish-year">📅 {{ book.first_publish_year }}</p>
-  
-          <button class="remove-button" (click)="removeFromWishlist(book.book_key)">🗑️ Remove from Wishlist</button>
-        </div>
+  <h2>🎁 Mi Wishlist</h2>
+
+  <div *ngIf="isLoading" class="wishlist-loading">
+    <p-progressSpinner styleClass="custom-spinner" strokeWidth="4" animationDuration=".8s"></p-progressSpinner>
+    <p>⏳ Cargando tu wishlist...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <div *ngIf="wishlistBooks.length === 0 && !isLoading" class="no-favorites">
+    <p>No hay libros aún en tu wishlist. 💡 ¡Añade alguno desde la búsqueda!</p>
+  </div>
+
+  <div class="favorite-grid" *ngIf="wishlistBooks.length > 0">
+    <div *ngFor="let book of wishlistBooks" class="favorite-card animate-fade-in">
+      <div class="book-image" (click)="navigateToBookDetail(book.book_key)">
+        <img *ngIf="book.cover_url && book.cover_url !== 'None'"
+             [src]="book.cover_url"
+             alt="Book cover" />
+      </div>
+
+      <div class="book-info">
+        <h4 (click)="navigateToBookDetail(book.book_key)" class="clickable-title">
+          {{ book.title }}
+        </h4>
+        <p *ngIf="book.author" class="author">
+          👤 <a href="#" (click)="$event.preventDefault(); getAuthorWikipediaLink(book.author)">
+            {{ book.author }}
+          </a>
+        </p>
+        <p *ngIf="book.first_publish_year" class="publish-year">📅 {{ book.first_publish_year }}</p>
+
+        <button class="remove-button" (click)="removeFromWishlist(book.book_key)">
+          🗑️ Quitar de Wishlist
+        </button>
       </div>
     </div>
   </div>
-  
+</div>

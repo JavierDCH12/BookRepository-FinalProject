@@ -3,14 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PublicProfileService, PublicUserProfile } from '../../services/PublicProfileService.service';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
-
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-public-profile',
   templateUrl: './public-profile.component.html',
   styleUrls: ['./public-profile.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, ProgressSpinnerModule  ]
 })
 export class PublicProfileComponent implements OnInit {
   userProfile: PublicUserProfile | null = null;
@@ -47,17 +47,6 @@ export class PublicProfileComponent implements OnInit {
       this.isLoading = true;
       this.publicProfileService.getPublicProfile(username).subscribe({
         next: (profile) => {
-          console.log('📡 Perfil recibido del backend:', profile); 
-    
-          // Mostrar cada campo por separado para debugging
-          console.log(`👤 Username: ${profile.username}`);
-          console.log(`📧 Email: ${profile.email}`);
-          console.log(`📅 Fecha de registro: ${profile.register_date}`);
-          console.log(`🖼️ Foto de perfil: ${profile.profile_picture || 'No disponible'}`);
-          console.log(`🧑 Nombre: ${profile.first_name || '(No especificado)'}`);
-          console.log(`👪 Apellido: ${profile.last_name || '(No especificado)'}`);
-          console.log(`📚 Libros favoritos (${profile.favorites.length}):`, profile.favorites);
-    
           this.userProfile = profile;
           this.isLoading = false;
         },

@@ -68,7 +68,7 @@ export class HomeComponent implements OnInit {
       this.isAuthenticated = true;
       this.loadUserProfile();
       this.checkPendingFavorite();
-      this.checkPendingWishlist(); // <-- ✅ Y AQUÍ TAMBIÉN
+      this.checkPendingWishlist(); 
       this.wishlistService.getWishlist();
     });
   }
@@ -178,15 +178,15 @@ export class HomeComponent implements OnInit {
   
       this.wishlistService.addToWishlist(wishlistBook).subscribe({
         next: () => {
-          console.log(`🎁 Libro '${wishlistBook.title}' añadido a wishlist tras login.`);
+          console.log(`Libro '${wishlistBook.title}' añadido a wishlist tras login.`);
           localStorage.removeItem('pendingWishlistBook');
           this.toastr.success(
-            `'${wishlistBook.title}' se ha añadido a tu wishlist 🎁`,
+            `'${wishlistBook.title}' se ha añadido a tu wishlist `,
             'Libro añadido'
           );
         },
         error: (err: any) => {
-          console.error('⚠️ Error añadiendo wishlist post-login:', err);
+          console.error('Error añadiendo wishlist post-login:', err);
           localStorage.removeItem('pendingWishlistBook');
           this.toastr.error(
             'No se pudo añadir el libro automáticamente a la wishlist.',
