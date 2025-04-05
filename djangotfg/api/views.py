@@ -17,7 +17,6 @@ from .serializers import UserProfileSerializer, RegisterSerializer, FavoriteBook
     WishlistBookSerializer
 from django.contrib.auth import get_user_model
 import logging
-from api.security import throttles
 
 # Configuración de logs
 logger = logging.getLogger(__name__)

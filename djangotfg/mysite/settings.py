@@ -11,8 +11,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
-
-from django.conf.global_settings import SECURE_HSTS_SECONDS, SECURE_HSTS_PRELOAD, SECRET_KEY
 import logging
 
 LOGGING = {
@@ -73,7 +71,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEBUG = False
 
 ###########################ALLOWED HOSTS
-ALLOWED_HOSTS = ["bookfinder.up.railway.app"] 
+ALLOWED_HOSTS = ["bookfinder.up.railway.app", "localhost", "127.0.0.1"] 
 
 ###########################APP DEFINITION
 REST_FRAMEWORK = {
