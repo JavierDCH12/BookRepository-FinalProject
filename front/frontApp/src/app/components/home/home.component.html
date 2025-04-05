@@ -6,8 +6,12 @@
 
       <!-- 🧍 Sidebar con perfil -->
       <div class="profile-card" *ngIf="isAuthenticated">
-        <img class="profile-picture" [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture"
-             alt="Profile Picture">
+        <img 
+        *ngIf="userProfile" 
+        [src]="environment.apiUrl.replace('/api/', '') + userProfile.profile_picture"
+        class="profile-picture"
+        alt="Foto de perfil"
+                   alt="Profile Picture">
         <h3>{{ username }}</h3>
         <p class="user-email">📧 {{ userProfile?.email }}</p>
         <button class="profile-button" (click)="navigateToProfile()">👤 Ver Perfil Privado</button>

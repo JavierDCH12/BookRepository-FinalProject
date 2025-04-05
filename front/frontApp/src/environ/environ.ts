@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://127.0.0.1:8000/api/' /*Ruta básica*/
+    apiUrl: 'https://bookfinder.up.railway.app/api/' /*Ruta básica*/
   };
   

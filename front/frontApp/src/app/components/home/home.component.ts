@@ -15,6 +15,7 @@ import { WishlistService } from '../../services/WishlistService.service';
 import { Book } from '../../services/BookSearchService.service';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../environ/environ';
 
 @Component({
   selector: 'app-home',
@@ -33,6 +34,8 @@ export class HomeComponent implements OnInit {
   isAuthenticated: boolean = false;
   userProfile: UserProfile | null = null;
   searchedUsername: string = '';
+  environment = environment;
+
 
   currentView: 'search' | 'favorites' | 'wishlist' = 'search';
   wishlistCount: number = 0;
@@ -141,7 +144,7 @@ export class HomeComponent implements OnInit {
 
       this.favoriteService.addFavorite(favoriteBook).subscribe({
         next: () => {
-          console.log(`✅ Libro '${favoriteBook.title}' añadido automáticamente después del login.`);
+          //console.log(`✅ Libro '${favoriteBook.title}' añadido automáticamente después del login.`);
           localStorage.removeItem('pendingFavoriteBook');
           this.toastr.success(
             `'${favoriteBook.title}' se ha añadido a tus favoritos ⭐`,
@@ -178,7 +181,7 @@ export class HomeComponent implements OnInit {
   
       this.wishlistService.addToWishlist(wishlistBook).subscribe({
         next: () => {
-          console.log(`Libro '${wishlistBook.title}' añadido a wishlist tras login.`);
+          //console.log(`Libro '${wishlistBook.title}' añadido a wishlist tras login.`);
           localStorage.removeItem('pendingWishlistBook');
           this.toastr.success(
             `'${wishlistBook.title}' se ha añadido a tu wishlist `,

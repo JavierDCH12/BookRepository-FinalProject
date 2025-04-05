@@ -81,7 +81,7 @@ wishlistCount$ = this.wishlistCountSubject.asObservable();
 
   // Manejo de errores 
   private handleError(error: any) {
-    console.error('❌ Error en wishlist:', error);
+    //console.error('❌ Error en wishlist:', error);
     return throwError(() => new Error(error.message || 'Ha ocurrido un error en WishlistService.'));
   }
 }

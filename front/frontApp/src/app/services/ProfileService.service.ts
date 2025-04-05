@@ -65,7 +65,7 @@ export class ProfileService {
       headers: this.getAuthHeaders(true) 
     }).pipe(
       tap((response: any) => {
-        console.log("📡 Imagen de perfil subida:", response);
+        //console.log("📡 Imagen de perfil subida:", response);
       })
     );
   }

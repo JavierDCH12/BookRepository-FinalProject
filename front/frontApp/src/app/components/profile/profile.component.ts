@@ -39,7 +39,7 @@ export class ProfileComponent implements OnInit {
     this.isLoading = true;
     this.profileService.getUserProfile().subscribe({
       next: (profile: UserProfile) => {
-        console.log("✅ Perfil recibido:", profile);
+        //console.log("✅ Perfil recibido:", profile);
         this.userProfile = profile;
         this.isLoading = false;
       },
@@ -65,7 +65,7 @@ export class ProfileComponent implements OnInit {
   
     this.profileService.updateUserProfile(this.editedProfile).subscribe({
       next: (response) => {
-        console.log("✅ Perfil actualizado:", response);
+        //console.log("✅ Perfil actualizado:", response);
         this.editMode = false;
   
         Swal.fire({
@@ -113,7 +113,7 @@ export class ProfileComponent implements OnInit {
   
     this.profileService.uploadProfilePicture(formData).subscribe({
       next: (response) => {
-        console.log("✅ Imagen subida correctamente:", response);
+        //console.log("✅ Imagen subida correctamente:", response);
         if (this.userProfile) {
           this.userProfile.profile_picture = response.profile_picture;
         }

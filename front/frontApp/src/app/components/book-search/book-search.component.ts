@@ -49,7 +49,7 @@ export class BookSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAuthenticated = this.userAuthService.isAuthenticated();
-    console.log('🟢 User authenticated?', this.isAuthenticated);
+    //console.log('🟢 User authenticated?', this.isAuthenticated);
     if (this.isAuthenticated) {
       this.loadFavorites();
       this.loadWishlist(); 
@@ -195,7 +195,7 @@ export class BookSearchComponent implements OnInit {
  
 
   getAuthorWikipediaLink(author: string): void {
-    console.log(`🔎 Buscando en Wikipedia: ${author}`);
+    //(`🔎 Buscando en Wikipedia: ${author}`);
     this.wikipediaService.getWikipediaLink(author).subscribe({
       next: (link: string | null) => {
         if (link) {

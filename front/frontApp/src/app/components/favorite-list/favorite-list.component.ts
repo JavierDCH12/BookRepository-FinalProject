@@ -50,7 +50,7 @@ export class FavoriteListComponent implements OnInit {
     this.isLoading = true;
     this.favoriteService.getFavorites().subscribe({
       next: (favorites: FavoriteBook[]) => {
-        console.log("📸 Libros favoritos recibidos:", favorites);
+        //console.log("📸 Libros favoritos recibidos:", favorites);
         this.favoriteBooks = favorites;
 
         // Inicializar textos de reseñas
@@ -88,11 +88,11 @@ export class FavoriteListComponent implements OnInit {
       return;
     }
 
-    console.log(`🔍 Intentando eliminar el favorito con bookKey: ${bookKey}`);
+    //console.log(`🔍 Intentando eliminar el favorito con bookKey: ${bookKey}`);
 
     this.favoriteService.removeFavorite(bookKey).subscribe({
       next: () => {
-        console.log(`✅ Libro con bookKey: ${bookKey} eliminado correctamente`);
+        //console.log(`✅ Libro con bookKey: ${bookKey} eliminado correctamente`);
         this.favoriteBooks = this.favoriteBooks.filter(book => book.book_key !== bookKey);
       },
       error: (error) => {
@@ -115,36 +115,36 @@ export class FavoriteListComponent implements OnInit {
       return;
     }
 
-    console.log(`💾 Guardando reseña para ${bookKey}:`, reviewText);
+    //console.log(`💾 Guardando reseña para ${bookKey}:`, reviewText);
 
     this.favoriteService.manageReview(bookKey, reviewText).subscribe({
       next: () => {
-        console.log(`✅ Reseña guardada para ${bookKey}`);
+        //console.log(`✅ Reseña guardada para ${bookKey}`);
         this.toggleReviewEdit(bookKey);
       },
       error: (error) => {
-        console.error(`❌ Error guardando reseña para ${bookKey}:`, error);
+        //console.error(`❌ Error guardando reseña para ${bookKey}:`, error);
       }
     });
   }
 
   // Obtener enlace de Wikipedia del autor 
   getAuthorWikipediaLink(author: string): void {
-    console.log(`🔎 Buscando en Wikipedia: ${author}`);
+    //(`🔎 Buscando en Wikipedia: ${author}`);
 
     this.wikipediaService.getWikipediaLink(author).subscribe({
       next: (link: string | null) => {
-        console.log("📡 Respuesta recibida:", link);
+        //console.log("📡 Respuesta recibida:", link);
 
         if (link) {
-          console.log(`🔗 Wikipedia link encontrado: ${link}`);
+          //console.log(`🔗 Wikipedia link encontrado: ${link}`);
           window.open(link, '_blank');
         } else {
-          console.warn(`⚠️ No se encontró un enlace de Wikipedia para: ${author}`);
+          //console.warn(`⚠️ No se encontró un enlace de Wikipedia para: ${author}`);
         }
       },
       error: (err) => {
-        console.error(`❌ Error obteniendo el enlace de Wikipedia:`, err);
+        //console.error(`❌ Error obteniendo el enlace de Wikipedia:`, err);
       }
     });
   }
@@ -158,17 +158,17 @@ export class FavoriteListComponent implements OnInit {
   updateBookRating(bookKey: string, rating: number) {
     this.favoriteService.updateRating(bookKey, rating).subscribe({
       next: () => {
-        console.log(`✅ Rating actualizado para ${bookKey}`);
+        //console.log(`✅ Rating actualizado para ${bookKey}`);
         const book = this.favoriteBooks.find(b => b.book_key === bookKey);
         if (book) book.rating = rating;
       },
-      error: (err) => console.error(`❌ Error actualizando rating:`, err)
+      error: (err) => {}
     });
   }
 
   // Navegar a la página de detalles de un libro
   navigateToBookDetail(bookKey: string) {
-    console.log('Navigating to book:', bookKey);
+    //console.log('Navigating to book:', bookKey);
 
     this.router.navigate([`${NAVIGATION_ROUTES.BOOK_DETAIL}/${bookKey}`]);
   }

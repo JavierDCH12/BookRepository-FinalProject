@@ -64,7 +64,7 @@ export class SearchService {
   // Método para obtener los detalles de un libro
   getBookDetails(bookKey: string): Observable<Book> {
     return this.http.get<Book>(`${environment.apiUrl}books/details/${bookKey}`).pipe(
-      tap(response => console.log('Book details:', response)),
+      tap(response => {}),
       catchError((error: HttpErrorResponse) => {
         console.error('Error fetching book details:', error);
         return throwError(() => new Error('Error fetching book details'));

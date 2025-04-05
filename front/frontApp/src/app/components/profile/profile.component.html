@@ -1,8 +1,11 @@
 <div class="profile-container">
   <div class="profile-card">
     <div class="profile-header">
-      <img [src]="userProfile?.profile_picture ? environment.apiUrl.replace('/api/', '') + userProfile?.profile_picture : LOCAL_MEDIA.DEFAULT_PROFILE_PICTURE" alt="Profile Picture">
-      <label for="fileInput" class="upload-label">
+      <img 
+      *ngIf="userProfile" 
+      [src]="environment.apiUrl.replace('/api/', '') + userProfile.profile_picture"
+      alt="Profile Picture">
+          <label for="fileInput" class="upload-label">
         📂 Cambiar foto
       </label>
       <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>

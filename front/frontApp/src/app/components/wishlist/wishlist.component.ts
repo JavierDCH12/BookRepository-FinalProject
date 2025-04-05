@@ -31,21 +31,21 @@ export class WishlistComponent implements OnInit {
 
   // Get link para el autor en Wikipedia
   getAuthorWikipediaLink(author: string): void {
-    console.log(`🔎 Buscando en Wikipedia: ${author}`);
+    //console.log(`🔎 Buscando en Wikipedia: ${author}`);
 
     this.wikipediaService.getWikipediaLink(author).subscribe({
       next: (link: string | null) => {
-        console.log("📡 Respuesta recibida:", link);
+        //console.log("📡 Respuesta recibida:", link);
 
         if (link) {
-          console.log(`🔗 Wikipedia link encontrado: ${link}`);
+          //console.log(`🔗 Wikipedia link encontrado: ${link}`);
           window.open(link, '_blank');
         } else {
-          console.warn(`⚠️ No se encontró un enlace de Wikipedia para: ${author}`);
+          //console.warn(`⚠️ No se encontró un enlace de Wikipedia para: ${author}`);
         }
       },
       error: (err) => {
-        console.error(`❌ Error obteniendo el enlace de Wikipedia:`, err);
+        //console.error(`❌ Error obteniendo el enlace de Wikipedia:`, err);
       }
     });
   }

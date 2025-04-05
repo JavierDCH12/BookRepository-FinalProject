@@ -34,7 +34,7 @@ export class FavoriteService {
       return new HttpHeaders();
     }
 
-    console.log("📡 Enviando headers con token:", token);
+    //console.log("📡 Enviando headers con token:", token);
 
     return new HttpHeaders({
       'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export class FavoriteService {
       rating: book.rating || 0
     };
 
-    console.log("📡 Enviando libro a favoritos:", formattedBook);
+    //console.log("📡 Enviando libro a favoritos:", formattedBook);
 
     return this.http.post<any>(this.favoritesUrl, formattedBook, { headers: this.getAuthHeaders() })
       .pipe(

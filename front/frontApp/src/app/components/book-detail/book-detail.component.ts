@@ -84,7 +84,7 @@ export class BookDetailComponent implements OnInit {
     this.favoriteService.addFavorite(favoriteBook).subscribe({
       next: () => {
         this.isFavorite = true;
-        console.log(`✅ ${this.book?.title} añadido a favoritos`);
+        //console.log(`✅ ${this.book?.title} añadido a favoritos`);
       },
       error: (err) => console.error('❌ Error al añadir a favoritos:', err)
     });
@@ -97,7 +97,7 @@ export class BookDetailComponent implements OnInit {
         this.isFavorite = false;
         this.reviewText = '';
         this.rating = 0;
-        console.log(`✅ ${this.book?.title} eliminado de favoritos`);
+        //console.log(`✅ ${this.book?.title} eliminado de favoritos`);
       },
       error: (err) => console.error('❌ Error al eliminar de favoritos:', err)
     });
@@ -107,7 +107,7 @@ export class BookDetailComponent implements OnInit {
     if (!this.book || !this.reviewText.trim()) return;
     this.favoriteService.manageReview(this.book.book_key, this.reviewText).subscribe({
       next: () => {
-        console.log('✅ Reseña guardada');
+        //console.log('✅ Reseña guardada');
         this.isEditingReview = false;
       },
       error: () => console.error('❌ Error al guardar la reseña'),
@@ -129,12 +129,10 @@ export class BookDetailComponent implements OnInit {
   setRating(star: number): void {
     if (this.isFavorite && this.book) {
       this.rating = star;
-      this.favoriteService.updateRating(this.book.book_key, star).subscribe({
-        next: () => console.log(`✅ Rating actualizado a ${star} estrellas`),
-        error: () => console.error('❌ Error al guardar el rating')
-      });
+      this.favoriteService.updateRating(this.book.book_key, star).subscribe();
     }
   }
+  
 
   // Hover visual para estrellas
   onStarHover(star: number): void {
