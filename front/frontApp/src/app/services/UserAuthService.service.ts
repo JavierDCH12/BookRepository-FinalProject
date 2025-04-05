@@ -19,10 +19,9 @@ export class UserAuthServiceService {
 
   constructor(private http: HttpClient) {}
 
-  
   private hasValidToken(): boolean {
     if (typeof window === 'undefined') return false; 
-  
+
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
     return token ? !this.isTokenExpired(token) : false;
   }
@@ -54,12 +53,17 @@ export class UserAuthServiceService {
   }
 
   private storeTokens(access: string, refresh: string, username: string): void {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, access);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH, refresh);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.USERNAME, username);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, access);
+      localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH, refresh);
+      localStorage.setItem(LOCAL_STORAGE_KEYS.USERNAME, username);
+    }
   }
 
   refreshToken(): Observable<any> {
+    if (typeof window === 'undefined') {
+      return throwError(() => new Error('No hay token de refresco disponible.'));
+    }
     const refresh = localStorage.getItem(LOCAL_STORAGE_KEYS.REFRESH);
     if (!refresh) {
       return throwError(() => new Error('No hay token de refresco disponible.'));
@@ -67,7 +71,9 @@ export class UserAuthServiceService {
 
     return this.http.post(`${this.baseUrl}refresh/`, { refresh }).pipe(
       tap((response: any) => {
-        localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, response.access);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, response.access);
+        }
       }),
       catchError(() => {
         this.logout();
@@ -77,6 +83,8 @@ export class UserAuthServiceService {
   }
 
   isAuthenticated(): boolean {
+    if (typeof window === 'undefined') return false;
+
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
     return !!token && !this.isTokenExpired(token);
   }
@@ -92,9 +100,11 @@ export class UserAuthServiceService {
   }
 
   logout(): void {
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH);
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.USERNAME);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH);
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.USERNAME);
+    }
     this.authStatus.next(false);
   }
 }
