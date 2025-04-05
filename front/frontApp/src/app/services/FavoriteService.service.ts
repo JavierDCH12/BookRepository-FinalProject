@@ -25,16 +25,19 @@ export class FavoriteService {
 
   constructor(private http: HttpClient) {}
 
+  // Verifica si estamos en el navegador
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined';
+  }
+
   // Obtener encabezados con token para la autenticación 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
-    
-    if (!token) {
-      console.error('❌ No token found in localStorage.');
-      return new HttpHeaders();
+    if (!this.isBrowser()) {
+      return new HttpHeaders(); // No hacer nada si estamos en server-side
     }
 
-    //console.log("📡 Enviando headers con token:", token);
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
+    if (!token) return new HttpHeaders();
 
     return new HttpHeaders({
       'Content-Type': 'application/json',
@@ -45,9 +48,7 @@ export class FavoriteService {
   // Obtener libros favoritos
   getFavorites(): Observable<FavoriteBook[]> {
     return this.http.get<FavoriteBook[]>(this.favoritesUrl, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError(this.handleError)
-      );
+      .pipe(catchError(this.handleError));
   }
 
   // Agregar libro a favoritos 
@@ -64,44 +65,32 @@ export class FavoriteService {
       rating: book.rating || 0
     };
 
-    //console.log("📡 Enviando libro a favoritos:", formattedBook);
-
     return this.http.post<any>(this.favoritesUrl, formattedBook, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError(this.handleError)
-      );
+      .pipe(catchError(this.handleError));
   }
 
   // Eliminar favorito 
   removeFavorite(bookKey: string): Observable<void> {
     return this.http.delete<void>(`${this.favoritesUrl}${bookKey}/`, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError(this.handleError)
-      );
+      .pipe(catchError(this.handleError));
   }
-  // Metodo para la recomendación de libros populares
 
+  // Obtener libros populares
   getPopularBooks(): Observable<FavoriteBook[]> {
     return this.http.get<FavoriteBook[]>(`${environment.apiUrl}books/popular/`)
-      .pipe(
-        catchError(this.handleError)
-      );
+      .pipe(catchError(this.handleError));
   }
 
   // Crear o actualizar reseña
   manageReview(bookKey: string, review: string): Observable<any> {
     return this.http.patch(`${this.favoritesUrl}${bookKey}/review/`, { review }, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError(this.handleError)
-      );
+      .pipe(catchError(this.handleError));
   }
 
   // Actualizar la valoración 
   updateRating(bookKey: string, rating: number): Observable<any> {
     return this.http.patch(`${this.favoritesUrl}${bookKey}/rating/`, { rating }, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError(this.handleError)
-      );
+      .pipe(catchError(this.handleError));
   }
 
   // Manejo de errores globales

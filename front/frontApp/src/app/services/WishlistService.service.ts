@@ -21,20 +21,24 @@ export interface WishlistBook {
 export class WishlistService {
   private baseUrl = `${environment.apiUrl}wishlist/`;
 
+  private wishlistCountSubject = new BehaviorSubject<number>(0);
+  wishlistCount$ = this.wishlistCountSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
-  private wishlistCountSubject = new BehaviorSubject<number>(0);
-wishlistCount$ = this.wishlistCountSubject.asObservable();
+  // ✅ Verificación para evitar usar localStorage en SSR
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined';
+  }
 
-
-  // Obtener encabezados con token 
+  // Obtener encabezados con token
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
-    
-    if (!token) {
-      console.error('❌ No token found in localStorage.');
-      return new HttpHeaders();
+    if (!this.isBrowser()) {
+      return new HttpHeaders(); // No usar localStorage en servidor
     }
+
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
+    if (!token) return new HttpHeaders();
 
     return new HttpHeaders({
       'Content-Type': 'application/json',
@@ -51,7 +55,7 @@ wishlistCount$ = this.wishlistCountSubject.asObservable();
     );
   }
 
-  // Añadir libro a la wishlist 
+  // Añadir libro a la wishlist
   addToWishlist(book: WishlistBook): Observable<WishlistBook> {
     const formattedBook = {
       book_key: book.book_key,
@@ -70,7 +74,7 @@ wishlistCount$ = this.wishlistCountSubject.asObservable();
     );
   }
 
-  // Eliminar libro de la wishlist 
+  // Eliminar libro de la wishlist
   removeFromWishlist(bookKey: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}${bookKey}/`, {
       headers: this.getAuthHeaders()
@@ -79,9 +83,8 @@ wishlistCount$ = this.wishlistCountSubject.asObservable();
     );
   }
 
-  // Manejo de errores 
+  // Manejo de errores
   private handleError(error: any) {
-    //console.error('❌ Error en wishlist:', error);
     return throwError(() => new Error(error.message || 'Ha ocurrido un error en WishlistService.'));
   }
 }

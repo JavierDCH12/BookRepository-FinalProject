@@ -16,30 +16,31 @@ export interface UserProfile {
   password?: string; 
 }
 
-
 @Injectable({
   providedIn: 'root'
 })
-
-
 export class ProfileService {
   private profileUrl = `${environment.apiUrl}users/profile/`; 
   private uploadUrl = `${environment.apiUrl}users/upload-profile-picture/`;
 
-  constructor(private http: HttpClient) {}
-
-
   private currentUserSubject = new BehaviorSubject<UserProfile | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
+  constructor(private http: HttpClient) {}
+
+  // Verificar si estamos en el navegador
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined';
+  }
+
   // Obtener headers de autenticación 
   private getAuthHeaders(isFormData: boolean = false): HttpHeaders {
-    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
-
-    if (!token) {
-      console.error("❌ No auth token found!");
-      return new HttpHeaders(); // Evita enviar petición sin token
+    if (!this.isBrowser()) {
+      return new HttpHeaders(); // No usar localStorage si estamos en SSR
     }
+
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
+    if (!token) return new HttpHeaders();
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -48,7 +49,7 @@ export class ProfileService {
     return isFormData ? headers : headers.set('Content-Type', 'application/json');
   }
 
-  // Obtener información del perfil del usuario con su info interna
+  // Obtener información del perfil del usuario
   getUserProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>(this.profileUrl, { headers: this.getAuthHeaders() }).pipe(
       tap(profile => this.currentUserSubject.next(profile)), 
@@ -59,24 +60,23 @@ export class ProfileService {
     );
   }
 
-  //Subir foto al perfil
+  // Subir imagen de perfil
   uploadProfilePicture(formData: FormData): Observable<any> {
     return this.http.post(this.uploadUrl, formData, { 
       headers: this.getAuthHeaders(true) 
     }).pipe(
-      tap((response: any) => {
-        //console.log("📡 Imagen de perfil subida:", response);
+      tap(() => {
+        // Imagen subida correctamente
       })
     );
   }
 
-  // Actualizar información del perfil del usuario
+  // Actualizar perfil
   updateUserProfile(profileData: Partial<UserProfile>): Observable<UserProfile> {
     const url = `${this.profileUrl}update-profile/`;
     return this.http.put<UserProfile>(url, profileData, { headers: this.getAuthHeaders() });
   }
 
- 
   setCurrentUser(user: UserProfile) {
     this.currentUserSubject.next(user);
   }
@@ -84,5 +84,4 @@ export class ProfileService {
   getCurrentUser(): UserProfile | null {
     return this.currentUserSubject.value;
   }
-  
 }
