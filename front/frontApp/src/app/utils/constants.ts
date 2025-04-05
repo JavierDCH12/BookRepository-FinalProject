@@ -1,5 +1,5 @@
-import { environment } from "../../environ/environ";
-
+// Constants for the application
+// These constants are used throughout the application for various purposes
 export const NAVIGATION_ROUTES = {
     HOME: '/',
     LOGIN: '/login',
