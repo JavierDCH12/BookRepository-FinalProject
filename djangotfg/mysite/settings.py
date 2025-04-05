@@ -169,7 +169,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 ###########################DATABASE: POSTGRESQL & RAILWAY
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME'),
@@ -178,19 +178,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
     }
-}"""
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'XBGQdzzSlarUddsbecSExkYjjptcmOvs',
-        'HOST': 'switchback.proxy.rlwy.net',
-        'PORT': '57744',
-    }
 }
+
+
+
 
 ###########################SEND EMAIL: MAILTRAP
 
