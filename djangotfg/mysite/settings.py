@@ -73,7 +73,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEBUG = False
 
 ###########################ALLOWED HOSTS
-ALLOWED_HOSTS = ["bookfinder.up.railway.app", "127.0.0.1", "localhost"] 
+ALLOWED_HOSTS = ["bookfinder.up.railway.app"] 
 
 ###########################APP DEFINITION
 REST_FRAMEWORK = {
