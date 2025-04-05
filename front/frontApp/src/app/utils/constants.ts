@@ -1,3 +1,5 @@
+import { environment } from "../../environ/environ";
+
 export const NAVIGATION_ROUTES = {
     HOME: '/',
     LOGIN: '/login',
@@ -15,6 +17,5 @@ export const NAVIGATION_ROUTES = {
   };
 
   export const LOCAL_MEDIA = {
-    DEFAULT_PROFILE_PICTURE: 'http://127.0.0.1:8000/media/profile_pics/default_avatar.jpg'
-  }
-  
+    DEFAULT_PROFILE_PICTURE: 'assets/default_avatar.jpg'
+  };

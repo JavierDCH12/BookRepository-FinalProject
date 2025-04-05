@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService, UserProfile } from '../../services/ProfileService.service';
 import { Router } from '@angular/router';
-import { NAVIGATION_ROUTES } from '../../utils/constants';
+import { LOCAL_MEDIA, NAVIGATION_ROUTES } from '../../utils/constants';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import Swal from 'sweetalert2';
+import { environment } from '../../../environ/environ';
+
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +21,8 @@ export class ProfileComponent implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
   selectedFile: File | null = null;
+  environment = environment;
+  LOCAL_MEDIA = LOCAL_MEDIA; // Para acceder a la URL de la imagen por defecto
 
   //Variables para la edición del perfil
   editMode = false;

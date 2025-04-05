@@ -1,7 +1,7 @@
 <div class="profile-container">
   <div class="profile-card">
     <div class="profile-header">
-      <img [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture" alt="Profile Picture">
+      <img [src]="userProfile?.profile_picture ? environment.apiUrl.replace('/api/', '') + userProfile?.profile_picture : LOCAL_MEDIA.DEFAULT_PROFILE_PICTURE" alt="Profile Picture">
       <label for="fileInput" class="upload-label">
         📂 Cambiar foto
       </label>
