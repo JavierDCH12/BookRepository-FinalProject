@@ -162,8 +162,13 @@ USE_TZ = True
 
 # CORS
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = ["http://localhost:4200"]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://book-repository-final-project.vercel.app",  # ✅ tu frontend en Vercel
+    "http://localhost:4200",  # ✅ para desarrollo local
+]
+
+CORS_ALLOW_CREDENTIALS = True  # ✅ si usas cookies/sesiones (opcional si usas JWT)
 
 # CSRF
 CSRF_TRUSTED_ORIGINS = ["https://bookfinder.up.railway.app"]
