@@ -10,3 +10,4 @@ gunicorn>=21.0,<22.0
 requests
 dj-database-url
 whitenoise
+
