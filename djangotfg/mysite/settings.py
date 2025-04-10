@@ -19,6 +19,7 @@ ALLOWED_HOSTS = ["bookfinder.up.railway.app", "localhost", "127.0.0.1"]
 WSGI_APPLICATION = 'mysite.wsgi.application'
 ROOT_URLCONF = 'mysite.urls'
 
+
 # DATABASE (✅ Ajustado para Railway)
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv("DATABASE_PUBLIC_URL"))
