@@ -1,14 +1,16 @@
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 from datetime import timedelta
 from pathlib import Path
 import dj_database_url  # ✅ Para usar DATABASE_PUBLIC_URL de Railway
 
-load_dotenv()
+#load_dotenv()
 
 # BASE
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise Exception("❌ SECRET_KEY no encontrada. Asegúrate de haberla definido en Railway.")
 
 DEBUG = False
 ALLOWED_HOSTS = ["bookfinder.up.railway.app", "localhost", "127.0.0.1"]
