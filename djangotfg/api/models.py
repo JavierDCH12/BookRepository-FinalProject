@@ -9,14 +9,7 @@ from django.conf import settings
 def default_profile_picture():
     return 'profile_pics/default_avatar.jpg'
 
-class Book(models.Model):
-    title = models.CharField(max_length=100)
-    author = models.CharField(max_length=100)
-    genre = models.CharField(max_length=125)
-    added_date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.title
 
 class User(AbstractUser):
     name = models.CharField(max_length=100)
