@@ -6,6 +6,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import Swal from 'sweetalert2';
 import { environment } from '../../../environ/environ';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { supabase } from '../../../supabase/supaBaseClient';
+
 
 
 @Component({
@@ -104,7 +107,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  // Subir imagen de perfil
+  /*
   uploadProfilePicture(): void {
     if (!this.selectedFile) return;
   
@@ -138,7 +141,54 @@ export class ProfileComponent implements OnInit {
         });
       }
     });
-  }
+  }*/
+
+
+    async uploadProfilePicture(): Promise<void> {
+      if (!this.selectedFile || !this.userProfile) return;
+    
+      const file = this.selectedFile;
+      const filePath = `user_${this.userProfile.id}/${file.name}`;
+    
+      // 1. Subir a Supabase
+      const { error } = await supabase.storage.from('profile-pictures').upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: true
+      });
+    
+      if (error) {
+        console.error('❌ Error al subir a Supabase:', error.message);
+        return;
+      }
+    
+      // 2. Obtener la URL pública
+      const { data } = supabase.storage.from('profile-pictures').getPublicUrl(filePath);
+      const imageUrl = data.publicUrl;
+    
+      // 3. Actualizar en el backend (Railway)
+      this.profileService.updateUserProfile({ profile_picture: imageUrl }).subscribe({
+        next: () => {
+          this.userProfile!.profile_picture = imageUrl;
+          Swal.fire({
+            title: '✅ Imagen actualizada',
+            text: 'Tu foto de perfil se ha subido correctamente.',
+            icon: 'success'
+          });
+        },
+        error: (err) => {
+          console.error('❌ Error actualizando el perfil:', err);
+        }
+      });
+    }
+    
+
+
+
+
+
+
+
+
   
 
   // Volver a la página de inicio

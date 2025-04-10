@@ -60,7 +60,7 @@ export class ProfileService {
     );
   }
 
-  // Subir imagen de perfil
+  
   uploadProfilePicture(formData: FormData): Observable<any> {
     return this.http.post(this.uploadUrl, formData, { 
       headers: this.getAuthHeaders(true) 
@@ -70,6 +70,18 @@ export class ProfileService {
       })
     );
   }
+
+
+    
+
+
+    
+
+
+
+
+
+
 
   // Actualizar perfil
   updateUserProfile(profileData: Partial<UserProfile>): Observable<UserProfile> {
