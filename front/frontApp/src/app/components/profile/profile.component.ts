@@ -150,7 +150,6 @@ export class ProfileComponent implements OnInit {
       const file = this.selectedFile;
       const filePath = `user_${this.userProfile.id}/${file.name}`;
     
-      // 1. Subir a Supabase
       const { error } = await supabase.storage.from('profile-pictures').upload(filePath, file, {
         cacheControl: '3600',
         upsert: true
@@ -161,11 +160,9 @@ export class ProfileComponent implements OnInit {
         return;
       }
     
-      // 2. Obtener la URL pública
       const { data } = supabase.storage.from('profile-pictures').getPublicUrl(filePath);
       const imageUrl = data.publicUrl;
     
-      // 3. Actualizar en el backend (Railway)
       this.profileService.updateUserProfile({ profile_picture: imageUrl }).subscribe({
         next: () => {
           this.userProfile!.profile_picture = imageUrl;
