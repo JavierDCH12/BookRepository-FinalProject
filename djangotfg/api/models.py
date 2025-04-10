@@ -9,18 +9,21 @@ from django.conf import settings
 def default_profile_picture():
     return 'profile_pics/default_avatar.jpg'
 
-
-
+#USER MODEL
 class User(AbstractUser):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=125, unique=True)
-    register_date = models.DateTimeField(auto_now_add=True)
-    profile_picture=models.ImageField(upload_to='profile_pics/', null=True, blank=True, default=default_profile_picture())
+    email = models.EmailField(max_length=125, unique=True)  
+    profile_picture = models.ImageField(
+        upload_to='profile_pics/',
+        null=True,
+        blank=True,
+        default=default_profile_picture()
+    )
 
     def __str__(self):
         return self.username
 
 
+#WISHLISTBOOK MODEL
 class WishlistBook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="wishlist")
     book_key = models.CharField(max_length=100)
@@ -36,12 +39,14 @@ class WishlistBook(models.Model):
         unique_together = ('user', 'book_key')
 
 
+
+##FAVORITEBOOK MODEL
 class FavoriteBook(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorites')
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255, null=True, blank=True)
     isbn = models.CharField(max_length=30, null=True, blank=True)
-    genres = models.CharField(max_length=255, null=True, blank=True)
+    genres = models.JSONField(null=True, blank=True)  #cambiado a jsonfield
     first_publish_year = models.IntegerField(null=True, blank=True)
     number_of_pages = models.IntegerField(null=True, blank=True)
     language = models.CharField(max_length=10, null=True, blank=True)
@@ -49,8 +54,7 @@ class FavoriteBook(models.Model):
     added_date = models.DateTimeField(auto_now_add=True)
     book_key = models.CharField(max_length=255, default="UNKNOWN")
     review=models.CharField(null=True, blank=True, max_length=255)
-    rating = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])  # ✅ Campo rating
-
+    rating = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]) 
 
 
     class Meta:

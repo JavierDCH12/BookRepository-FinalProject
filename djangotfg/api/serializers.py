@@ -3,13 +3,16 @@ from rest_framework import serializers
 from mysite import settings
 from .models import Book, User, FavoriteBook, WishlistBook
 
-# Los serialziadores son clases que convierten los modelos de Django en JSON
+# Los serializadores son clases que convierten los modelos de Django en JSON
 
+#USER SERIALIZER
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ["id", "title", "author", "genre", "added_date"]
 
+
+#USER SERIALIZER
 class UserProfileSerializer(serializers.ModelSerializer):
     profile_picture = serializers.SerializerMethodField()
     first_name = serializers.CharField(required=False, allow_blank=True)
@@ -18,7 +21,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'register_date', 'profile_picture', 'password']
+        fields = [
+            'id',
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'date_joined',  
+            'profile_picture',
+            'password',
+        ]
 
     def get_profile_picture(self, obj):
         if obj.profile_picture:
@@ -39,7 +51,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
+#REGISTER SERIALIZER
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
@@ -68,29 +80,35 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-class FavoriteBookSerializer(serializers.ModelSerializer):
-    genres = serializers.SerializerMethodField()
 
+
+
+#FAVORITEBOOK SERIALIZER
+class FavoriteBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteBook
-        fields = ['id', 'book_key', 'title', 'author', 'isbn', 'genres', 'first_publish_year', 'added_date', 'cover_url', 'review', 'rating']
-
-    def get_genres(self, obj):
-        if isinstance(obj.genres, list):
-            return ", ".join(obj.genres)
-        return obj.genres
-
-    def validate_genres(self, value):
-        if isinstance(value, list):
-            return ", ".join(value)
-        return value
+        fields = [
+            'id', 'book_key', 'title', 'author', 'isbn',
+            'genres', 'first_publish_year', 'added_date',
+            'cover_url', 'review', 'rating'
+        ]
 
 
+
+
+
+
+##PUBLIC FAVORITEBOOK SERIALIZER
 class PublicFavoriteBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteBook
         fields = ['book_key', 'title', 'author', 'cover_url', 'rating', 'review']
 
+
+
+
+
+#PUBLIC USER PROFILE SERIALIZER
 class PublicUserProfileSerializer(serializers.ModelSerializer):
     favorites = serializers.SerializerMethodField()
     profile_picture = serializers.SerializerMethodField()
@@ -108,16 +126,18 @@ class PublicUserProfileSerializer(serializers.ModelSerializer):
         ]
 
     def get_favorites(self, obj):
-        favorites = FavoriteBook.objects.filter(user=obj)
+        favorites = obj.favorites.all()
         return PublicFavoriteBookSerializer(favorites, many=True).data
 
     def get_profile_picture(self, obj):
         if obj.profile_picture:
             return obj.profile_picture.url
-        return None
+        return '/media/profile_pics/default_avatar.jpg'
 
 
 
+
+#WISHLISTBOOK SERIALIZER
 class WishlistBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = WishlistBook
