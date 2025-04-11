@@ -57,11 +57,12 @@ export class WishlistComponent implements OnInit, OnDestroy {
   removeFromWishlist(bookKey: string): void {
     this.wishlistService.removeFromWishlist(bookKey).subscribe({
       next: () => {
-        console.log(`✅ Libro ${bookKey} eliminado de wishlist`);
+        this.wishlistBooks = this.wishlistBooks.filter(b => b.book_key !== bookKey);
       },
       error: () => console.error('❌ Error removing book from wishlist')
     });
   }
+  
 
   navigateToBookDetail(bookKey: string): void {
     this.router.navigate([`${NAVIGATION_ROUTES.BOOK_DETAIL}/${bookKey}`]);

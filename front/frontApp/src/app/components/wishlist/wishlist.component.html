@@ -33,7 +33,7 @@
         </p>
         <p *ngIf="book.first_publish_year" class="publish-year">📅 {{ book.first_publish_year }}</p>
 
-        <button class="remove-button" (click)="removeFromWishlist(book.book_key)">
+        <button class="remove-button" (click)="removeFromWishlist(book.book_key); $event.stopPropagation()">
           🗑️ Quitar de Wishlist
         </button>
       </div>

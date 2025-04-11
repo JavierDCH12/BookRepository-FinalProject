@@ -99,33 +99,30 @@ export class FavoriteListComponent implements OnInit {
     this.sortFavorites();
   }
 
-  // Eliminar un libro de favoritos 
-  // removeFavorite(bookKey: string): void {
-  //   if (!bookKey) {
-  //     console.error('⚠️ Error: bookKey no válido.');
-  //     return;
-  //   }
-
-  //   //console.log(`🔍 Intentando eliminar el favorito con bookKey: ${bookKey}`);
-
-  //   this.favoriteService.removeFavorite(bookKey).subscribe({
-  //     next: () => {
-  //       //console.log(`✅ Libro con bookKey: ${bookKey} eliminado correctamente`);
-  //       this.favoriteBooks = this.favoriteBooks.filter(book => book.book_key !== bookKey);
-  //     },
-  //     error: (error) => {
-  //       console.error('⚠️ Error eliminando favorito:', error);
-  //     }
-  //   });
-  // }
+  
 
 
   removeFavorite(bookKey: string): void {
     this.favoriteService.removeFavorite(bookKey).subscribe({
-      next: () => this.favoriteService.loadFavorites(),
-      error: (error) => console.error('⚠️ Error eliminando favorito:', error)
+      next: () => {
+        // ✅ Eliminarlo manualmente del array para actualizar la UI
+        this.favoriteBooks = this.favoriteBooks.filter(book => book.book_key !== bookKey);
+      },
+      error: (error) => {
+        if (error.status === 404) {
+          console.warn(`⚠️ El libro ${bookKey} ya no estaba en favoritos.`);
+          this.favoriteBooks = this.favoriteBooks.filter(book => book.book_key !== bookKey);
+        } else {
+          console.error('⚠️ Error eliminando favorito:', error);
+        }
+      }
     });
   }
+
+  trackByBookKey(index: number, book: FavoriteBook): string {
+    return book.book_key;
+  }
+  
 
   // Alternar el estado de edición de reseñas 
   toggleReviewEdit(bookKey: string): void {
