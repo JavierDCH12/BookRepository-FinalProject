@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from datetime import timedelta
 import dj_database_url
+from dotenv import load_dotenv
 
 
 # BASE
@@ -10,9 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Cargar .env solo en local (si existe)
 dotenv_path = BASE_DIR / ".env"
 if dotenv_path.exists():
-    from dotenv import load_dotenv
     load_dotenv(dotenv_path)
-
 
 # SECRET KEY
 SECRET_KEY = os.environ.get("SECRET_KEY")
