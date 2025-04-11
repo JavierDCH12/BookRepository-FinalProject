@@ -130,6 +130,8 @@ def remove_favorite(request, book_key):
     """Remove a favorite book from the user's list."""
     user = request.user
     favorite = FavoriteBook.objects.filter(user=user, book_key=book_key).first()
+    print(f"🔎 Buscando favorito: user={user.username}, book_key={book_key}")
+
 
     if favorite:
         favorite.delete()
