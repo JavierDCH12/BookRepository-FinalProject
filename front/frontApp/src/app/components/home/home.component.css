@@ -152,10 +152,13 @@ body {
   box-shadow: 0 4px 10px rgba(216, 27, 96, 0.3);
 }
 
+.favorite-counter,
 .wishlist-counter {
   font-weight: bold;
-  margin-left: 4px;
+  color: #e91e63;
+  margin-left: 6px;
 }
+
 
 .search-container {
   margin-top: 5px;

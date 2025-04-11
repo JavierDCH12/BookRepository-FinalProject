@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from '../../environ/environ';
 
 export interface FavoriteBook {
@@ -25,24 +25,26 @@ export class FavoriteService {
   private favoriteBooksSubject = new BehaviorSubject<FavoriteBook[]>([]);
   favoriteBooks$ = this.favoriteBooksSubject.asObservable();
 
+  // ✅ Contador reactivo de favoritos
+  public favoriteCount$ = this.favoriteBooks$.pipe(
+    map(favs => favs.length)
+  );
+
   constructor(private http: HttpClient) {}
 
-  // Obtener favoritos y actualizar el BehaviorSubject
   loadFavorites(): void {
     this.http.get<FavoriteBook[]>(this.favoritesUrl)
       .pipe(
         tap(favorites => this.favoriteBooksSubject.next(favorites)),
         catchError(this.handleError)
       )
-      .subscribe(); // ejecutamos el observable
+      .subscribe();
   }
 
-  // Devolver favoritos actuales
   getFavorites(): Observable<FavoriteBook[]> {
     return this.favoriteBooks$;
   }
 
-  // Añadir favorito y actualizar
   addFavorite(book: FavoriteBook): Observable<any> {
     const formattedBook = {
       book_key: book.book_key,
@@ -62,7 +64,6 @@ export class FavoriteService {
     );
   }
 
-  // Eliminar favorito y actualizar
   removeFavorite(bookKey: string): Observable<void> {
     return this.http.delete<void>(`${this.favoritesUrl}${bookKey}/`).pipe(
       tap(() => this.loadFavorites()),
@@ -70,13 +71,11 @@ export class FavoriteService {
     );
   }
 
-  // Libros populares
   getPopularBooks(): Observable<FavoriteBook[]> {
     return this.http.get<FavoriteBook[]>(`${environment.apiUrl}books/popular/`)
       .pipe(catchError(this.handleError));
   }
 
-  // Reseña
   manageReview(bookKey: string, review: string): Observable<any> {
     return this.http.patch(`${this.favoritesUrl}${bookKey}/review/`, { review })
       .pipe(
@@ -85,7 +84,6 @@ export class FavoriteService {
       );
   }
 
-  // Valoración
   updateRating(bookKey: string, rating: number): Observable<any> {
     return this.http.patch(`${this.favoritesUrl}${bookKey}/rating/`, { rating })
       .pipe(

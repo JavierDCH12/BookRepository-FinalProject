@@ -39,6 +39,8 @@ export class HomeComponent implements OnInit {
 
   currentView: 'search' | 'favorites' | 'wishlist' = 'search';
   wishlistCount: number = 0;
+  favoriteCount: number = 0;
+
 
   constructor(
     private userAuthService: UserAuthServiceService,
@@ -54,12 +56,17 @@ export class HomeComponent implements OnInit {
   
     if (this.isAuthenticated) {
       this.checkPendingFavorite();
-      this.checkPendingWishlist(); 
-      this.wishlistService.loadWishlist(); // ✅ ACTUALIZADO
+      this.checkPendingWishlist();
+      this.wishlistService.loadWishlist();
+      this.favoriteService.loadFavorites(); // 🔄 también carga los favoritos al iniciar
     }
   
     this.wishlistService.wishlistCount$.subscribe(count => {
       this.wishlistCount = count;
+    });
+  
+    this.favoriteService.favoriteCount$.subscribe(count => {
+      this.favoriteCount = count;
     });
   
     this.profileService.currentUser$.subscribe((profile: any) => {
@@ -70,10 +77,12 @@ export class HomeComponent implements OnInit {
       this.isAuthenticated = true;
       this.loadUserProfile();
       this.checkPendingFavorite();
-      this.checkPendingWishlist(); 
-      this.wishlistService.loadWishlist(); 
+      this.checkPendingWishlist();
+      this.wishlistService.loadWishlist();
+      this.favoriteService.loadFavorites(); // 🔁 tras login también
     });
   }
+  
   
   
 

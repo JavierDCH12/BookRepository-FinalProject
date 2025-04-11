@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from '../../environ/environ';
 
 export interface WishlistBook {
@@ -22,47 +22,40 @@ export class WishlistService {
   private wishlistSubject = new BehaviorSubject<WishlistBook[]>([]);
   public wishlist$ = this.wishlistSubject.asObservable();
 
+  // ✅ Observable reactivo con el contador de libros
+  public wishlistCount$ = this.wishlist$.pipe(
+    map((wishlist) => wishlist.length)
+  );
+
   constructor(private http: HttpClient) {}
 
-  /**
-   * Cargar wishlist desde el backend y actualizar el observable.
-   */
   loadWishlist(): Observable<WishlistBook[]> {
     return this.http.get<WishlistBook[]>(this.baseUrl).pipe(
-      tap((wishlist: WishlistBook[]) => {
+      tap((wishlist) => {
         this.wishlistSubject.next(wishlist);
       }),
       catchError(this.handleError)
     );
   }
 
-  /**
-   * Añadir un libro a la wishlist.
-   */
   addToWishlist(book: WishlistBook): Observable<WishlistBook> {
     return this.http.post<WishlistBook>(this.baseUrl, book).pipe(
-      tap(() => {
-        this.loadWishlist().subscribe(); // recarga tras añadir
-      }),
+      tap(() => this.reloadWishlist()),
       catchError(this.handleError)
     );
   }
 
-  /**
-   * Eliminar un libro de la wishlist.
-   */
   removeFromWishlist(bookKey: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${bookKey}`).pipe(
-      tap(() => {
-        this.loadWishlist().subscribe(); // recarga tras eliminar
-      }),
+      tap(() => this.reloadWishlist()),
       catchError(this.handleError)
     );
   }
 
-  /**
-   * Manejo de errores centralizado.
-   */
+  private reloadWishlist(): void {
+    this.loadWishlist().subscribe();
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error('WishlistService error:', error);
     return throwError(() => new Error('Ocurrió un error al gestionar la wishlist.'));
