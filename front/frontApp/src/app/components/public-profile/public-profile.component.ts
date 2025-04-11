@@ -33,6 +33,9 @@ export class PublicProfileComponent implements OnInit {
       }
     }
 
+
+    
+
     
     
     // Método para recargar el perfil público

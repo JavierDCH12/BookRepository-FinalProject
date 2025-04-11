@@ -15,15 +15,18 @@
     <div class="profile-header">
       <img 
         class="profile-picture"
-        [src]="userProfile.profile_picture ? 'http://127.0.0.1:8000' + userProfile.profile_picture : 'assets/default-avatar.png'"
+        [src]="userProfile.profile_picture"
         [alt]="userProfile.username + ' avatar'"
+        title="{{ userProfile.username }}'s profile picture"
       />
+    
       <div class="user-info">
         <h2>👤 {{ userProfile.username }}</h2>
         <p>📧 {{ userProfile.email }}</p>
-        <p>📅 Se unió el {{ userProfile.register_date | date:'longDate' }}</p>
+        <p>📅 Se unió el {{ userProfile.register_date | date: 'longDate' }}</p>
       </div>
     </div>
+    
 
     <section class="favorites-section">
       <h3>📚 Libros favoritos</h3>
@@ -42,6 +45,7 @@
             class="book-cover" 
             [src]="book.cover_url || 'assets/default-cover.png'" 
             [alt]="book.title + ' cover'"
+            title="{{ book.title }} cover"
           />
           <div class="book-info">
             <h4>{{ book.title }}</h4>

@@ -107,41 +107,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  /*
-  uploadProfilePicture(): void {
-    if (!this.selectedFile) return;
   
-    const formData = new FormData();
-    formData.append('profile_picture', this.selectedFile);
-  
-    this.profileService.uploadProfilePicture(formData).subscribe({
-      next: (response) => {
-        //console.log("✅ Imagen subida correctamente:", response);
-        if (this.userProfile) {
-          this.userProfile.profile_picture = response.profile_picture;
-        }
-  
-        Swal.fire({
-          title: '¡Imagen actualizada!',
-          text: 'Tu foto de perfil se ha subido correctamente.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-          timer: 2500,  
-          timerProgressBar: true
-        });
-      },
-      error: (error) => {
-        console.error('❌ Error uploading profile picture:', error);
-  
-        Swal.fire({
-          title: 'Error',
-          text: 'Hubo un problema al subir la imagen. Inténtalo de nuevo.',
-          icon: 'error',
-          confirmButtonText: 'Cerrar'
-        });
-      }
-    });
-  }*/
 
 
     async uploadProfilePicture(): Promise<void> {
