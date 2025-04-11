@@ -7,16 +7,16 @@ from django.conf import settings
 # Modelos de la aplicación
 
 def default_profile_picture():
-    return 'profile_pics/default_avatar.jpg'
+    return 'https://rorwpelcykogxwqyaopv.supabase.co/storage/v1/object/public/profile-pictures//default_avatar.jpg'
 
 #USER MODEL
 class User(AbstractUser):
     email = models.EmailField(max_length=125, unique=True)
-    profile_picture = models.ImageField(
-        upload_to='profile_pics/',
+    profile_picture = models.URLField(
+        max_length=500,
+        default=default_profile_picture,
         null=True,
-        blank=True,
-        default=default_profile_picture()
+        blank=True
     )
     
     USERNAME_FIELD = "username"
