@@ -53,7 +53,10 @@ export class BookSearchComponent implements OnInit {
       this.loadFavorites();
       this.loadWishlist();
     }
+  
+    this.onSearch(); 
   }
+  
 
   private transformToBookDTO(book: Book): Partial<FavoriteBook & WishlistBook> {
     return {
