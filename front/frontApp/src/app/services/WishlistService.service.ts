@@ -26,31 +26,11 @@ export class WishlistService {
 
   constructor(private http: HttpClient) {}
 
-  // ✅ Verificación para evitar usar localStorage en SSR
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined';
-  }
-
-  // Obtener encabezados con token
-  private getAuthHeaders(): HttpHeaders {
-    if (!this.isBrowser()) {
-      return new HttpHeaders(); // No usar localStorage en servidor
-    }
-
-    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
-    if (!token) return new HttpHeaders();
-
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-  }
+  
 
   // Obtener libros en la wishlist
   getWishlist(): Observable<WishlistBook[]> {
-    return this.http.get<WishlistBook[]>(this.baseUrl, {
-      headers: this.getAuthHeaders()
-    }).pipe(
+    return this.http.get<WishlistBook[]>(this.baseUrl).pipe(
       catchError(this.handleError)
     );
   }
@@ -67,24 +47,20 @@ export class WishlistService {
       first_publish_year: book.first_publish_year || undefined
     };
 
-    return this.http.post<WishlistBook>(this.baseUrl, formattedBook, {
-      headers: this.getAuthHeaders()
-    }).pipe(
+    return this.http.post<WishlistBook>(this.baseUrl, formattedBook).pipe(
       catchError(this.handleError)
     );
   }
 
   // Eliminar libro de la wishlist
   removeFromWishlist(bookKey: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}${bookKey}/`, {
-      headers: this.getAuthHeaders()
-    }).pipe(
+    return this.http.delete(`${this.baseUrl}${bookKey}/`).pipe(
       catchError(this.handleError)
     );
   }
 
   // Manejo de errores
   private handleError(error: any) {
-    return throwError(() => new Error(error.message || 'Ha ocurrido un error en WishlistService.'));
+    return throwError(() => new Error(error.message || 'Ha ocurrido un error en la wishlist.'));
   }
 }
