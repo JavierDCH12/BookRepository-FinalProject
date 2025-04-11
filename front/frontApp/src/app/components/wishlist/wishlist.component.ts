@@ -25,35 +25,11 @@ export class WishlistComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchWishlist();
-  }
-
-
-  // Get link para el autor en Wikipedia
-  getAuthorWikipediaLink(author: string): void {
-    //console.log(`🔎 Buscando en Wikipedia: ${author}`);
-
-    this.wikipediaService.getWikipediaLink(author).subscribe({
-      next: (link: string | null) => {
-        //console.log("📡 Respuesta recibida:", link);
-
-        if (link) {
-          //console.log(`🔗 Wikipedia link encontrado: ${link}`);
-          window.open(link, '_blank');
-        } else {
-          //console.warn(`⚠️ No se encontró un enlace de Wikipedia para: ${author}`);
-        }
-      },
-      error: (err) => {
-        //console.error(`❌ Error obteniendo el enlace de Wikipedia:`, err);
-      }
-    });
-  }
-
-  // Coger lista de wishlist
-  fetchWishlist(): void {
     this.isLoading = true;
-    this.wishlistService.getWishlist().subscribe({
+
+    this.wishlistService.loadWishlist();
+
+    this.wishlistService.wishlist$.subscribe({
       next: (books) => {
         this.wishlistBooks = books;
         this.isLoading = false;
@@ -65,19 +41,22 @@ export class WishlistComponent implements OnInit {
     });
   }
 
-  // Eliminar libro de la wishlist
-  removeFromWishlist(bookKey: string): void {
-    this.wishlistService.removeFromWishlist(bookKey).subscribe({
-      next: () => {
-        this.wishlistBooks = this.wishlistBooks.filter(b => b.book_key !== bookKey);
+  getAuthorWikipediaLink(author: string): void {
+    this.wikipediaService.getWikipediaLink(author).subscribe({
+      next: (link: string | null) => {
+        if (link) window.open(link, '_blank');
       },
-      error: () => {
-        console.error('❌ Error removing book from wishlist');
-      }
+      error: (err) => console.error('❌ Error obteniendo Wikipedia:', err)
     });
   }
 
-  // Navegar a la página de detalles del libro
+  removeFromWishlist(bookKey: string): void {
+    this.wishlistService.removeFromWishlist(bookKey).subscribe({
+      error: () => console.error('❌ Error removing book from wishlist')
+    });
+  }
+
+  // 📖 Ir al detalle
   navigateToBookDetail(bookKey: string): void {
     this.router.navigate([`${NAVIGATION_ROUTES.BOOK_DETAIL}/${bookKey}`]);
   }

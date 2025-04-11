@@ -26,12 +26,26 @@ export class PublicProfileComponent implements OnInit {
     ngOnInit(): void {
       const username = this.route.snapshot.paramMap.get('username');
       if (username && username.trim()) {
+        this.publicProfileService.publicProfile$.subscribe({
+          next: (profile) => {
+            this.userProfile = profile;
+            this.isLoading = false;
+          },
+          error: (err) => {
+            console.error('❌ Error al recibir perfil público:', err);
+            this.errorMessage = `Error cargando el perfil de ${username}`;
+            this.userProfile = null;
+            this.isLoading = false;
+          }
+        });
+    
         this.loadPublicProfile(username.trim());
       } else {
         this.errorMessage = 'Invalid username.';
         this.isLoading = false;
       }
     }
+    
 
 
     

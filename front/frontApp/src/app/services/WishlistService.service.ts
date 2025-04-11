@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environ/environ';
-import { LOCAL_STORAGE_KEYS } from '../utils/constants';
 
 export interface WishlistBook {
   book_key: string;
   title: string;
   author?: string;
   isbn?: string;
-  genres?: string[];
+  genres?: string[] | string;
   cover_url?: string;
   first_publish_year?: number;
 }
@@ -21,21 +20,26 @@ export interface WishlistBook {
 export class WishlistService {
   private baseUrl = `${environment.apiUrl}wishlist/`;
 
+  private wishlistSubject = new BehaviorSubject<WishlistBook[]>([]);
+  wishlist$ = this.wishlistSubject.asObservable();
+
   private wishlistCountSubject = new BehaviorSubject<number>(0);
   wishlistCount$ = this.wishlistCountSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  
-
-  // Obtener libros en la wishlist
-  getWishlist(): Observable<WishlistBook[]> {
-    return this.http.get<WishlistBook[]>(this.baseUrl).pipe(
+  // 🔄 Recargar wishlist desde backend
+  loadWishlist(): void {
+    this.http.get<WishlistBook[]>(this.baseUrl).pipe(
+      tap((wishlist) => {
+        this.wishlistSubject.next(wishlist);
+        this.wishlistCountSubject.next(wishlist.length);
+      }),
       catchError(this.handleError)
-    );
+    ).subscribe(); // ejecuta sin necesidad de que lo hagan desde fuera
   }
 
-  // Añadir libro a la wishlist
+  // 🆕 Añadir libro
   addToWishlist(book: WishlistBook): Observable<WishlistBook> {
     const formattedBook = {
       book_key: book.book_key,
@@ -48,18 +52,20 @@ export class WishlistService {
     };
 
     return this.http.post<WishlistBook>(this.baseUrl, formattedBook).pipe(
+      tap(() => this.loadWishlist()), // ← recarga tras añadir
       catchError(this.handleError)
     );
   }
 
-  // Eliminar libro de la wishlist
+  // ❌ Eliminar libro
   removeFromWishlist(bookKey: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}${bookKey}/`).pipe(
+      tap(() => this.loadWishlist()), // ← recarga tras eliminar
       catchError(this.handleError)
     );
   }
 
-  // Manejo de errores
+  // ❗ Error handler
   private handleError(error: any) {
     return throwError(() => new Error(error.message || 'Ha ocurrido un error en la wishlist.'));
   }
