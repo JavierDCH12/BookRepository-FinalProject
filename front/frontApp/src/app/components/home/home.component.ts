@@ -53,7 +53,6 @@ export class HomeComponent implements OnInit {
     this.isAuthenticated = this.userAuthService.isAuthenticated();
   
     if (this.isAuthenticated) {
-      this.loadUserProfile();
       this.checkPendingFavorite();
       this.checkPendingWishlist(); 
       this.wishlistService.getWishlist();

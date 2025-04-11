@@ -31,10 +31,28 @@ export class FavoriteListComponent implements OnInit {
 
   // Cargar los favoritos del usuario y los libros populares al iniciar el componente
   ngOnInit(): void {
-    this.loadFavorites();
+    this.isLoading = true;
+    this.favoriteService.favoriteBooks$.subscribe({
+      next: (favorites: FavoriteBook[]) => {
+        this.favoriteBooks = favorites;
+        this.isLoading = false;
+  
+        favorites.forEach(book => {
+          this.reviewTexts[book.book_key] = book.review || '';
+        });
+  
+        this.sortFavorites();
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load favorites.';
+        this.isLoading = false;
+      }
+    });
+  
+    this.favoriteService.loadFavorites(); // Dispara la carga
     this.loadPopularBooks();
-
   }
+  
 
   // Cargar los libros populares
   loadPopularBooks(): void {
@@ -82,22 +100,30 @@ export class FavoriteListComponent implements OnInit {
   }
 
   // Eliminar un libro de favoritos 
+  // removeFavorite(bookKey: string): void {
+  //   if (!bookKey) {
+  //     console.error('⚠️ Error: bookKey no válido.');
+  //     return;
+  //   }
+
+  //   //console.log(`🔍 Intentando eliminar el favorito con bookKey: ${bookKey}`);
+
+  //   this.favoriteService.removeFavorite(bookKey).subscribe({
+  //     next: () => {
+  //       //console.log(`✅ Libro con bookKey: ${bookKey} eliminado correctamente`);
+  //       this.favoriteBooks = this.favoriteBooks.filter(book => book.book_key !== bookKey);
+  //     },
+  //     error: (error) => {
+  //       console.error('⚠️ Error eliminando favorito:', error);
+  //     }
+  //   });
+  // }
+
+
   removeFavorite(bookKey: string): void {
-    if (!bookKey) {
-      console.error('⚠️ Error: bookKey no válido.');
-      return;
-    }
-
-    //console.log(`🔍 Intentando eliminar el favorito con bookKey: ${bookKey}`);
-
     this.favoriteService.removeFavorite(bookKey).subscribe({
-      next: () => {
-        //console.log(`✅ Libro con bookKey: ${bookKey} eliminado correctamente`);
-        this.favoriteBooks = this.favoriteBooks.filter(book => book.book_key !== bookKey);
-      },
-      error: (error) => {
-        console.error('⚠️ Error eliminando favorito:', error);
-      }
+      next: () => this.favoriteService.loadFavorites(),
+      error: (error) => console.error('⚠️ Error eliminando favorito:', error)
     });
   }
 
