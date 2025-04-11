@@ -17,12 +17,16 @@ from .serializers import UserProfileSerializer, RegisterSerializer, FavoriteBook
     WishlistBookSerializer
 from django.contrib.auth import get_user_model
 import logging
-
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
 # Configuración de logs
 logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
+
+class CustomLoginView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 ### PERFIL DE USUARIO (GET & DELETE)

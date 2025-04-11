@@ -11,7 +11,7 @@ def default_profile_picture():
 
 #USER MODEL
 class User(AbstractUser):
-    email = models.EmailField(max_length=125, unique=True)  
+    email = models.EmailField(max_length=125, unique=True)
     profile_picture = models.ImageField(
         upload_to='profile_pics/',
         null=True,

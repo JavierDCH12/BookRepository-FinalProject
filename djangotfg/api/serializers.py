@@ -2,9 +2,16 @@ from rest_framework import serializers
 
 from mysite import settings
 from .models import User, FavoriteBook, WishlistBook
-
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 # Los serializadores son clases que convierten los modelos de Django en JSON
 
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        print("📥 Intento de login con:", attrs)  # DEBUG
+        data = super().validate(attrs)
+        print("✅ Login exitoso:", data)  # DEBUG
+        return data
 
 
 #USER SERIALIZER
