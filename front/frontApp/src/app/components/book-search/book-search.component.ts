@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SearchService, Book, BookSearchResponse } from '../../services/BookSearchService.service';
-import { FavoriteService, FavoriteBook } from '../../services/FavoriteService.service';
-import { UserAuthServiceService } from '../../services/UserAuthService.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+import { SearchService, Book, BookSearchResponse } from '../../services/BookSearchService.service';
+import { FavoriteService, FavoriteBook } from '../../services/FavoriteService.service';
+import { WishlistService, WishlistBook } from '../../services/WishlistService.service';
+import { UserAuthServiceService } from '../../services/UserAuthService.service';
 import { WikipediaService } from '../../services/WikipediaService.service';
+
 import { NAVIGATION_ROUTES } from '../../utils/constants';
-import { WishlistBook, WishlistService } from '../../services/WishlistService.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-book-search',
@@ -17,21 +20,18 @@ import { WishlistBook, WishlistService } from '../../services/WishlistService.se
   imports: [CommonModule, FormsModule]
 })
 export class BookSearchComponent implements OnInit {
-  searchParams = { title: '', author: '', genre: '' };
+  searchParams: { title: string; author: string; genre: string } = { title: '', author: '', genre: '' };
   results: Book[] = [];
   favoriteBooks = new Set<string>();
+  wishlistBooks = new Set<string>();
+  isAuthenticated = false;
   isLoading = false;
   errorMessage: string | null = null;
-  isAuthenticated: boolean = false;
-  wishlistBooks = new Set<string>();
 
-  
-  // Paginación
-  currentPage: number = 1;
-  totalPages: number = 1;
-  totalCount: number = 0;
+  currentPage = 1;
+  totalPages = 1;
+  totalCount = 0;
 
-  // Modal properties
   isModalOpen = false;
   selectedBookTitle: string | null = null;
   selectedBookDescription: string | null = null;
@@ -41,84 +41,49 @@ export class BookSearchComponent implements OnInit {
   constructor(
     private searchService: SearchService,
     private favoriteService: FavoriteService,
-    private router: Router,
-    private wikipediaService: WikipediaService,
+    private wishlistService: WishlistService,
     private userAuthService: UserAuthServiceService,
-    private wishlistService: WishlistService
+    private wikipediaService: WikipediaService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.isAuthenticated = this.userAuthService.isAuthenticated();
-    //console.log('🟢 User authenticated?', this.isAuthenticated);
     if (this.isAuthenticated) {
       this.loadFavorites();
-      this.loadWishlist(); 
+      this.loadWishlist();
     }
   }
-  
-  // Wishlist
-  toggleWishlist(book: Book): void {
-    if (!this.isAuthenticated) {
-      localStorage.setItem('pendingWishlistBook', JSON.stringify(book));
-      this.openAuthModal();
-      return;
-    }
-  
-    if (this.isInWishlist(book.book_key)) {
-      this.wishlistService.removeFromWishlist(book.book_key).subscribe({
-        next: () => {
-          this.wishlistBooks.delete(book.book_key);
-        },
-        error: () => console.error('⚠️ Error removing from wishlist'),
-      });
-    } else {
-      const wishlistBook: WishlistBook = {
-        book_key: book.book_key,
-        title: book.title,
-        author: book.author || '',
-        isbn: book.isbn || undefined,
-        genres: Array.isArray(book.genres) ? book.genres : [],
-        cover_url: book.cover_url || undefined,
-        first_publish_year: book.first_publish_year || undefined,
-      };
-  
-      this.wishlistService.addToWishlist(wishlistBook).subscribe({
-        next: () => {
-          this.wishlistBooks.add(book.book_key);
-        },
-        error: () => console.error('⚠️ Error adding to wishlist'),
-      });
-    }
+
+  private transformToBookDTO(book: Book): Partial<FavoriteBook & WishlistBook> {
+    return {
+      book_key: book.book_key,
+      title: book.title,
+      author: book.author || '',
+      isbn: book.isbn || undefined,
+      genres: Array.isArray(book.genres) ? book.genres : [],
+      cover_url: book.cover_url || undefined,
+      first_publish_year: book.first_publish_year || undefined
+    };
   }
-  
-  // Wishlist
-  isInWishlist(bookKey: string): boolean {
-    return this.wishlistBooks.has(bookKey);
+
+  trackByBookKey(index: number, book: Book): string {
+    return book.book_key;
   }
-  // Cargar Wishlist
 
+  toggleAuthModal(open: boolean): void {
+    this.isModalAuthOpen = open;
+  }
 
-  loadWishlist(): void {
-  this.wishlistService.loadWishlist();
+  formatGenres(genres: string | string[]): string {
+    return Array.isArray(genres) ? genres.join(', ') : genres;
+  }
 
-  this.wishlistService.wishlist$.subscribe({
-    next: (wishlist: WishlistBook[]) => {
-      this.wishlistBooks = new Set(wishlist.map(w => w.book_key));
-    },
-    error: () => console.error('⚠️ Error loading wishlist'),
-  });
-}
-
-  
-
-  // Buscar libros 
   onSearch(page: number = 1): void {
     this.isLoading = true;
     this.errorMessage = null;
 
     const { title, author, genre } = this.searchParams;
-
-    // Llamar a la API con la página actual y el límite de 20 por página
     this.searchService.searchBooks(title, author, genre, page).subscribe({
       next: (response: BookSearchResponse) => {
         this.results = response.books || [];
@@ -130,65 +95,43 @@ export class BookSearchComponent implements OnInit {
       error: () => {
         this.errorMessage = 'Failed to fetch book results. Try again.';
         this.isLoading = false;
-      },
+      }
     });
   }
 
-  // Cargar favoritos 
+  // ⭐ FAVORITOS
   loadFavorites(): void {
-    this.favoriteService.getFavorites().subscribe({
+    this.favoriteService.getFavorites().pipe(take(1)).subscribe({
       next: (favorites: FavoriteBook[]) => {
-        this.favoriteBooks = new Set(favorites.map(fav => fav.book_key));
+        this.favoriteBooks = new Set(favorites.map(f => f.book_key));
       },
-      error: () => console.error('⚠️ Error loading favorites'),
+      error: () => console.error('⚠️ Error loading favorites')
     });
   }
 
-  formatGenres(genres: string | string[]): string {
-    return Array.isArray(genres) ? genres.join(', ') : genres;
-  }
-
-  openAuthModal() {
-    this.isModalAuthOpen = true;
-  }
-  
-  closeAuthModal() {
-    this.isModalAuthOpen = false;
-  }
-
-  //Añadir o quitar favoritos 
-  toggleFavorite(book: Book): void { 
+  toggleFavorite(book: Book): void {
     if (!this.isAuthenticated) {
       localStorage.setItem('pendingFavoriteBook', JSON.stringify(book));
-      this.openAuthModal();
+      this.toggleAuthModal(true);
       return;
     }
-  
-    if (this.isFavorite(book.book_key)) {
-      this.favoriteService.removeFavorite(book.book_key).subscribe({
-        next: () => {
-          this.favoriteBooks.delete(book.book_key);
-        },
-        error: () => console.error('⚠️ Error removing favorite'),
+
+    const key = book.book_key;
+    if (this.isFavorite(key)) {
+      this.favoriteService.removeFavorite(key).pipe(take(1)).subscribe({
+        next: () => this.favoriteBooks.delete(key),
+        error: () => console.error('⚠️ Error removing favorite')
       });
     } else {
-      const favoriteBook: FavoriteBook = {
-        book_key: book.book_key,
-        title: book.title,
-        author: book.author || '',
-        isbn: book.isbn || undefined,
-        genres: Array.isArray(book.genres) ? book.genres : [],
-        first_publish_year: book.first_publish_year || undefined,
-        cover_url: book.cover_url || undefined,
+      const favorite: FavoriteBook = {
+        ...this.transformToBookDTO(book),
         review: '',
         rating: 0
-      };
-  
-      this.favoriteService.addFavorite(favoriteBook).subscribe({
-        next: () => {
-          this.favoriteBooks.add(book.book_key);
-        },
-        error: () => console.error('⚠️ Error adding favorite'),
+      } as FavoriteBook;
+
+      this.favoriteService.addFavorite(favorite).pipe(take(1)).subscribe({
+        next: () => this.favoriteBooks.add(key),
+        error: () => console.error('⚠️ Error adding favorite')
       });
     }
   }
@@ -197,37 +140,68 @@ export class BookSearchComponent implements OnInit {
     return this.favoriteBooks.has(bookKey);
   }
 
- 
+  // 💛 WISHLIST
+  loadWishlist(): void {
+    this.wishlistService.loadWishlist().pipe(take(1)).subscribe({
+      next: (wishlist: WishlistBook[]) => {
+        this.wishlistBooks = new Set(wishlist.map(w => w.book_key));
+      },
+      error: () => console.error('⚠️ Error loading wishlist')
+    });
+  }
+
+  toggleWishlist(book: Book): void {
+    if (!this.isAuthenticated) {
+      localStorage.setItem('pendingWishlistBook', JSON.stringify(book));
+      this.toggleAuthModal(true);
+      return;
+    }
+
+    const key = book.book_key;
+    if (this.isInWishlist(key)) {
+      this.wishlistService.removeFromWishlist(key).pipe(take(1)).subscribe({
+        next: () => this.wishlistBooks.delete(key),
+        error: () => console.error('⚠️ Error removing from wishlist')
+      });
+    } else {
+      const wishlist: WishlistBook = this.transformToBookDTO(book) as WishlistBook;
+
+      this.wishlistService.addToWishlist(wishlist).pipe(take(1)).subscribe({
+        next: () => this.wishlistBooks.add(key),
+        error: () => console.error('⚠️ Error adding to wishlist')
+      });
+    }
+  }
+
+  isInWishlist(bookKey: string): boolean {
+    return this.wishlistBooks.has(bookKey);
+  }
 
   getAuthorWikipediaLink(author: string): void {
-    //(`🔎 Buscando en Wikipedia: ${author}`);
-    this.wikipediaService.getWikipediaLink(author).subscribe({
+    this.wikipediaService.getWikipediaLink(author).pipe(take(1)).subscribe({
       next: (link: string | null) => {
         if (link) {
           window.open(link, '_blank');
         } else {
-          console.warn(`⚠️ No se encontró un enlace de Wikipedia para: ${author}`);
+          console.warn(`⚠️ No Wikipedia link for ${author}`);
         }
       },
-      error: (err) => {
-        console.error(`❌ Error obteniendo el enlace de Wikipedia:`, err);
-      }
+      error: (err) => console.error('❌ Wikipedia error:', err)
     });
   }
 
-  navigateToLogin() {
-    this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
-  }
-  
-  navigateToRegister() {
-    this.router.navigate([NAVIGATION_ROUTES.REGISTER]);
-  }
-
-  navigateToBookDetail(bookKey: string) {
+  navigateToBookDetail(bookKey: string): void {
     this.router.navigate([`${NAVIGATION_ROUTES.BOOK_DETAIL}/${bookKey}`]);
   }
 
-  // Paginación
+  navigateToLogin(): void {
+    this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
+  }
+
+  navigateToRegister(): void {
+    this.router.navigate([NAVIGATION_ROUTES.REGISTER]);
+  }
+
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.onSearch(this.currentPage + 1);
@@ -239,6 +213,4 @@ export class BookSearchComponent implements OnInit {
       this.onSearch(this.currentPage - 1);
     }
   }
-
- 
 }

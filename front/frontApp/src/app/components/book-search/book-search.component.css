@@ -1,3 +1,4 @@
+/* 🔍 CONTENEDOR PRINCIPAL */
 .search-container {
   margin: 0 auto;
   max-width: 1200px;
@@ -13,6 +14,7 @@
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
 }
 
+/* 🔎 FORMULARIO DE BÚSQUEDA */
 .search-form {
   display: flex;
   flex-wrap: wrap;
@@ -80,7 +82,7 @@
   cursor: not-allowed;
 }
 
-/* 📘 Resultados */
+/* 📘 RESULTADOS */
 .results-container {
   margin-top: 30px;
 }
@@ -148,37 +150,7 @@
   margin-top: 4px;
 }
 
-/* ❤️ Wishlist */
-.wishlist-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
-  font-size: 1.6rem;
-  transition: transform 0.3s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.heart-icon {
-  color: #e91e63;
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-
-.in-wishlist .heart-icon {
-  color: #c2185b;
-  animation: pop 0.4s ease;
-}
-
-@keyframes pop {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.4); }
-  100% { transform: scale(1); }
-}
-
+/* ⭐ FAVORITOS */
 .fav-toggle-button {
   display: inline-flex;
   align-items: center;
@@ -193,6 +165,8 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
 }
 
 .fav-toggle-button:hover {
@@ -204,7 +178,6 @@
   background-color: #e2cb4a;
   color: #fff;
   border: 1px solid #fff025;
-
 }
 
 .fav-toggle-button i {
@@ -217,7 +190,38 @@
   transform: scale(1.2);
 }
 
+/* 💛 WISHLIST */
+.wishlist-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 1.6rem;
+  transition: transform 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
 
+.heart-icon {
+  color: #bbb;
+  font-size: 1.6rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.in-wishlist .heart-icon {
+  color: #e91e63;
+  animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* 🔐 MODAL */
 .modal {
   position: fixed;
   top: 0; left: 0;
@@ -292,6 +296,7 @@
   background-color: #357ab8;
 }
 
+/* 📄 PAGINACIÓN */
 .pagination {
   display: flex;
   justify-content: center;
@@ -320,6 +325,7 @@
   cursor: not-allowed;
 }
 
+/* ✨ EFECTO ENTRADA */
 .fade-in {
   animation: fadeSlideIn 0.9s ease-in-out;
 }
