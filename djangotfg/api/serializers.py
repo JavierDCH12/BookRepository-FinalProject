@@ -1,15 +1,10 @@
 from rest_framework import serializers
 
 from mysite import settings
-from .models import Book, User, FavoriteBook, WishlistBook
+from .models import User, FavoriteBook, WishlistBook
 
 # Los serializadores son clases que convierten los modelos de Django en JSON
 
-#USER SERIALIZER
-class BookSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Book
-        fields = ["id", "title", "author", "genre", "added_date"]
 
 
 #USER SERIALIZER
