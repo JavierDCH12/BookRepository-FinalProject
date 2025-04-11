@@ -25,7 +25,7 @@ export class FavoriteService {
 
   constructor(private http: HttpClient) {}
 
-  // Verifica si estamos en el navegador
+  /*
   private isBrowser(): boolean {
     return typeof window !== 'undefined';
   }
@@ -33,7 +33,7 @@ export class FavoriteService {
   // Obtener encabezados con token para la autenticación 
   private getAuthHeaders(): HttpHeaders {
     if (!this.isBrowser()) {
-      return new HttpHeaders(); // No hacer nada si estamos en server-side
+      return new HttpHeaders(); 
     }
 
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
@@ -43,11 +43,12 @@ export class FavoriteService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-  }
+  }*/
 
   // Obtener libros favoritos
+  
   getFavorites(): Observable<FavoriteBook[]> {
-    return this.http.get<FavoriteBook[]>(this.favoritesUrl, { headers: this.getAuthHeaders() })
+    return this.http.get<FavoriteBook[]>(this.favoritesUrl)
       .pipe(catchError(this.handleError));
   }
 
@@ -65,13 +66,13 @@ export class FavoriteService {
       rating: book.rating || 0
     };
 
-    return this.http.post<any>(this.favoritesUrl, formattedBook, { headers: this.getAuthHeaders() })
+    return this.http.post<any>(this.favoritesUrl, formattedBook)
       .pipe(catchError(this.handleError));
   }
 
   // Eliminar favorito 
   removeFavorite(bookKey: string): Observable<void> {
-    return this.http.delete<void>(`${this.favoritesUrl}${bookKey}/`, { headers: this.getAuthHeaders() })
+    return this.http.delete<void>(`${this.favoritesUrl}${bookKey}/`)
       .pipe(catchError(this.handleError));
   }
 
@@ -83,19 +84,19 @@ export class FavoriteService {
 
   // Crear o actualizar reseña
   manageReview(bookKey: string, review: string): Observable<any> {
-    return this.http.patch(`${this.favoritesUrl}${bookKey}/review/`, { review }, { headers: this.getAuthHeaders() })
+    return this.http.patch(`${this.favoritesUrl}${bookKey}/review/`, { review })
       .pipe(catchError(this.handleError));
   }
 
   // Actualizar la valoración 
   updateRating(bookKey: string, rating: number): Observable<any> {
-    return this.http.patch(`${this.favoritesUrl}${bookKey}/rating/`, { rating }, { headers: this.getAuthHeaders() })
+    return this.http.patch(`${this.favoritesUrl}${bookKey}/rating/`, { rating })
       .pipe(catchError(this.handleError));
   }
 
-  // Manejo de errores globales
-  private handleError(error: any) {
-    console.error('❌ Error en la solicitud:', error);
-    return throwError(() => new Error(error.message || 'Ha ocurrido un error en la solicitud.'));
+  // Manejo de errores
+  private handleError(error: any): Observable<never> {
+    console.error('An error occurred:', error);
+    throw error;
   }
 }
