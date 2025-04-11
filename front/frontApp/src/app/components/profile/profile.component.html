@@ -2,14 +2,18 @@
   <div class="profile-card">
     <div class="profile-header">
       <img 
-      *ngIf="userProfile" 
-      [src]="environment.apiUrl.replace('/api/', '') + userProfile.profile_picture"
-      alt="Profile Picture">
-          <label for="fileInput" class="upload-label">
+        *ngIf="userProfile" 
+        [src]="userProfile.profile_picture"
+        alt="Profile Picture">
+        
+      <label for="fileInput" class="upload-label">
         📂 Cambiar foto
       </label>
+      
       <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>
     </div>
+
+
     <div class="profile-info">
       <h2 *ngIf="!editMode">{{ userProfile?.username }}</h2>
       <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.username" placeholder="Username">
