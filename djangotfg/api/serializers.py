@@ -1,22 +1,18 @@
 from rest_framework import serializers
-
-from mysite import settings
 from .models import User, FavoriteBook, WishlistBook
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
-# Los serializadores son clases que convierten los modelos de Django en JSON
 
+# Login personalizado
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        print("📥 Intento de login con:", attrs)  # DEBUG
+        print("📥 Intento de login con:", attrs)
         data = super().validate(attrs)
-        print("✅ Login exitoso:", data)  # DEBUG
+        print("✅ Login exitoso:", data)
         return data
 
 
-#USER SERIALIZER
+# SERIALIZER DE PERFIL
 class UserProfileSerializer(serializers.ModelSerializer):
-    profile_picture = serializers.SerializerMethodField()
     first_name = serializers.CharField(required=False, allow_blank=True)
     last_name = serializers.CharField(required=False, allow_blank=True)
     password = serializers.CharField(write_only=True, required=False, min_length=5)
@@ -29,15 +25,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'email',
             'first_name',
             'last_name',
-            'date_joined',  
-            'profile_picture',
+            'date_joined',
+            'profile_picture',  # ← Ahora es una URL, no necesitamos campo especial
             'password',
         ]
-
-    def get_profile_picture(self, obj):
-        if obj.profile_picture:
-            return obj.profile_picture.url
-        return '/media/profile_pics/default_avatar.jpg'
 
     def validate_username(self, value):
         if User.objects.filter(username=value).exclude(pk=self.instance.pk).exists():
@@ -53,7 +44,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-#REGISTER SERIALIZER
+
+# SERIALIZER DE REGISTRO
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
@@ -76,16 +68,15 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create(
             username=validated_data["username"],
-            email=validated_data["email"]
+            email=validated_data["email"],
+            # El campo profile_picture se asigna automáticamente con el valor por defecto
         )
         user.set_password(validated_data["password"])
         user.save()
         return user
 
 
-
-
-#FAVORITEBOOK SERIALIZER
+# FAVORITE BOOK
 class FavoriteBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteBook
@@ -96,24 +87,16 @@ class FavoriteBookSerializer(serializers.ModelSerializer):
         ]
 
 
-
-
-
-
-##PUBLIC FAVORITEBOOK SERIALIZER
+# FAVORITE BOOK (PÚBLICO)
 class PublicFavoriteBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteBook
         fields = ['book_key', 'title', 'author', 'cover_url', 'rating', 'review']
 
 
-
-
-
-#PUBLIC USER PROFILE SERIALIZER
+# PERFIL PÚBLICO DE USUARIO
 class PublicUserProfileSerializer(serializers.ModelSerializer):
     favorites = serializers.SerializerMethodField()
-    profile_picture = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -131,20 +114,10 @@ class PublicUserProfileSerializer(serializers.ModelSerializer):
         favorites = obj.favorites.all()
         return PublicFavoriteBookSerializer(favorites, many=True).data
 
-    def get_profile_picture(self, obj):
-        if obj.profile_picture:
-            return obj.profile_picture.url
-        return '/media/profile_pics/default_avatar.jpg'
 
-
-
-
-#WISHLISTBOOK SERIALIZER
+# WISHLIST
 class WishlistBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = WishlistBook
         fields = '__all__'
         read_only_fields = ['user', 'added_at']
-
-
-
