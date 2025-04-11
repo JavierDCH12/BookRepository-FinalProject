@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
     if (this.isAuthenticated) {
       this.checkPendingFavorite();
       this.checkPendingWishlist(); 
-      this.wishlistService.getWishlist();
+      this.wishlistService.loadWishlist(); // ✅ ACTUALIZADO
     }
   
     this.wishlistService.wishlistCount$.subscribe(count => {
@@ -71,9 +71,10 @@ export class HomeComponent implements OnInit {
       this.loadUserProfile();
       this.checkPendingFavorite();
       this.checkPendingWishlist(); 
-      this.wishlistService.getWishlist();
+      this.wishlistService.loadWishlist(); 
     });
   }
+  
   
 
   get username(): string {

@@ -96,14 +96,19 @@ export class BookSearchComponent implements OnInit {
     return this.wishlistBooks.has(bookKey);
   }
   // Cargar Wishlist
+
+
   loadWishlist(): void {
-    this.wishlistService.getWishlist().subscribe({
-      next: (wishlist: WishlistBook[]) => {
-        this.wishlistBooks = new Set(wishlist.map(w => w.book_key));
-      },
-      error: () => console.error('⚠️ Error loading wishlist'),
-    });
-  }
+  this.wishlistService.loadWishlist();
+
+  this.wishlistService.wishlist$.subscribe({
+    next: (wishlist: WishlistBook[]) => {
+      this.wishlistBooks = new Set(wishlist.map(w => w.book_key));
+    },
+    error: () => console.error('⚠️ Error loading wishlist'),
+  });
+}
+
   
 
   // Buscar libros 

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WishlistService, WishlistBook } from '../../services/WishlistService.service';
 import { Router } from '@angular/router';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
 import { CommonModule } from '@angular/common';
 import { WikipediaService } from '../../services/WikipediaService.service';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-wishlist',
@@ -13,10 +14,11 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   standalone: true,
   imports: [CommonModule, ProgressSpinnerModule]
 })
-export class WishlistComponent implements OnInit {
+export class WishlistComponent implements OnInit, OnDestroy {
   wishlistBooks: WishlistBook[] = [];
-  isLoading = false;
+  isLoading = true;
   errorMessage: string | null = null;
+  private wishlistSub!: Subscription;
 
   constructor(
     private wishlistService: WishlistService,
@@ -25,11 +27,9 @@ export class WishlistComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
-
     this.wishlistService.loadWishlist();
 
-    this.wishlistService.wishlist$.subscribe({
+    this.wishlistSub = this.wishlistService.wishlist$.subscribe({
       next: (books) => {
         this.wishlistBooks = books;
         this.isLoading = false;
@@ -39,6 +39,10 @@ export class WishlistComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.wishlistSub) this.wishlistSub.unsubscribe();
   }
 
   getAuthorWikipediaLink(author: string): void {
@@ -52,11 +56,13 @@ export class WishlistComponent implements OnInit {
 
   removeFromWishlist(bookKey: string): void {
     this.wishlistService.removeFromWishlist(bookKey).subscribe({
+      next: () => {
+        console.log(`✅ Libro ${bookKey} eliminado de wishlist`);
+      },
       error: () => console.error('❌ Error removing book from wishlist')
     });
   }
 
-  // 📖 Ir al detalle
   navigateToBookDetail(bookKey: string): void {
     this.router.navigate([`${NAVIGATION_ROUTES.BOOK_DETAIL}/${bookKey}`]);
   }
