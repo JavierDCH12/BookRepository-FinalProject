@@ -49,21 +49,6 @@
           </div>
         </div>
 
-        <div class="review-section">
-          <div *ngIf="!editingReview[book.book_key]">
-            <p class="review-text" *ngIf="book.review">📝 {{ book.review }}</p>
-            <button (click)="toggleReviewEdit(book.book_key)">✏️ Edit Review</button>
-          </div>
-
-          <div *ngIf="editingReview[book.book_key]">
-            <textarea [(ngModel)]="reviewTexts[book.book_key]" rows="3" placeholder="Write your review here..."></textarea>
-            <div class="review-actions">
-              <button (click)="saveReview(book.book_key)">💾 Save</button>
-              <button (click)="toggleReviewEdit(book.book_key)">❌ Cancel</button>
-            </div>
-          </div>
-        </div>
-
         <button class="remove-button" (click)="removeFavorite(book.book_key)">❌ Remove from Favorites</button>
       </div>
     </div>
@@ -73,7 +58,7 @@
     <h3 class="popular-heading">🔥 Libros Populares entre Usuarios</h3>
     <div class="popular-carousel">
       <div *ngFor="let book of popularBooks" class="popular-card" (click)="navigateToBookDetail(book.book_key)">
-        <img *ngIf="book.cover_url" alt="cover" [src]="book.cover_url" [alt]="book.title + ' cover'">
+        <img *ngIf="book.cover_url" title="cover" [src]="book.cover_url" [alt]="book.title + ' cover'">
         <div class="popular-card-text">
           <p class="popular-title">{{ book.title }}</p>
           <p class="popular-author">{{ book.author }}</p>
