@@ -26,7 +26,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'date_joined',
-            'profile_picture',  # ← Ahora es una URL, no necesitamos campo especial
+            'profile_picture',  
             'password',
         ]
 
