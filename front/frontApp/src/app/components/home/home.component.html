@@ -59,11 +59,19 @@
     </div>
 
     <!-- 📦 Contenido dinámico -->
-    <div class="dynamic-content-container">
-      <app-book-search *ngIf="currentView === 'search'"></app-book-search>
-      <app-favorite-list *ngIf="currentView === 'favorites'"></app-favorite-list>
-      <app-wishlist *ngIf="currentView === 'wishlist'"></app-wishlist>
-    </div>
+    <!-- 📦 Contenido dinámico -->
+<div class="dynamic-content-container">
+  <!-- Usuario NO autenticado: mostrar siempre el buscador -->
+  <app-book-search *ngIf="!isAuthenticated"></app-book-search>
+
+  <!-- Usuario autenticado: mostrar según el botón activo -->
+  <ng-container *ngIf="isAuthenticated">
+    <app-book-search *ngIf="currentView === 'search'"></app-book-search>
+    <app-favorite-list *ngIf="currentView === 'favorites'"></app-favorite-list>
+    <app-wishlist *ngIf="currentView === 'wishlist'"></app-wishlist>
+  </ng-container>
+</div>
+
 
   </div>
 

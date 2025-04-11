@@ -54,11 +54,15 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.isAuthenticated = this.userAuthService.isAuthenticated();
   
+    if (!this.isAuthenticated) {
+      this.currentView = 'search';
+    }
+  
     if (this.isAuthenticated) {
       this.checkPendingFavorite();
       this.checkPendingWishlist();
       this.wishlistService.loadWishlist();
-      this.favoriteService.loadFavorites(); // 🔄 también carga los favoritos al iniciar
+      this.favoriteService.loadFavorites();
     }
   
     this.wishlistService.wishlistCount$.subscribe(count => {
@@ -69,7 +73,7 @@ export class HomeComponent implements OnInit {
       this.favoriteCount = count;
     });
   
-    this.profileService.currentUser$.subscribe((profile: any) => {
+    this.profileService.currentUser$.subscribe(profile => {
       this.userProfile = profile;
     });
   
@@ -79,9 +83,12 @@ export class HomeComponent implements OnInit {
       this.checkPendingFavorite();
       this.checkPendingWishlist();
       this.wishlistService.loadWishlist();
-      this.favoriteService.loadFavorites(); // 🔁 tras login también
+      this.favoriteService.loadFavorites();
+  
+      this.currentView = 'search'; 
     });
   }
+  
   
   
   
