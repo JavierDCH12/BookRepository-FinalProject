@@ -18,6 +18,9 @@ class User(AbstractUser):
         blank=True,
         default=default_profile_picture()
     )
+    
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
 
     def __str__(self):
         return self.username
