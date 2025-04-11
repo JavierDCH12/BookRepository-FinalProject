@@ -1,6 +1,6 @@
 <div class="book-detail-container" *ngIf="!isLoading && book; else loading">
   <div class="book-header">
-    <img *ngIf="book.cover_url" [src]="book.cover_url" alt="Book Cover" class="book-cover">
+    <img *ngIf="book.cover_url" title="cover " [src]="book.cover_url" [alt]="'Portada del libro ' + book.title" class="book-cover">
     <div class="book-info">
       <h1>{{ book.title }}</h1>
       <p><strong>Autor:</strong> {{ book.author }}</p>
@@ -20,8 +20,9 @@
   </div>
 
   <div class="actions">
-    <button *ngIf="!isFavorite" (click)="addToFavorites()">⭐ Añadir a Favoritos</button>
-    <button *ngIf="isFavorite" (click)="removeFromFavorites()">❌ Quitar de Favoritos</button>
+    <button (click)="isFavorite ? removeFromFavorites() : addToFavorites()">
+      {{ isFavorite ? '❌ Quitar de Favoritos' : '⭐ Añadir a Favoritos' }}
+    </button>
   </div>
 
   <div *ngIf="isFavorite" class="review-section">
@@ -38,28 +39,24 @@
     <div *ngIf="isEditingReview" class="edit-review-form">
       <textarea [(ngModel)]="reviewText" placeholder="Escribe tu reseña aquí..."></textarea>
       <div class="review-actions">
-        <button (click)="saveReview()">💾 Guardar</button>
+        <button [disabled]="!reviewText.trim()" (click)="saveReview()">💾 Guardar</button>
         <button (click)="cancelEditReview()">❌ Cancelar</button>
       </div>
     </div>
 
-
-    <div class="rating-section" *ngIf="isFavorite">
+    <div class="rating-section">
       <h4>⭐ Tu valoración</h4>
       <div class="stars">
-        <span *ngFor="let star of [1,2,3,4,5]" (click)="setRating(star)" (mouseenter)="onStarHover(star)"
-          (mouseleave)="onStarLeave()"
-          [ngClass]="{ 'filled-star': star <= (tempRating || rating), 'empty-star': star > (tempRating || rating) }">
+        <span *ngFor="let star of [1,2,3,4,5]"
+              (click)="setRating(star)"
+              (mouseenter)="onStarHover(star)"
+              (mouseleave)="onStarLeave()"
+              [title]="star + ' estrella' + (star > 1 ? 's' : '')"
+              [ngClass]="{ 'filled-star': star <= (tempRating || rating), 'empty-star': star > (tempRating || rating) }">
           ★
         </span>
       </div>
-
-
     </div>
-
-
-
-
   </div>
 
   <div class="go-home">

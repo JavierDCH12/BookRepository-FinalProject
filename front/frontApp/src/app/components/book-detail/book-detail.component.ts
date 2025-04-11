@@ -5,6 +5,7 @@ import { FavoriteService } from '../../services/FavoriteService.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-book-detail',
@@ -20,7 +21,7 @@ export class BookDetailComponent implements OnInit {
   isEditingReview = false;
   isLoading = true;
   rating = 0;
-  tempRating = 0; 
+  tempRating = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,7 +37,6 @@ export class BookDetailComponent implements OnInit {
     }
   }
 
-    // Cargar detalles del libro
   loadBookDetails(bookKey: string): void {
     this.searchService.getBookDetails(bookKey).subscribe({
       next: (response: Book) => {
@@ -51,7 +51,6 @@ export class BookDetailComponent implements OnInit {
     });
   }
 
-  // Comprobar si el libro está en favoritos
   checkIfFavorite(bookKey: string): void {
     this.favoriteService.getFavorites().subscribe({
       next: (favorites) => {
@@ -65,7 +64,7 @@ export class BookDetailComponent implements OnInit {
       error: () => console.error('⚠️ Error loading favorites'),
     });
   }
-  // Añadir a favoritos
+
   addToFavorites(): void {
     if (!this.book) return;
 
@@ -84,12 +83,16 @@ export class BookDetailComponent implements OnInit {
     this.favoriteService.addFavorite(favoriteBook).subscribe({
       next: () => {
         this.isFavorite = true;
-        //console.log(`✅ ${this.book?.title} añadido a favoritos`);
+        Swal.fire({
+          icon: 'success',
+          title: '¡Añadido a favoritos!',
+          text: `${this.book?.title} se ha añadido correctamente.`
+        });
       },
       error: (err) => console.error('❌ Error al añadir a favoritos:', err)
     });
   }
-  // Eliminar de favoritos
+
   removeFromFavorites(): void {
     if (!this.book) return;
     this.favoriteService.removeFavorite(this.book.book_key).subscribe({
@@ -97,23 +100,31 @@ export class BookDetailComponent implements OnInit {
         this.isFavorite = false;
         this.reviewText = '';
         this.rating = 0;
-        //console.log(`✅ ${this.book?.title} eliminado de favoritos`);
+        Swal.fire({
+          icon: 'success',
+          title: 'Favorito eliminado',
+          text: `${this.book?.title} se ha eliminado de tus favoritos.`
+        });
       },
       error: (err) => console.error('❌ Error al eliminar de favoritos:', err)
     });
   }
-  // Guardar reseña
+
   saveReview(): void {
     if (!this.book || !this.reviewText.trim()) return;
     this.favoriteService.manageReview(this.book.book_key, this.reviewText).subscribe({
       next: () => {
-        //console.log('✅ Reseña guardada');
         this.isEditingReview = false;
+        Swal.fire({
+          icon: 'success',
+          title: 'Reseña guardada',
+          text: 'Tu reseña se ha guardado correctamente.'
+        });
       },
       error: () => console.error('❌ Error al guardar la reseña'),
     });
   }
-  // Editar reseña
+
   startEditReview(): void {
     this.isEditingReview = true;
   }
@@ -122,19 +133,22 @@ export class BookDetailComponent implements OnInit {
     this.isEditingReview = false;
   }
 
-  formatGenres(genres: string[] | string): string {
-    return Array.isArray(genres) ? genres.join(', ') : genres;
-  }
-  // Actualizar rating
   setRating(star: number): void {
     if (this.isFavorite && this.book) {
       this.rating = star;
-      this.favoriteService.updateRating(this.book.book_key, star).subscribe();
+      this.favoriteService.updateRating(this.book.book_key, star).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Valoración actualizada',
+            text: `Has valorado este libro con ${star} estrella(s).`
+          });
+        },
+        error: () => console.error('❌ Error al actualizar el rating')
+      });
     }
   }
-  
 
-  // Hover visual para estrellas
   onStarHover(star: number): void {
     if (this.isFavorite) {
       this.tempRating = star;
@@ -145,11 +159,11 @@ export class BookDetailComponent implements OnInit {
     this.tempRating = 0;
   }
 
-    // Navegar a la página de inicio
+  formatGenres(genres: string[] | string): string {
+    return Array.isArray(genres) ? genres.join(', ') : genres;
+  }
+
   navigateToHome(): void {
     this.router.navigate([NAVIGATION_ROUTES.HOME]);
   }
-
-
-  
 }
