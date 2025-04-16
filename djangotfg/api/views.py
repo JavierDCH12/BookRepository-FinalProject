@@ -179,7 +179,7 @@ def manage_review(request, book_key):
     if not review_text:
         return Response({'error': ERROR_EMPTY}, status=status.HTTP_400_BAD_REQUEST)
 
-    favorite.review = review_text  # Si es nuevo, lo asigna; si ya existe, lo sobrescribe.
+    favorite.review = review_text  
     favorite.save()
 
     return Response({'message': SUCCESS_SAVED_REVIEW, 'review': favorite.review}, status=status.HTTP_200_OK)
