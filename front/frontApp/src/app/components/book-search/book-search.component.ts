@@ -20,13 +20,14 @@ import { take } from 'rxjs/operators';
   imports: [CommonModule, FormsModule]
 })
 export class BookSearchComponent implements OnInit {
-  searchParams: { title: string; author: string; genre: string } = { title: '', author: '', genre: '' };
+  searchParams = { title: '', author: '', genre: '' };
   results: Book[] = [];
   favoriteBooks = new Set<string>();
   wishlistBooks = new Set<string>();
   isAuthenticated = false;
   isLoading = false;
   errorMessage: string | null = null;
+  hasSearched = false;
 
   currentPage = 1;
   totalPages = 1;
@@ -49,20 +50,47 @@ export class BookSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAuthenticated = this.userAuthService.isAuthenticated();
-  
-    // Ya no se hace búsqueda por defecto
+
+    // Solo cargamos favoritos y wishlist si está autenticado
     if (this.isAuthenticated) {
       this.loadFavorites();
       this.loadWishlist();
     }
   }
-  
-  
-  
-  
 
-  
-  
+  onSearch(page: number = 1): void {
+    const { title, author, genre } = this.searchParams;
+
+    // ❗ Si todos los campos están vacíos, no hacemos la búsqueda
+    if (!title.trim() && !author.trim() && !genre.trim()) {
+      this.results = [];
+      this.hasSearched = true;
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = null;
+    this.hasSearched = true;
+
+    this.searchService.searchBooks(
+      title.trim(),
+      author.trim(),
+      genre.trim(),
+      page
+    ).subscribe({
+      next: (response: BookSearchResponse) => {
+        this.results = response.books || [];
+        this.totalCount = response.total_count;
+        this.totalPages = response.total_pages;
+        this.currentPage = response.current_page;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.errorMessage = 'No se pudieron obtener los resultados.';
+        this.isLoading = false;
+      }
+    });
+  }
 
   private transformToBookDTO(book: Book): Partial<FavoriteBook & WishlistBook> {
     return {
@@ -87,33 +115,6 @@ export class BookSearchComponent implements OnInit {
   formatGenres(genres: string | string[]): string {
     return Array.isArray(genres) ? genres.join(', ') : genres;
   }
-
-  onSearch(page: number = 1): void {
-    this.isLoading = true;
-    this.errorMessage = null;
-  
-    const { title, author, genre } = this.searchParams;
-  
-    // 🛠️ Si no hay ningún criterio, usa un término genérico por defecto
-    const finalTitle = title.trim() || 'a';
-    const finalAuthor = author.trim();
-    const finalGenre = genre.trim();
-  
-    this.searchService.searchBooks(finalTitle, finalAuthor, finalGenre, page).subscribe({
-      next: (response: BookSearchResponse) => {
-        this.results = response.books || [];
-        this.totalCount = response.total_count;
-        this.totalPages = response.total_pages;
-        this.currentPage = response.current_page;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.errorMessage = 'Failed to fetch book results. Try again.';
-        this.isLoading = false;
-      }
-    });
-  }
-  
 
   // ⭐ FAVORITOS
   loadFavorites(): void {
