@@ -53,7 +53,7 @@
     <!-- 📦 Contenido dinámico -->
 <!-- 📦 Contenido dinámico -->
 <div class="dynamic-content-container">
-  <app-book-search *ngIf="!isAuthenticated || currentView === 'search'"></app-book-search>
+  <app-wishlist *ngIf="!isAuthenticated || currentView === 'search'"></app-wishlist>
   <app-favorite-list *ngIf="isAuthenticated && currentView === 'favorites'"></app-favorite-list>
   <app-wishlist *ngIf="isAuthenticated && currentView === 'wishlist'"></app-wishlist>
 </div>
