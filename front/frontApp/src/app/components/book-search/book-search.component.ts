@@ -50,15 +50,13 @@ export class BookSearchComponent implements OnInit {
   ngOnInit(): void {
     this.isAuthenticated = this.userAuthService.isAuthenticated();
   
-    if (!this.isAuthenticated) {
-      // Si NO está autenticado, busca siempre
-      this.onSearch();
-    } else {
-      // Si está autenticado, no busca por defecto, solo carga favoritos y wishlist
+    // Ya no se hace búsqueda por defecto
+    if (this.isAuthenticated) {
       this.loadFavorites();
       this.loadWishlist();
     }
   }
+  
   
   
   
