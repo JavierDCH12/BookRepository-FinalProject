@@ -64,21 +64,23 @@ export class FavoriteListComponent implements OnInit {
   }
 
   removeFavorite(bookKey: string): void {
-    const index = this.favoriteBooks.findIndex(book => book.book_key === bookKey);
-    const removedBook = this.favoriteBooks[index];
-    this.favoriteBooks.splice(index, 1);
+    // 1. Quitamos el libro de la vista inmediatamente
+    this.favoriteBooks = this.favoriteBooks.filter(book => book.book_key !== bookKey);
   
     this.favoriteService.removeFavorite(bookKey).subscribe({
       next: () => {
+        console.log(`✅ Book ${bookKey} removed from favorites`);
       },
       error: (error) => {
-        console.error('❌ Error eliminando favorito:', error);
-        if (removedBook) {
-          this.favoriteBooks.splice(index, 0, removedBook);
+        if (error.status === 404) {
+          console.warn(`⚠️ Book ${bookKey} ya no estaba en favoritos (404).`);
+        } else {
+          console.error(`❌ Error eliminando favorito ${bookKey}:`, error);
         }
       }
     });
   }
+  
   
 
   trackByBookKey(index: number, book: FavoriteBook): string {
