@@ -26,6 +26,7 @@
             [src]="book.cover_url || 'assets/default_cover.jpg'"
             alt="Portada"
             (click)="navigateToBookDetail(book.book_key)"
+            (error)="onImageError($event)"
           />
         </div>
 
@@ -67,5 +68,20 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- 🔐 Modal de autenticación -->
+<div class="modal-auth-backdrop" *ngIf="isModalAuthOpen">
+  <div class="modal-auth">
+    <h3>¿Quieres guardar este libro?</h3>
+    <p>Debes iniciar sesión o registrarte para añadir libros a favoritos o wishlist.</p>
+
+    <div class="auth-buttons">
+      <button (click)="navigateToLogin()">Iniciar sesión</button>
+      <button (click)="navigateToRegister()">Registrarse</button>
+    </div>
+
+    <span class="close" (click)="toggleAuthModal(false)">&times;</span>
   </div>
 </div>
