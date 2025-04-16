@@ -49,13 +49,21 @@ export class BookSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAuthenticated = this.userAuthService.isAuthenticated();
-    if (this.isAuthenticated) {
+  
+    if (!this.isAuthenticated) {
+      // Si NO está autenticado, busca siempre
+      this.onSearch();
+    } else {
+      // Si está autenticado, no busca por defecto, solo carga favoritos y wishlist
       this.loadFavorites();
       this.loadWishlist();
     }
-  
-    this.onSearch(); 
   }
+  
+  
+  
+
+  
   
 
   private transformToBookDTO(book: Book): Partial<FavoriteBook & WishlistBook> {
@@ -85,9 +93,15 @@ export class BookSearchComponent implements OnInit {
   onSearch(page: number = 1): void {
     this.isLoading = true;
     this.errorMessage = null;
-
+  
     const { title, author, genre } = this.searchParams;
-    this.searchService.searchBooks(title, author, genre, page).subscribe({
+  
+    // 🛠️ Si no hay ningún criterio, usa un término genérico por defecto
+    const finalTitle = title.trim() || 'a';
+    const finalAuthor = author.trim();
+    const finalGenre = genre.trim();
+  
+    this.searchService.searchBooks(finalTitle, finalAuthor, finalGenre, page).subscribe({
       next: (response: BookSearchResponse) => {
         this.results = response.books || [];
         this.totalCount = response.total_count;
@@ -101,6 +115,7 @@ export class BookSearchComponent implements OnInit {
       }
     });
   }
+  
 
   // ⭐ FAVORITOS
   loadFavorites(): void {

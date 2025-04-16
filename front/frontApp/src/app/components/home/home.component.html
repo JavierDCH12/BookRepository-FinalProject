@@ -6,12 +6,8 @@
 
       <!-- 🧍 Sidebar con perfil -->
       <div class="profile-card" *ngIf="isAuthenticated">
-        <img 
-        *ngIf="userProfile" 
-        [src]="userProfile.profile_picture"
-        class="profile-picture"
-        alt="Foto de perfil"
-                   alt="Profile Picture">
+        <img class="profile-picture" [src]="'http://127.0.0.1:8000' + userProfile?.profile_picture"
+             alt="Profile Picture">
         <h3>{{ username }}</h3>
         <p class="user-email">📧 {{ userProfile?.email }}</p>
         <button class="profile-button" (click)="navigateToProfile()">👤 Ver Perfil Privado</button>
@@ -27,14 +23,10 @@
           <button *ngIf="!isAuthenticated" (click)="navigateToLogin()">🔑 Login</button>
           <button *ngIf="!isAuthenticated" (click)="navigateToRegister()">📝 Registro</button>
 
-          <button *ngIf="isAuthenticated" (click)="setView('favorites')">
-            ⭐ Mis Favoritos <span class="favorite-counter">({{ favoriteCount }})</span>
-          </button>
-          
+          <button *ngIf="isAuthenticated" (click)="setView('favorites')">⭐ Mis Favoritos</button>
           <button *ngIf="isAuthenticated" (click)="setView('wishlist')">
             💖 Mi Wishlist <span class="wishlist-counter">({{ wishlistCount }})</span>
           </button>
-          
 
           <button *ngIf="isAuthenticated" (click)="setView('search')" [disabled]="currentView === 'search'">
             🔍 Buscar Libros
@@ -46,7 +38,7 @@
     </div>
 
     <!-- 🔍 Buscador público debajo del layout -->
-    <div class="search-container" >
+    <div class="search-container" *ngIf="isAuthenticated">
       <div class="public-profile-search-sidebar">
         <h4>🔎 Ver perfil público</h4>
         <div class="search-bar">
@@ -59,18 +51,13 @@
     </div>
 
     <!-- 📦 Contenido dinámico -->
-    <!-- 📦 Contenido dinámico -->
+<!-- 📦 Contenido dinámico -->
 <div class="dynamic-content-container">
-  <!-- Usuario NO autenticado: mostrar siempre el buscador -->
-  <app-book-search *ngIf="!isAuthenticated"></app-book-search>
-
-  <!-- Usuario autenticado: mostrar según el botón activo -->
-  <ng-container *ngIf="isAuthenticated">
-    <app-book-search *ngIf="currentView === 'search'"></app-book-search>
-    <app-favorite-list *ngIf="currentView === 'favorites'"></app-favorite-list>
-    <app-wishlist *ngIf="currentView === 'wishlist'"></app-wishlist>
-  </ng-container>
+  <app-book-search *ngIf="!isAuthenticated || currentView === 'search'"></app-book-search>
+  <app-favorite-list *ngIf="isAuthenticated && currentView === 'favorites'"></app-favorite-list>
+  <app-wishlist *ngIf="isAuthenticated && currentView === 'wishlist'"></app-wishlist>
 </div>
+
 
 
   </div>
