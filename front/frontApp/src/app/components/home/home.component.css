@@ -175,7 +175,6 @@ body {
   box-shadow: 0 4px 10px rgba(233, 30, 99, 0.4);
 }
 
-
 .search-container {
   margin-top: 5px;
 }
@@ -319,4 +318,67 @@ body {
 
 .dynamic-content-container > * {
   animation: fadeSlideIn 0.4s ease-in-out;
+}
+
+/* Botones Modernos */
+.modern-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  background-color: #4a90e2;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modern-button:hover {
+  background-color: #357ab8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(53, 122, 184, 0.25);
+}
+
+.modern-button:disabled {
+  background-color: #a0b9da;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.logout-button {
+  background-color: #e74c3c;
+}
+
+.logout-button:hover {
+  background-color: #c0392b;
+  box-shadow: 0 6px 12px rgba(192, 57, 43, 0.25);
+}
+
+/* Contadores */
+.favorite-counter,
+.wishlist-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  background-color: #e91e63;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 0.85rem;
+  margin-left: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.favorite-counter:hover,
+.wishlist-counter:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(233, 30, 99, 0.4);
 }

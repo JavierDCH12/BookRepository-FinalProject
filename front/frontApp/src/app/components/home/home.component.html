@@ -29,37 +29,27 @@
         </p>
 
         <div class="buttons">
-          <button *ngIf="!isAuthenticated" (click)="navigateToLogin()">
+          <button *ngIf="!isAuthenticated" (click)="navigateToLogin()" class="modern-button">
             🔑 Login
           </button>
-          <button *ngIf="!isAuthenticated" (click)="navigateToRegister()">
+          <button *ngIf="!isAuthenticated" (click)="navigateToRegister()" class="modern-button">
             📝 Registro
           </button>
 
-          <button *ngIf="isAuthenticated" (click)="setView('favorites')"
-          title="Número de libros en tus favoritos">
-          >
+          <button *ngIf="isAuthenticated" (click)="setView('favorites')" class="modern-button" title="Número de libros en tus favoritos">
             ⭐ Mis Favoritos
-            <span class="favorite-counter">({{ favoriteCount }})</span>
-
-
+            <span class="favorite-counter">{{ favoriteCount }}</span>
           </button>
-          <button *ngIf="isAuthenticated" (click)="setView('wishlist')"
-          title="Número de libros en tu wishlist">
-          >
+          <button *ngIf="isAuthenticated" (click)="setView('wishlist')" class="modern-button" title="Número de libros en tu wishlist">
             💖 Mi Wishlist
-            <span class="wishlist-counter">({{ wishlistCount }})</span>
+            <span class="wishlist-counter">{{ wishlistCount }}</span>
           </button>
 
-          <button
-            *ngIf="isAuthenticated"
-            (click)="setView('search')"
-            [disabled]="currentView === 'search'"
-          >
+          <button *ngIf="isAuthenticated" (click)="setView('search')" [disabled]="currentView === 'search'" class="modern-button">
             🔍 Buscar Libros
           </button>
 
-          <button *ngIf="isAuthenticated" (click)="logout()">
+          <button *ngIf="isAuthenticated" (click)="logout()" class="modern-button logout-button">
             🚪 Cerrar Sesión
           </button>
         </div>
