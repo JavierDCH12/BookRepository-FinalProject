@@ -71,11 +71,11 @@ export class FavoriteService {
           const current = this.favoriteBooksSubject.getValue();
           const updated = current.filter(book => book.book_key !== bookKey);
           this.favoriteBooksSubject.next(updated);
-          console.log(`✅ Book ${bookKey} removed from favorites`);
+          console.log(`Book ${bookKey} removed from favorites`);
         },
         error: (error) => {
           if (error.status === 404) {
-            console.warn(`⚠️ Book ${bookKey} ya no estaba en favoritos (404). Eliminando del estado igualmente.`);
+            console.warn(`Book ${bookKey} ya no estaba en favoritos (404).`);
             const current = this.favoriteBooksSubject.getValue();
             const updated = current.filter(book => book.book_key !== bookKey);
             this.favoriteBooksSubject.next(updated);
