@@ -8,6 +8,7 @@ import { FavoriteService, FavoriteBook } from '../../services/FavoriteService.se
 import { WishlistService, WishlistBook } from '../../services/WishlistService.service';
 import { UserAuthServiceService } from '../../services/UserAuthService.service';
 import { WikipediaService } from '../../services/WikipediaService.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { NAVIGATION_ROUTES } from '../../utils/constants';
 import { take } from 'rxjs/operators';
@@ -17,7 +18,7 @@ import { take } from 'rxjs/operators';
   templateUrl: './book-search.component.html',
   styleUrls: ['./book-search.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, ProgressSpinnerModule]
 })
 export class BookSearchComponent implements OnInit {
   searchParams = { title: '', author: '', genre: '' };

@@ -279,3 +279,9 @@
 .close:hover {
   color: #333;
 }
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}

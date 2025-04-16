@@ -15,22 +15,32 @@
 
   <!-- 📚 Resultados -->
   <div class="results-container" *ngIf="hasSearched">
-    <div *ngIf="results.length === 0">No se encontraron libros.</div>
 
-    <div class="book-grid">
+    <!-- ⏳ Spinner de carga -->
+    <div class="spinner-container" *ngIf="isLoading">
+      <p-progressSpinner strokeWidth="4" animationDuration=".5s" aria-label="Cargando resultados"></p-progressSpinner>
+    </div>
+
+    <!-- ❌ Mensaje solo si NO hay resultados y no se está cargando -->
+    <div *ngIf="!isLoading && results.length === 0">
+      No se encontraron libros.
+    </div>
+
+    <!-- ✅ Resultados -->
+    <div class="book-grid" *ngIf="!isLoading && results.length > 0">
       <div class="book-card fade-in" *ngFor="let book of results; trackBy: trackByBookKey">
-        <!-- 📕 Portada -->
+        <!-- Portada -->
         <div class="book-cover-container">
           <img
             class="book-cover"
-            [src]="book.cover_url || 'assets/default_cover.jpg'"
+            [src]="book.cover_url || defaultCover"
             alt="Portada"
             (click)="navigateToBookDetail(book.book_key)"
             (error)="onImageError($event)"
           />
         </div>
 
-        <!-- 📝 Información del libro -->
+        <!-- Info del libro -->
         <div class="book-info">
           <h4 class="clickable-title" (click)="navigateToBookDetail(book.book_key)">
             {{ book.title }}
@@ -51,7 +61,7 @@
             🏷️ {{ formatGenres(book.genres) }}
           </p>
 
-          <!-- ⭐ Botón Favoritos -->
+          <!-- Favorito -->
           <button class="fav-toggle-button"
                   [class.active]="isFavorite(book.book_key)"
                   (click)="toggleFavorite(book)">
@@ -59,7 +69,7 @@
             {{ isFavorite(book.book_key) ? 'Favorito' : 'Añadir a favoritos' }}
           </button>
 
-          <!-- 💛 Botón Wishlist -->
+          <!-- Wishlist -->
           <button class="wishlist-button"
                   [class.in-wishlist]="isInWishlist(book.book_key)"
                   (click)="toggleWishlist(book)">
@@ -69,19 +79,17 @@
       </div>
     </div>
   </div>
-</div>
 
-<!-- 🔐 Modal de autenticación -->
-<div class="modal-auth-backdrop" *ngIf="isModalAuthOpen">
-  <div class="modal-auth">
-    <h3>¿Quieres guardar este libro?</h3>
-    <p>Debes iniciar sesión o registrarte para añadir libros a favoritos o wishlist.</p>
-
-    <div class="auth-buttons">
-      <button (click)="navigateToLogin()">Iniciar sesión</button>
-      <button (click)="navigateToRegister()">Registrarse</button>
+  <!-- 🔐 Modal de autenticación -->
+  <div class="modal-auth-backdrop" *ngIf="isModalAuthOpen">
+    <div class="modal-auth">
+      <h3>¿Quieres guardar este libro?</h3>
+      <p>Debes iniciar sesión o registrarte para añadir libros a favoritos o wishlist.</p>
+      <div class="auth-buttons">
+        <button (click)="navigateToLogin()">Iniciar sesión</button>
+        <button (click)="navigateToRegister()">Registrarse</button>
+      </div>
+      <span class="close" (click)="toggleAuthModal(false)">&times;</span>
     </div>
-
-    <span class="close" (click)="toggleAuthModal(false)">&times;</span>
   </div>
 </div>
