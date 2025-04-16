@@ -66,19 +66,18 @@ export class FavoriteListComponent implements OnInit {
   removeFavorite(bookKey: string): void {
     this.favoriteService.removeFavorite(bookKey).subscribe({
       next: () => {
-        this.favoriteBooks = this.favoriteBooks.filter(book => book.book_key !== bookKey);
         console.log(`✅ Book ${bookKey} removed from favorites`);
       },
       error: (error) => {
         if (error.status === 404) {
-          console.warn(`⚠️ Book ${bookKey} ya no estaba en favoritos (404). Eliminando localmente.`);
-          this.favoriteBooks = this.favoriteBooks.filter(book => book.book_key !== bookKey);
+          console.warn(`⚠️ Book ${bookKey} ya no estaba en favoritos (404).`);
         } else {
           console.error(`❌ Error eliminando favorito ${bookKey}:`, error);
         }
       }
     });
   }
+  
   
   
   

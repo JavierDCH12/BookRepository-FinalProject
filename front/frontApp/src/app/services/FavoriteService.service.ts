@@ -66,10 +66,23 @@ export class FavoriteService {
 
   removeFavorite(bookKey: string): Observable<void> {
     return this.http.delete<void>(`${this.favoritesUrl}${bookKey}/`).pipe(
-      tap(() => this.loadFavorites()),
-      catchError(this.handleError)
+      tap(() => {
+        const current = this.favoriteBooksSubject.getValue();
+        const updated = current.filter(book => book.book_key !== bookKey);
+        this.favoriteBooksSubject.next(updated);
+      }),
+      catchError(error => {
+        if (error.status === 404) {
+          const current = this.favoriteBooksSubject.getValue();
+          const updated = current.filter(book => book.book_key !== bookKey);
+          this.favoriteBooksSubject.next(updated);
+          return throwError(() => error);
+        }
+        return this.handleError(error);
+      })
     );
   }
+  
 
   getPopularBooks(): Observable<FavoriteBook[]> {
     return this.http.get<FavoriteBook[]>(`${environment.apiUrl}books/popular/`)
