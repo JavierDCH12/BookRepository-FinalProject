@@ -3,10 +3,12 @@
     <div class="top-layout">
       <div class="profile-card" *ngIf="isAuthenticated">
         <img
+          *ngIf="userProfile"
           class="profile-picture"
-          [src]="userProfile?.profile_picture"
-          [alt]="userProfile?.username + ' avatar'"
-          title="{{ userProfile?.username }}'s profile picture"
+          [src]="userProfile.profile_picture"
+          [alt]="userProfile.username + ' avatar'"
+          [title]="userProfile.username + '\'s profile picture'"
+          alt="Profile Picture"
         />
 
         <h3>{{ username }}</h3>

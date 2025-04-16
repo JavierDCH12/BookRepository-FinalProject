@@ -87,6 +87,8 @@ export class HomeComponent implements OnInit {
   
       this.currentView = 'search'; 
     });
+
+    this.loadUserProfile();
   }
   
   
