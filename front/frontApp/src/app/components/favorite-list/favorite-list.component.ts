@@ -66,7 +66,6 @@ export class FavoriteListComponent implements OnInit {
   removeFavorite(bookKey: string): void {
     this.favoriteService.removeFavorite(bookKey).subscribe({
       next: () => {
-        console.log(`✅ Book ${bookKey} removed from favorites`);
       },
       error: (error) => {
         if (error.status === 404) {
@@ -77,6 +76,7 @@ export class FavoriteListComponent implements OnInit {
       }
     });
   }
+  
   
   
   
