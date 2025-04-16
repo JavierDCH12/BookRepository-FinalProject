@@ -38,6 +38,9 @@
 
           <button *ngIf="isAuthenticated" (click)="setView('favorites')">
             ⭐ Mis Favoritos
+            <span class="favorite-counter">({{ favoriteCount }})</span>
+
+
           </button>
           <button *ngIf="isAuthenticated" (click)="setView('wishlist')">
             💖 Mi Wishlist

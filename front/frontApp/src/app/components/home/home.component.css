@@ -154,9 +154,25 @@ body {
 
 .favorite-counter,
 .wishlist-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-weight: bold;
-  color: #e91e63;
-  margin-left: 6px;
+  color: white;
+  background-color: #e91e63;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 0.85rem;
+  margin-left: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.favorite-counter:hover,
+.wishlist-counter:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(233, 30, 99, 0.4);
 }
 
 
