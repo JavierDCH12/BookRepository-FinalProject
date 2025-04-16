@@ -18,7 +18,7 @@ export interface WishlistBook {
   providedIn: 'root'
 })
 export class WishlistService {
-  private baseUrl = `${environment.apiUrl}wishlist`;
+  private baseUrl = `${environment.apiUrl}wishlist/`;
   private wishlistSubject = new BehaviorSubject<WishlistBook[]>([]);
   public wishlist$ = this.wishlistSubject.asObservable();
 
