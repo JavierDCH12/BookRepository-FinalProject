@@ -1,3 +1,24 @@
+<!-- 🔍 Barra de búsqueda múltiple (misma estética que la búsqueda pública) -->
+<div class="search-bar">
+  <input
+    type="text"
+    [(ngModel)]="searchParams.title"
+    placeholder="Título"
+  />
+  <input
+    type="text"
+    [(ngModel)]="searchParams.author"
+    placeholder="Autor"
+  />
+  <input
+    type="text"
+    [(ngModel)]="searchParams.genre"
+    placeholder="Género"
+  />
+  <button (click)="onSearch()">Buscar</button>
+</div>
+
+<!-- 📚 Resultados -->
 <div *ngFor="let book of results" class="book-card">
   <div class="book-cover-container">
     <img *ngIf="book.cover_url" [src]="book.cover_url" alt="Portada"

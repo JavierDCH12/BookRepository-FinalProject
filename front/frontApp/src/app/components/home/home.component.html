@@ -50,10 +50,8 @@
       </div>
     </div>
 
-    <!-- 📦 Contenido dinámico -->
-<!-- 📦 Contenido dinámico -->
 <div class="dynamic-content-container">
-  <app-wishlist *ngIf="!isAuthenticated || currentView === 'search'"></app-wishlist>
+  <app-book-search *ngIf="!isAuthenticated || currentView === 'search'"></app-book-search>
   <app-favorite-list *ngIf="isAuthenticated && currentView === 'favorites'"></app-favorite-list>
   <app-wishlist *ngIf="isAuthenticated && currentView === 'wishlist'"></app-wishlist>
 </div>
@@ -62,7 +60,6 @@
 
   </div>
 
-  <!-- 📎 Footer -->
   <footer class="footer">
     <div class="footer-content">
       <p>📖 <strong>BookFinder</strong> © 2024. Todos los derechos reservados.</p>
