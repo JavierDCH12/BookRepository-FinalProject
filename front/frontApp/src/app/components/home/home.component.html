@@ -36,13 +36,17 @@
             📝 Registro
           </button>
 
-          <button *ngIf="isAuthenticated" (click)="setView('favorites')">
+          <button *ngIf="isAuthenticated" (click)="setView('favorites')"
+          title="Número de libros en tus favoritos">
+          >
             ⭐ Mis Favoritos
             <span class="favorite-counter">({{ favoriteCount }})</span>
 
 
           </button>
-          <button *ngIf="isAuthenticated" (click)="setView('wishlist')">
+          <button *ngIf="isAuthenticated" (click)="setView('wishlist')"
+          title="Número de libros en tu wishlist">
+          >
             💖 Mi Wishlist
             <span class="wishlist-counter">({{ wishlistCount }})</span>
           </button>
@@ -98,9 +102,8 @@
         📖 <strong>BookFinder</strong> © 2024. Todos los derechos reservados.
       </p>
       <nav class="footer-nav">
-        <a href="#">Términos y Condiciones</a> |
-        <a href="#">Política de Privacidad</a> |
-        <a href="#">Contacto</a>
+        <a href="https://github.com/JavierDCH12/BookRepository-FinalProject" target="_blank" rel="noopener noreferrer">Repositorio del proyecto</a> |        
+        <a href="https://github.com/JavierDCH12" target="_blank" rel="noopener noreferrer">Contacto</a>
       </nav>
     </div>
   </footer>
