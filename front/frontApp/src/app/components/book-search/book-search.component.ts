@@ -39,6 +39,8 @@ export class BookSearchComponent implements OnInit {
   isLoadingDescription = false;
   isModalAuthOpen = false;
 
+  defaultCover = 'assets/default_cover.jpg';
+
   constructor(
     private searchService: SearchService,
     private favoriteService: FavoriteService,
@@ -51,7 +53,6 @@ export class BookSearchComponent implements OnInit {
   ngOnInit(): void {
     this.isAuthenticated = this.userAuthService.isAuthenticated();
 
-    // Solo cargamos favoritos y wishlist si está autenticado
     if (this.isAuthenticated) {
       this.loadFavorites();
       this.loadWishlist();
@@ -61,7 +62,6 @@ export class BookSearchComponent implements OnInit {
   onSearch(page: number = 1): void {
     const { title, author, genre } = this.searchParams;
 
-    // ❗ Si todos los campos están vacíos, no hacemos la búsqueda
     if (!title.trim() && !author.trim() && !genre.trim()) {
       this.results = [];
       this.hasSearched = true;
@@ -72,24 +72,27 @@ export class BookSearchComponent implements OnInit {
     this.errorMessage = null;
     this.hasSearched = true;
 
-    this.searchService.searchBooks(
-      title.trim(),
-      author.trim(),
-      genre.trim(),
-      page
-    ).subscribe({
-      next: (response: BookSearchResponse) => {
-        this.results = response.books || [];
-        this.totalCount = response.total_count;
-        this.totalPages = response.total_pages;
-        this.currentPage = response.current_page;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.errorMessage = 'No se pudieron obtener los resultados.';
-        this.isLoading = false;
-      }
-    });
+    this.searchService.searchBooks(title.trim(), author.trim(), genre.trim(), page)
+      .subscribe({
+        next: (response: BookSearchResponse) => {
+          this.results = (response.books || []).map(book => ({
+            ...book,
+            cover_url: book.cover_url || this.defaultCover
+          }));
+          this.totalCount = response.total_count;
+          this.totalPages = response.total_pages;
+          this.currentPage = response.current_page;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.errorMessage = 'No se pudieron obtener los resultados.';
+          this.isLoading = false;
+        }
+      });
+  }
+
+  onImageError(event: any): void {
+    event.target.src = this.defaultCover;
   }
 
   private transformToBookDTO(book: Book): Partial<FavoriteBook & WishlistBook> {
@@ -116,7 +119,6 @@ export class BookSearchComponent implements OnInit {
     return Array.isArray(genres) ? genres.join(', ') : genres;
   }
 
-  // ⭐ FAVORITOS
   loadFavorites(): void {
     this.favoriteService.getFavorites().pipe(take(1)).subscribe({
       next: (favorites: FavoriteBook[]) => {
@@ -157,7 +159,6 @@ export class BookSearchComponent implements OnInit {
     return this.favoriteBooks.has(bookKey);
   }
 
-  // 💛 WISHLIST
   loadWishlist(): void {
     this.wishlistService.loadWishlist().pipe(take(1)).subscribe({
       next: (wishlist: WishlistBook[]) => {
