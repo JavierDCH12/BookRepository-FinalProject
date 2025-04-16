@@ -1,89 +1,52 @@
-<!-- 🔍 CONTENEDOR PRINCIPAL -->
 <div class="search-container">
-
-  <!-- 🔎 FORMULARIO DE BÚSQUEDA -->
   <div class="search-form">
     <div class="input-group">
-      <input
-        type="text"
-        [(ngModel)]="searchParams.title"
-        placeholder="Título"
-      />
+      <input type="text" [(ngModel)]="searchParams.title" placeholder="Título" />
     </div>
     <div class="input-group">
-      <input
-        type="text"
-        [(ngModel)]="searchParams.author"
-        placeholder="Autor"
-      />
+      <input type="text" [(ngModel)]="searchParams.author" placeholder="Autor" />
     </div>
     <div class="input-group">
-      <input
-        type="text"
-        [(ngModel)]="searchParams.genre"
-        placeholder="Género"
-      />
+      <input type="text" [(ngModel)]="searchParams.genre" placeholder="Género" />
     </div>
     <button class="search-button" (click)="onSearch()">Buscar</button>
   </div>
 
-  <!-- 📚 RESULTADOS DE BÚSQUEDA -->
-  <div class="results-container" *ngIf="results.length > 0">
+  <div class="results-container" *ngIf="hasSearched">
+    <div *ngIf="results.length === 0">No se encontraron libros.</div>
+
     <div class="book-grid">
-      <div *ngFor="let book of results" class="book-card">
-
+      <div class="book-card" *ngFor="let book of results">
         <div class="book-cover">
-          <img *ngIf="book.cover_url"
-               [src]="book.cover_url"
-               alt="Portada"
-               (click)="navigateToBookDetail(book.book_key)" />
+          <img
+            class="book-cover-img"
+            [src]="book.cover_url || 'assets/default_cover.jpg'"
+            alt="Portada"
+          />
         </div>
-
         <div class="book-info">
           <h4 (click)="navigateToBookDetail(book.book_key)">
             {{ book.title }}
           </h4>
-
-          <p *ngIf="book.author" class="author">
+          <p class="author" *ngIf="book.author">
             👤
-            <a href="#" (click)="
-                $event.preventDefault(); getAuthorWikipediaLink(book.author)">
+            <a href="#" (click)="getAuthorWikipediaLink(book.author); $event.preventDefault()">
               {{ book.author }}
             </a>
           </p>
+          <p class="publish-year" *ngIf="book.first_publish_year">📅 {{ book.first_publish_year }}</p>
+          <p class="genres" *ngIf="book.genres">🏷️ {{ formatGenres(book.genres) }}</p>
 
-          <p *ngIf="book.first_publish_year" class="publish-year">
-            📅 {{ book.first_publish_year }}
-          </p>
+          <button class="fav-toggle-button" [class.active]="isFavorite(book.book_key)" (click)="toggleFavorite(book)">
+            <i class="pi" [ngClass]="isFavorite(book.book_key) ? 'pi-star-fill' : 'pi-star'"></i>
+            {{ isFavorite(book.book_key) ? 'Favorito' : 'Añadir a favoritos' }}
+          </button>
 
-          <p *ngIf="book.genres" class="genres">
-            🏷️ Género: {{ formatGenres(book.genres) }}
-          </p>
+          <button class="wishlist-button" [class.active]="isInWishlist(book.book_key)" (click)="toggleWishlist(book)">
+            {{ isInWishlist(book.book_key) ? '❤️' : '🤍' }} Wishlist
+          </button>
         </div>
-
-        <!-- ⭐ Botones -->
-        <button (click)="toggleFavorite(book); $event.stopPropagation()"
-                class="fav-toggle-button"
-                [class.active]="isFavorite(book.book_key)">
-          <i class="pi" [ngClass]="isFavorite(book.book_key) ? 'pi-star-fill' : 'pi-star'"></i>
-          {{ isFavorite(book.book_key) ? 'Favorito' : 'Añadir a favoritos' }}
-        </button>
-
-        <button (click)="toggleWishlist(book); $event.stopPropagation()"
-                class="wishlist-button"
-                [class.active]="isInWishlist(book.book_key)">
-          <span class="heart-icon">
-            {{ isInWishlist(book.book_key) ? '❤️ En wishlist' : '🤍 Añadir a wishlist' }}
-          </span>
-        </button>
-
       </div>
     </div>
   </div>
-
-  <!-- ❌ MENSAJE CUANDO NO HAY RESULTADOS -->
-  <div *ngIf="results.length === 0 && !isLoading && hasSearched" class="no-favorites">
-    No se encontraron libros. Intenta otra búsqueda 🔍
-  </div>
-
 </div>
