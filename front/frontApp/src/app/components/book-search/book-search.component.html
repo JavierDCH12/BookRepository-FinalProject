@@ -1,4 +1,5 @@
 <div class="search-container">
+  <!-- 🔍 Formulario de Búsqueda -->
   <div class="search-form">
     <div class="input-group">
       <input type="text" [(ngModel)]="searchParams.title" placeholder="Título" />
@@ -12,38 +13,56 @@
     <button class="search-button" (click)="onSearch()">Buscar</button>
   </div>
 
+  <!-- 📚 Resultados -->
   <div class="results-container" *ngIf="hasSearched">
     <div *ngIf="results.length === 0">No se encontraron libros.</div>
 
     <div class="book-grid">
-      <div class="book-card" *ngFor="let book of results">
-        <div class="book-cover">
+      <div class="book-card fade-in" *ngFor="let book of results; trackBy: trackByBookKey">
+        <!-- 📕 Portada -->
+        <div class="book-cover-container">
           <img
-            class="book-cover-img"
+            class="book-cover"
             [src]="book.cover_url || 'assets/default_cover.jpg'"
             alt="Portada"
+            (click)="navigateToBookDetail(book.book_key)"
           />
         </div>
+
+        <!-- 📝 Información del libro -->
         <div class="book-info">
-          <h4 (click)="navigateToBookDetail(book.book_key)">
+          <h4 class="clickable-title" (click)="navigateToBookDetail(book.book_key)">
             {{ book.title }}
           </h4>
+
           <p class="author" *ngIf="book.author">
             👤
             <a href="#" (click)="getAuthorWikipediaLink(book.author); $event.preventDefault()">
               {{ book.author }}
             </a>
           </p>
-          <p class="publish-year" *ngIf="book.first_publish_year">📅 {{ book.first_publish_year }}</p>
-          <p class="genres" *ngIf="book.genres">🏷️ {{ formatGenres(book.genres) }}</p>
 
-          <button class="fav-toggle-button" [class.active]="isFavorite(book.book_key)" (click)="toggleFavorite(book)">
+          <p class="publish-year" *ngIf="book.first_publish_year">
+            📅 {{ book.first_publish_year }}
+          </p>
+
+          <p class="genres" *ngIf="book.genres">
+            🏷️ {{ formatGenres(book.genres) }}
+          </p>
+
+          <!-- ⭐ Botón Favoritos -->
+          <button class="fav-toggle-button"
+                  [class.active]="isFavorite(book.book_key)"
+                  (click)="toggleFavorite(book)">
             <i class="pi" [ngClass]="isFavorite(book.book_key) ? 'pi-star-fill' : 'pi-star'"></i>
             {{ isFavorite(book.book_key) ? 'Favorito' : 'Añadir a favoritos' }}
           </button>
 
-          <button class="wishlist-button" [class.active]="isInWishlist(book.book_key)" (click)="toggleWishlist(book)">
-            {{ isInWishlist(book.book_key) ? '❤️' : '🤍' }} Wishlist
+          <!-- 💛 Botón Wishlist -->
+          <button class="wishlist-button"
+                  [class.in-wishlist]="isInWishlist(book.book_key)"
+                  (click)="toggleWishlist(book)">
+            <span class="heart-icon">{{ isInWishlist(book.book_key) ? '❤️' : '🤍' }}</span>
           </button>
         </div>
       </div>
