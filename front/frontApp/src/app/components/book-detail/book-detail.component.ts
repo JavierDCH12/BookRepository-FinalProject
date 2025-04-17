@@ -64,6 +64,11 @@ export class BookDetailComponent implements OnInit {
     });
   }
 
+  navigateToPublicProfile(username: string): void {
+    this.router.navigate([`/user/${username}`]);
+  }
+  
+
   checkIfFavorite(bookKey: string): void {
     this.favoriteService.getFavorites().subscribe({
       next: (favorites) => {
