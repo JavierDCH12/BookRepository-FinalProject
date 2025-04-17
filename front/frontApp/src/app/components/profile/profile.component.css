@@ -1,3 +1,4 @@
+/* Contenedor principal */
 .profile-container {
   display: flex;
   justify-content: center;
@@ -8,6 +9,7 @@
   padding: 40px 20px;
 }
 
+/* Tarjeta de perfil */
 .profile-card {
   background: #ffffff;
   border-radius: 18px;
@@ -15,13 +17,15 @@
   width: 100%;
   max-width: 520px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .profile-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
+/* Encabezado del perfil */
 .profile-header {
   text-align: center;
   margin-bottom: 25px;
@@ -33,7 +37,7 @@
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid #64b5f6;
-  box-shadow: 0 4px 10px rgba(100, 181, 246, 0.3);
+  box-shadow: 0 6px 12px rgba(100, 181, 246, 0.4);
 }
 
 .upload-label {
@@ -42,20 +46,22 @@
   font-size: 0.9rem;
   color: #2196f3;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .upload-label:hover {
   color: #0d47a1;
+  transform: scale(1.05);
 }
 
+/* Información del perfil */
 .profile-info {
   text-align: center;
   margin-bottom: 20px;
 }
 
 .profile-info h2 {
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: #2c3e50;
   margin: 0;
 }
@@ -66,6 +72,7 @@
   margin-top: 5px;
 }
 
+/* Campos de edición */
 .input-edit {
   margin-top: 8px;
   width: 100%;
@@ -73,15 +80,16 @@
   border: 1px solid #ccd6dd;
   border-radius: 10px;
   font-size: 1rem;
-  transition: border 0.3s;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
 .input-edit:focus {
   border-color: #42a5f5;
   outline: none;
-  box-shadow: 0 0 5px rgba(66, 165, 245, 0.3);
+  box-shadow: 0 0 8px rgba(66, 165, 245, 0.4);
 }
 
+/* Detalles del perfil */
 .profile-details {
   border-top: 1px solid #e0e0e0;
   padding-top: 20px;
@@ -92,7 +100,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 0;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: #455a64;
   border-bottom: 1px solid #f1f1f1;
 }
@@ -103,6 +111,7 @@
   margin-right: 10px;
 }
 
+/* Botones */
 .profile-actions {
   margin-top: 30px;
   display: flex;
@@ -116,12 +125,12 @@
 .back-btn,
 .stats-btn {
   border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-size: 0.95rem;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 1rem;
   cursor: pointer;
   color: white;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .edit-btn {
@@ -129,7 +138,8 @@
 }
 .edit-btn:hover {
   background-color: #1e88e5;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(30, 136, 229, 0.3);
 }
 
 .save-btn {
@@ -137,7 +147,8 @@
 }
 .save-btn:hover {
   background-color: #27ae60;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(39, 174, 96, 0.3);
 }
 
 .back-btn {
@@ -145,7 +156,8 @@
 }
 .back-btn:hover {
   background-color: #e67e22;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(230, 126, 34, 0.3);
 }
 
 .stats-btn {
@@ -153,7 +165,8 @@
 }
 .stats-btn:hover {
   background-color: #455a64;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(69, 90, 100, 0.3);
 }
 
 .upload-container {
@@ -177,7 +190,7 @@
   border-radius: 6px;
 }
 
-/* 📊 Estadísticas personales */
+/* Estadísticas personales */
 .stats-section {
   margin-top: 25px;
   padding-top: 20px;
@@ -187,8 +200,9 @@
 .stat-item {
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
-  font-size: 1rem;
+  align-items: center;
+  padding: 12px 0;
+  font-size: 1.1rem;
   color: #34495e;
 }
 
@@ -198,7 +212,15 @@
 }
 
 .stat-value {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #2980b9;
-  font-weight: 600;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-value i {
+  font-size: 1.4rem;
+  color: #2980b9;
 }

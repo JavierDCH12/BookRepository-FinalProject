@@ -75,7 +75,6 @@ export class ProfileComponent implements OnInit {
     this.isLoading = true;
     this.profileService.getUserProfile().subscribe({
       next: (profile: UserProfile) => {
-        //console.log("✅ Perfil recibido:", profile);
         this.userProfile = profile;
         this.isLoading = false;
       },

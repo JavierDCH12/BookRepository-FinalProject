@@ -9,7 +9,7 @@ export interface UserProfile {
   id: number;
   username: string;
   email: string;
-  register_date: string;
+  date_joined: string;
   profile_picture?: string;
   first_name?: string;
   last_name?: string;

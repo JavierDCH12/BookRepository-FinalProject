@@ -48,7 +48,7 @@
 
         <div class="detail-item">
           <span class="label">📅 Miembro desde:</span>
-          <span>{{ userProfile?.register_date | date: 'dd/MM/yyyy' }}</span>
+          <span>{{ userProfile?.date_joined | date: 'dd/MM/yyyy' }}</span>
         </div>
       </div>
 
@@ -59,24 +59,26 @@
       </div>
     </div>
 
-    <!-- 📊 Vista de Estadísticas -->
     <div *ngIf="showStats" class="stats-section">
       <h3>📈 Tus estadísticas</h3>
       <div class="stat-item">
         <span class="stat-label">⭐ Libros favoritos:</span>
-        <span class="stat-value">{{ favoriteCount }}</span>
+        <span class="stat-value">{{ favoriteCount || '—' }}</span>
       </div>
       <div class="stat-item">
         <span class="stat-label">💖 Wishlist:</span>
-        <span class="stat-value">{{ wishlistCount }}</span>
+        <span class="stat-value">{{ wishlistCount || '—' }}</span>
       </div>
       <div class="stat-item">
         <span class="stat-label">📅 Miembro desde:</span>
-        <span class="stat-value">{{ userProfile?.register_date | date: 'dd/MM/yyyy' }}</span>
+        <span class="stat-value">{{ userProfile?.date_joined | date: 'dd/MM/yyyy' }}</span>
       </div>
       <div class="stat-item" *ngIf="favoriteCount > 0">
         <span class="stat-label">📊 Valoración media:</span>
-        <span class="stat-value">{{ averageRating }}/5</span>
+        <span class="stat-value">{{ averageRating || '—' }}/5</span>
+      </div>
+      <div *ngIf="!favoriteCount && !wishlistCount" class="no-stats">
+        <p>📭 Aún no tienes estadísticas disponibles. ¡Empieza a añadir libros a tus favoritos o wishlist!</p>
       </div>
     </div>
 
