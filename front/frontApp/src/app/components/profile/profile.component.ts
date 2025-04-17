@@ -1,41 +1,74 @@
 import { Component, OnInit } from '@angular/core';
-import { ProfileService, UserProfile } from '../../services/ProfileService.service';
+import {
+  ProfileService,
+  UserProfile,
+} from '../../services/ProfileService.service';
 import { Router } from '@angular/router';
 import { LOCAL_MEDIA, NAVIGATION_ROUTES } from '../../utils/constants';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environ/environ';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { supabase } from '../../../supabase/supaBaseClient';
-
-
+import { FavoriteService } from '../../services/FavoriteService.service';
+import { WishlistService } from '../../services/WishlistService.service';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule] 
+  imports: [CommonModule, FormsModule],
 })
 export class ProfileComponent implements OnInit {
-
   userProfile: UserProfile | null = null;
   isLoading = false;
   errorMessage: string | null = null;
   selectedFile: File | null = null;
   environment = environment;
-  LOCAL_MEDIA = LOCAL_MEDIA; // Para acceder a la URL de la imagen por defecto
+  LOCAL_MEDIA = LOCAL_MEDIA;
+  favoriteCount: number = 0;
+  wishlistCount: number = 0;
+  averageRating: number = 0;
 
-  //Variables para la edición del perfil
   editMode = false;
   editedProfile: Partial<UserProfile> = {};
+  showStats: boolean = true;
 
-  constructor(private profileService: ProfileService, private router: Router) { }
+
+  constructor(
+    private profileService: ProfileService,
+    private router: Router,
+    private favoriteService: FavoriteService,
+    private wishlistService: WishlistService
+  ) {}
 
   ngOnInit(): void {
     this.loadUserProfile();
+    this.loadStatistics();
+
   }
+
+  loadStatistics(): void {
+    this.favoriteService.getFavorites().subscribe(favorites => {
+      this.favoriteCount = favorites.length;
+      const totalRating = favorites.reduce((acc, fav) => acc + (fav.rating || 0), 0);
+      this.averageRating = favorites.length ? +(totalRating / favorites.length).toFixed(1) : 0;
+    });
+  
+    this.wishlistService.wishlist$.subscribe(wishlist => {
+      this.wishlistCount = wishlist.length;
+    });
+    
+  }
+
+  setViewStats(show: boolean): void {
+    this.showStats = show;
+    if (!show) this.editMode = false;
+  }
+  
+  
 
   //Cargar el perfil del usuario
   loadUserProfile(): void {
@@ -50,7 +83,7 @@ export class ProfileComponent implements OnInit {
         console.error('⚠️ Error loading profile:', error);
         this.errorMessage = 'Failed to load user profile.';
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -62,41 +95,38 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-    //  Guardar cambios en el perfil
+  //  Guardar cambios en el perfil
   saveProfileChanges(): void {
     if (!this.editedProfile) return;
-  
+
     this.profileService.updateUserProfile(this.editedProfile).subscribe({
       next: (response) => {
         //console.log("✅ Perfil actualizado:", response);
         this.editMode = false;
-  
+
         Swal.fire({
           title: '¡Perfil actualizado!',
           text: 'Tu perfil ha sido actualizado correctamente.',
           icon: 'success',
           confirmButtonText: 'Volver al Inicio',
-          timer: 3000,  
-          timerProgressBar: true
+          timer: 3000,
+          timerProgressBar: true,
         }).then(() => {
           this.navigateToHome();
         });
       },
       error: (error) => {
-        console.error("❌ Error updating profile:", error);
-  
+        console.error('❌ Error updating profile:', error);
+
         Swal.fire({
           title: 'Error',
           text: 'Hubo un problema al actualizar el perfil. Inténtalo de nuevo.',
           icon: 'error',
-          confirmButtonText: 'Cerrar'
+          confirmButtonText: 'Cerrar',
         });
-      }
+      },
     });
   }
-  
-  
-  
 
   // Seleccionar y subir imagen de perfil
   onFileSelected(event: Event): void {
@@ -107,52 +137,45 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  
+  async uploadProfilePicture(): Promise<void> {
+    if (!this.selectedFile || !this.userProfile) return;
 
+    const file = this.selectedFile;
+    const filePath = `user_${this.userProfile.id}/${file.name}`;
 
-    async uploadProfilePicture(): Promise<void> {
-      if (!this.selectedFile || !this.userProfile) return;
-    
-      const file = this.selectedFile;
-      const filePath = `user_${this.userProfile.id}/${file.name}`;
-    
-      const { error } = await supabase.storage.from('profile-pictures').upload(filePath, file, {
+    const { error } = await supabase.storage
+      .from('profile-pictures')
+      .upload(filePath, file, {
         cacheControl: '3600',
-        upsert: true
+        upsert: true,
       });
-    
-      if (error) {
-        console.error('❌ Error al subir a Supabase:', error.message);
-        return;
-      }
-    
-      const { data } = supabase.storage.from('profile-pictures').getPublicUrl(filePath);
-      const imageUrl = data.publicUrl;
-    
-      this.profileService.updateUserProfile({ profile_picture: imageUrl }).subscribe({
+
+    if (error) {
+      console.error('❌ Error al subir a Supabase:', error.message);
+      return;
+    }
+
+    const { data } = supabase.storage
+      .from('profile-pictures')
+      .getPublicUrl(filePath);
+    const imageUrl = data.publicUrl;
+
+    this.profileService
+      .updateUserProfile({ profile_picture: imageUrl })
+      .subscribe({
         next: () => {
           this.userProfile!.profile_picture = imageUrl;
           Swal.fire({
             title: '✅ Imagen actualizada',
             text: 'Tu foto de perfil se ha subido correctamente.',
-            icon: 'success'
+            icon: 'success',
           });
         },
         error: (err) => {
           console.error('❌ Error actualizando el perfil:', err);
-        }
+        },
       });
-    }
-    
-
-
-
-
-
-
-
-
-  
+  }
 
   // Volver a la página de inicio
   navigateToHome(): void {

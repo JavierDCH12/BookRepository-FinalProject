@@ -113,7 +113,8 @@
 
 .edit-btn,
 .save-btn,
-.back-btn {
+.back-btn,
+.stats-btn {
   border: none;
   padding: 10px 20px;
   border-radius: 10px;
@@ -147,6 +148,14 @@
   transform: translateY(-2px);
 }
 
+.stats-btn {
+  background-color: #607d8b;
+}
+.stats-btn:hover {
+  background-color: #455a64;
+  transform: translateY(-2px);
+}
+
 .upload-container {
   margin-top: 20px;
   display: flex;
@@ -166,4 +175,30 @@
   font-size: 0.85rem;
   padding: 6px 14px;
   border-radius: 6px;
+}
+
+/* 📊 Estadísticas personales */
+.stats-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #ececec;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 1rem;
+  color: #34495e;
+}
+
+.stat-label {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  color: #2980b9;
+  font-weight: 600;
 }

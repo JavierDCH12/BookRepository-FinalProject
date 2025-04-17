@@ -267,6 +267,10 @@
   border: 2px solid #90caf9;
 }
 
+.avatar:hover{
+  cursor: pointer;
+}
+
 .review-rating {
   font-size: 0.9rem;
   color: #f39c12;
