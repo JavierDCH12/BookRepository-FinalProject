@@ -312,6 +312,7 @@ def public_reviews_by_book(request, book_key):
             'review': fav.review,
             'rating': fav.rating,
             'cover_url': fav.cover_url,
+            'profile_picture': fav.user.profile_picture.url if fav.user.profile_picture else None,
         })
 
     return Response(data)
