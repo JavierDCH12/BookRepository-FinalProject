@@ -297,3 +297,21 @@ def delete_from_wishlist(request, book_key):
 
     wishlist_item.delete()
     return Response({'detail': 'Book removed from wishlist.'}, status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def public_reviews_by_book(request, book_key):
+    """Devuelve todas las reseñas públicas de un libro concreto."""
+    reviews = FavoriteBook.objects.filter(book_key=book_key).exclude(review__isnull=True).exclude(review__exact='')
+    
+    data = []
+    for fav in reviews:
+        data.append({
+            'username': fav.user.username,
+            'review': fav.review,
+            'rating': fav.rating,
+            'cover_url': fav.cover_url,
+        })
+
+    return Response(data)
