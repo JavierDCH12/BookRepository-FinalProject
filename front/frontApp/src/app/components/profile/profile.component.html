@@ -8,17 +8,11 @@
         [src]="userProfile.profile_picture"
         alt="Profile Picture">
         
-      <label for="fileInput" class="upload-label">📂 Cambiar foto</label>
+      <label for="fileInput" class="upload-label" *ngIf="editMode">📂 Cambiar foto</label>
       <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>
     </div>
 
-    <!-- 🧭 Botones para cambiar de modo -->
-    <div class="profile-actions">
-      <button class="stats-btn" [disabled]="!showStats" (click)="showStats = false">✏️ Editar Perfil</button>
-      <button class="stats-btn" [disabled]="showStats" (click)="showStats = true">📊 Ver Estadísticas</button>
-    </div>
-
-    <!-- 📄 Vista de Edición de Perfil -->
+    <!-- 📄 Vista de Edición o Visualización de Perfil -->
     <div *ngIf="!showStats">
       <div class="profile-info">
         <h2 *ngIf="!editMode">{{ userProfile?.username }}</h2>
@@ -52,13 +46,16 @@
         </div>
       </div>
 
+      <!-- 🧭 Botones de acción -->
       <div class="profile-actions">
         <button *ngIf="!editMode" class="edit-btn" (click)="toggleEditMode()">✏️ Editar Perfil</button>
         <button *ngIf="editMode" class="save-btn" (click)="saveProfileChanges()">💾 Guardar Cambios</button>
+        <button *ngIf="editMode" class="cancel-btn" (click)="toggleEditMode()">❌ Cancelar</button>
         <button class="back-btn" (click)="navigateToHome()">🏠 Inicio</button>
       </div>
     </div>
 
+    <!-- 📊 Vista de Estadísticas -->
     <div *ngIf="showStats" class="stats-section">
       <h3>📈 Tus estadísticas</h3>
       <div class="stat-item">
@@ -80,6 +77,12 @@
       <div *ngIf="!favoriteCount && !wishlistCount" class="no-stats">
         <p>📭 Aún no tienes estadísticas disponibles. ¡Empieza a añadir libros a tus favoritos o wishlist!</p>
       </div>
+    </div>
+
+    <!-- 🧭 Botones para cambiar de modo -->
+    <div class="profile-actions">
+      <button class="stats-btn" [disabled]="!showStats" (click)="showStats = false">✏️ Editar Perfil</button>
+      <button class="stats-btn" [disabled]="showStats" (click)="showStats = true">📊 Ver Estadísticas</button>
     </div>
 
   </div>
