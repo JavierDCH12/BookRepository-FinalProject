@@ -86,5 +86,18 @@ export class SearchService {
       })
     );
   }
+
+
+  getPublicReviews(bookKey: string): Observable<any[]> {
+    const url = `${environment.apiUrl}books/public-reviews/${bookKey}`;
+    return this.http.get<any[]>(url).pipe(
+      catchError(error => {
+        console.error('Error fetching public reviews:', error);
+        return throwError(() => new Error('Error fetching reviews'));
+      })
+    );
+  }
+
+
 }
 

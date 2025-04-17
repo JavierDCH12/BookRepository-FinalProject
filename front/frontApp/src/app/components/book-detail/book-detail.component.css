@@ -231,3 +231,59 @@
   color: #666;
   margin-top: 60px;
 }
+
+.public-reviews {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f9fbfd;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.review-card {
+  background-color: white;
+  border-left: 4px solid #4a90e2;
+  padding: 15px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.review-user {
+  margin-left: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #90caf9;
+}
+
+.review-rating {
+  font-size: 0.9rem;
+  color: #f39c12;
+  margin-left: 4px;
+}
+
+.review-text {
+  margin: 0;
+  font-style: italic;
+  color: #37474f;
+}
+
+.filled-star {
+  color: #f1c40f;
+}
+
+.empty-star {
+  color: #dcdcdc;
+}
+

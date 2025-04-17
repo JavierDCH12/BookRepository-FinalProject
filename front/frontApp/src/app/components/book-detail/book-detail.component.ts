@@ -22,6 +22,8 @@ export class BookDetailComponent implements OnInit {
   isLoading = true;
   rating = 0;
   tempRating = 0;
+  publicReviews: any[] = [];
+  bookKey: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -33,7 +35,9 @@ export class BookDetailComponent implements OnInit {
   ngOnInit(): void {
     const bookKey = this.route.snapshot.paramMap.get('bookKey');
     if (bookKey) {
+      this.bookKey = bookKey;
       this.loadBookDetails(bookKey);
+      this.loadPublicReviews(bookKey);
     }
   }
 
@@ -48,6 +52,15 @@ export class BookDetailComponent implements OnInit {
         console.error('❌ Error fetching book details');
         this.isLoading = false;
       }
+    });
+  }
+
+  loadPublicReviews(bookKey: string): void {
+    this.searchService.getPublicReviews(bookKey).subscribe({
+      next: (reviews) => {
+        this.publicReviews = reviews;
+      },
+      error: () => console.error('❌ Error fetching public reviews'),
     });
   }
 
