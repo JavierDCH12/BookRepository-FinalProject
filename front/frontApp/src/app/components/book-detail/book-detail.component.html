@@ -60,29 +60,37 @@
   </div>
 
   <!-- 💬 Opiniones públicas -->
-  <div class="public-reviews" *ngIf="publicReviews.length > 0">
-    <h3>💬 Opiniones de otros lectores</h3>
+<div class="public-reviews" *ngIf="publicReviews.length > 0">
+  <h3>💬 Opiniones de otros lectores</h3>
 
-    <div class="review-card" *ngFor="let review of publicReviews">
-      <div class="review-header">
-        <img class="avatar" [src]="review.profile_picture" alt="Foto de {{ review.username }}">
-        <div class="review-user">
-          <strong>{{ review.username }}</strong>
-          <span class="review-rating">
-            <ng-container *ngFor="let star of [1,2,3,4,5]">
-              <span [ngClass]="{ 'filled-star': star <= review.rating, 'empty-star': star > review.rating }">★</span>
-            </ng-container>
-          </span>
-        </div>
+  <div class="review-card" *ngFor="let review of publicReviews">
+    <div class="review-header">
+      <img
+        class="avatar"
+        [src]="review.profile_picture"
+        [alt]="'Foto de ' + review.username"
+        title="{{ review.username }}"
+      />
+      <div class="review-user">
+        <strong>{{ review.username }}</strong>
+        <span class="review-rating">
+          <ng-container *ngFor="let star of [1,2,3,4,5]">
+            <span [ngClass]="{ 'filled-star': star <= review.rating, 'empty-star': star > review.rating }">★</span>
+          </ng-container>
+        </span>
       </div>
-      <blockquote class="review-text">“{{ review.review }}”</blockquote>
     </div>
-  </div>
 
-  <div class="public-reviews" *ngIf="publicReviews.length === 0">
-    <h4>📭 Aún no hay reseñas públicas de este libro.</h4>
-    <p>¡Sé el primero en compartir tu opinión al añadirlo a favoritos!</p>
+    <blockquote class="review-text">“{{ review.review }}”</blockquote>
   </div>
+</div>
+
+<!-- 💡 Si no hay reseñas -->
+<div class="public-reviews" *ngIf="publicReviews.length === 0">
+  <h4>📭 Aún no hay reseñas públicas de este libro.</h4>
+  <p>¡Sé el primero en compartir tu opinión al añadirlo a favoritos!</p>
+</div>
+
 
   <div class="go-home">
     <button type="button" (click)="navigateToHome()">🏠 Volver al inicio</button>
