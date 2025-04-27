@@ -7,6 +7,13 @@ import { LOCAL_STORAGE_KEYS, NAVIGATION_ROUTES } from '../utils/constants';
 import { Router } from '@angular/router';
 import { ProfileService } from './ProfileService.service';
 
+// Tipado de respuesta de login
+interface LoginResponse {
+  access: string;
+  refresh: string;
+  username: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,15 +22,17 @@ export class UserAuthServiceService {
   private loginSuccessSourceAddBook = new Subject<void>();
   loginSuccessSourceAddBook$ = this.loginSuccessSourceAddBook.asObservable();
 
-  // Estado de autenticación
   private authStatus = new BehaviorSubject<boolean>(this.hasValidToken());
   authStatus$ = this.authStatus.asObservable();
 
-  constructor(private http: HttpClient, private router:Router, private profileService:ProfileService) {}
+  constructor(
+    private http: HttpClient, 
+    private router: Router, 
+    private profileService: ProfileService
+  ) {}
 
   private hasValidToken(): boolean {
     if (typeof window === 'undefined') return false; 
-
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
     return token ? !this.isTokenExpired(token) : false;
   }
@@ -41,11 +50,11 @@ export class UserAuthServiceService {
     );
   }
 
-  loginUser(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}users/login/`, { username, password }).pipe(
-      tap((response: any) => {
-        this.profileService.clearUserProfile(); 
-        this.storeTokens(response.access, response.refresh, username);
+  loginUser(username: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}users/login/`, { username, password }).pipe(
+      tap((response) => {
+        this.profileService.clearUserProfile(); // Limpia cualquier perfil previo
+        this.storeTokens(response); // 🔥 Ahora storeTokens recibe todo el objeto
         this.authStatus.next(true);
         this.loginSuccessSourceAddBook.next();
       }),
@@ -54,13 +63,12 @@ export class UserAuthServiceService {
       })
     );
   }
-  
 
-  private storeTokens(access: string, refresh: string, username: string): void {
+  private storeTokens(data: LoginResponse): void {
     if (typeof window !== 'undefined') {
-      localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, access);
-      localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH, refresh);
-      localStorage.setItem(LOCAL_STORAGE_KEYS.USERNAME, username);
+      localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, data.access);
+      localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH, data.refresh);
+      localStorage.setItem(LOCAL_STORAGE_KEYS.USERNAME, data.username);
     }
   }
 
@@ -73,8 +81,8 @@ export class UserAuthServiceService {
       return throwError(() => new Error('No hay token de refresco disponible.'));
     }
 
-    return this.http.post(`${this.baseUrl}refresh/`, { refresh }).pipe(
-      tap((response: any) => {
+    return this.http.post<{ access: string }>(`${this.baseUrl}refresh/`, { refresh }).pipe(
+      tap((response) => {
         if (typeof window !== 'undefined') {
           localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, response.access);
         }
@@ -88,7 +96,6 @@ export class UserAuthServiceService {
 
   isAuthenticated(): boolean {
     if (typeof window === 'undefined') return false;
-
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
     return !!token && !this.isTokenExpired(token);
   }
@@ -114,5 +121,4 @@ export class UserAuthServiceService {
     this.authStatus.next(false);
     this.router.navigate([NAVIGATION_ROUTES.HOME]);
   }
-  
 }
