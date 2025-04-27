@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, Subject, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, Subject, switchMap, tap, throwError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../environ/environ';
 import { LOCAL_STORAGE_KEYS, NAVIGATION_ROUTES } from '../utils/constants';
@@ -50,30 +50,24 @@ export class UserAuthServiceService {
     );
   }
 
-  loginUser(username: string, password: string): Observable<LoginResponse> {
+  loginUser(username: string, password: string): Observable<any> {
     console.log('🛑 Enviando login para:', username);
     return this.http.post<LoginResponse>(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response) => {
         console.log('✅ LOGIN RESPONSE:', response);
-  
         this.clearStorage();
-        setTimeout(() => {
-          this.storeTokens(response);
-          console.log('📦 Nuevo token guardado:', localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN));
-  
-          this.authStatus.next(true);
-  
-          this.profileService.getUserProfile().subscribe({
-            next: (profile) => {
-              console.log('👤 Perfil cargado tras login:', profile);
-              this.profileService.setCurrentUser(profile);
-              this.loginSuccessSourceAddBook.next();
-            },
-            error: (error) => {
-              console.error("⚠️ Error cargando perfil tras login:", error);
-            }
-          });
-        }, 250);
+        this.storeTokens(response);
+        this.authStatus.next(true);
+        console.log('📦 Nuevo token guardado:', localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN));
+      }),
+      switchMap(() => {
+        return this.profileService.getUserProfile().pipe(
+          tap(profile => {
+            console.log('👤 Perfil cargado tras login:', profile);
+            this.profileService.setCurrentUser(profile);
+            this.loginSuccessSourceAddBook.next();
+          })
+        );
       }),
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error?.detail || 'Error en el inicio de sesión.'));
