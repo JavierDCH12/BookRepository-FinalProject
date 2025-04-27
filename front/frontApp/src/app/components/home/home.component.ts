@@ -53,36 +53,37 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAuthenticated = this.userAuthService.isAuthenticated();
-  
-    if (!this.isAuthenticated) {
-      this.currentView = 'search';
-    } else {
+
+    if (this.isAuthenticated) {
+      this.loadUserProfile(); // ⚡ Cargar perfil si ya está autenticado
       this.checkPendingFavorite();
       this.checkPendingWishlist();
       this.wishlistService.loadWishlist();
       this.favoriteService.loadFavorites();
-      this.loadUserProfile(); // ⚡ cargar perfil si ya está autenticado
+    } else {
+      this.currentView = 'search';
     }
-  
+
+    // Suscripciones para actualizar el estado
     this.wishlistService.wishlistCount$.subscribe(count => {
       this.wishlistCount = count;
     });
-  
+
     this.favoriteService.favoriteCount$.subscribe(count => {
       this.favoriteCount = count;
     });
-  
+
     this.profileService.currentUser$.subscribe(profile => {
       this.userProfile = profile;
     });
-  
+
     this.userAuthService.loginSuccessSourceAddBook$.subscribe(() => {
       this.isAuthenticated = true;
+      this.loadUserProfile(); // ⚡ Recargar perfil tras login
       this.checkPendingFavorite();
       this.checkPendingWishlist();
       this.wishlistService.loadWishlist();
       this.favoriteService.loadFavorites();
-      this.loadUserProfile(); 
       this.currentView = 'search';
     });
   }
@@ -106,6 +107,7 @@ export class HomeComponent implements OnInit {
     this.isAuthenticated = false;
     this.favoriteCount = 0;
     this.wishlistCount = 0;
+    localStorage.clear(); // ⚡ Limpiar todo el almacenamiento local
     this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
   }
   
@@ -130,9 +132,13 @@ export class HomeComponent implements OnInit {
   // Función para cargar el perfil del usuario
   private loadUserProfile(): void {
     this.profileService.getUserProfile().subscribe({
-      next: (profile: any) => { this.userProfile = profile; },
+      next: (profile: UserProfile) => {
+        this.userProfile = profile;
+        localStorage.setItem('username', profile.username); // ⚡ Actualizar el almacenamiento local
+      },
       error: (error: any) => {
-        console.error('⚠️ Error loading profile:', error);
+        console.error('⚠️ Error cargando el perfil:', error);
+        this.logout(); // ⚡ Cerrar sesión si no se puede cargar el perfil
       }
     });
   }
