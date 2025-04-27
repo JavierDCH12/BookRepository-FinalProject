@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environ/environ';
-import { LOCAL_STORAGE_KEYS } from '../utils/constants';
 
 export interface UserProfile {
   id: number;
@@ -21,15 +20,12 @@ export interface UserProfile {
 })
 export class ProfileService {
   private profileUrl = `${environment.apiUrl}users/profile/`; 
-  private uploadUrl = `${environment.apiUrl}users/upload-profile-picture/`;
 
   private currentUserSubject = new BehaviorSubject<UserProfile | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-
-  // Obtener información del perfil del usuario
   getUserProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>(this.profileUrl).pipe(
       tap(profile => this.currentUserSubject.next(profile)), 
@@ -40,38 +36,25 @@ export class ProfileService {
     );
   }
 
-  
-  uploadProfilePicture(formData: FormData): Observable<any> {
-    return this.http.post(this.uploadUrl, formData).pipe(
-      tap(() => {
-        // Imagen subida correctamente
+  updateUserProfile(profileData: Partial<UserProfile>): Observable<UserProfile> {
+    return this.http.patch<UserProfile>(this.profileUrl, profileData).pipe(
+      tap(profile => this.currentUserSubject.next(profile)),
+      catchError((error) => {
+        console.error('❌ Error updating user profile:', error);
+        return throwError(() => new Error('Failed to update user profile.'));
       })
     );
   }
 
-
-    
-
-
-    
-
-
-
-
-
-
-
-  // Actualizar perfil
-  updateUserProfile(profileData: Partial<UserProfile>): Observable<UserProfile> {
-    const url = `${this.profileUrl}update-profile/`;
-    return this.http.put<UserProfile>(url, profileData);
-  }
-
-  setCurrentUser(user: UserProfile) {
+  setCurrentUser(user: UserProfile): void {
     this.currentUserSubject.next(user);
   }
 
   getCurrentUser(): UserProfile | null {
     return this.currentUserSubject.value;
+  }
+
+  clearUserProfile(): void {
+    this.currentUserSubject.next(null);
   }
 }

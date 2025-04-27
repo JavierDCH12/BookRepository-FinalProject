@@ -5,6 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../environ/environ';
 import { LOCAL_STORAGE_KEYS, NAVIGATION_ROUTES } from '../utils/constants';
 import { Router } from '@angular/router';
+import { ProfileService } from './ProfileService.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class UserAuthServiceService {
   private authStatus = new BehaviorSubject<boolean>(this.hasValidToken());
   authStatus$ = this.authStatus.asObservable();
 
-  constructor(private http: HttpClient, private router:Router) {}
+  constructor(private http: HttpClient, private router:Router, private profileService:ProfileService) {}
 
   private hasValidToken(): boolean {
     if (typeof window === 'undefined') return false; 
@@ -106,8 +107,10 @@ export class UserAuthServiceService {
       localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH);
       localStorage.removeItem(LOCAL_STORAGE_KEYS.USERNAME);
     }
+  
+    this.profileService.clearUserProfile(); 
     this.authStatus.next(false);
     this.router.navigate([NAVIGATION_ROUTES.HOME]);
-
   }
+  
 }
