@@ -212,6 +212,10 @@ export class HomeComponent implements OnInit {
       });
     }
   }
+
+  get username(): string {
+    return this.userProfile?.username || localStorage.getItem('username') || 'Usuario';
+  }
   
 
 
