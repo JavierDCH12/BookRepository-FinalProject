@@ -51,30 +51,42 @@ export class UserAuthServiceService {
   }
 
   loginUser(username: string, password: string): Observable<LoginResponse> {
+    console.log('🛫 Intentando login con username:', username);
+  
     return this.http.post<LoginResponse>(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response) => {
+        console.log('✅ Respuesta del backend:', response);
+        
         this.clearStorage();          
+  
         setTimeout(() => {              
           this.storeTokens(response);   
+          console.log('📦 Tokens almacenados:');
+          console.log('   - access_token:', localStorage.getItem('auth_token'));
+          console.log('   - refresh_token:', localStorage.getItem('refresh_token'));
+          console.log('   - username:', localStorage.getItem('username'));
   
           this.authStatus.next(true);
   
           this.profileService.getUserProfile().subscribe({
             next: (profile) => {
+              console.log('👤 Perfil recibido:', profile);
               this.profileService.setCurrentUser(profile); 
               this.loginSuccessSourceAddBook.next();
             },
             error: (error) => {
-              console.error("⚠️ Error cargando perfil tras login:", error);
+              console.error('⚠️ Error cargando perfil tras login:', error);
             }
           });
         }, 50); // Pequeño delay de 50ms para asegurar que el token nuevo está en localStorage
       }),
       catchError((error: HttpErrorResponse) => {
+        console.error('❌ Error en el login:', error);
         return throwError(() => new Error(error.error?.detail || 'Error en el inicio de sesión.'));
       })
     );
   }
+  
   
 
   private storeTokens(data: LoginResponse): void {
