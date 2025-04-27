@@ -7,7 +7,6 @@ import { LOCAL_STORAGE_KEYS, NAVIGATION_ROUTES } from '../utils/constants';
 import { Router } from '@angular/router';
 import { ProfileService } from './ProfileService.service';
 
-// Tipado de respuesta de login
 interface LoginResponse {
   access: string;
   refresh: string;
@@ -53,24 +52,34 @@ export class UserAuthServiceService {
   loginUser(username: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response) => {
-        this.profileService.clearUserProfile();
-        this.storeTokens(response); 
-        this.authStatus.next(true);
-        this.profileService.getUserProfile().subscribe(); 
-        this.loginSuccessSourceAddBook.next();
+        this.clearStorage();                  // 🔥 BORRAMOS TODO antes de nada
+        this.profileService.clearUserProfile(); // 🔥 Limpiar perfil
+        this.storeTokens(response);             // Guardamos nuevo token limpio
+        this.authStatus.next(true);             
+        this.profileService.getUserProfile().subscribe(); // Recargar perfil correcto
+        this.loginSuccessSourceAddBook.next();            
       }),
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error?.detail || 'Error en el inicio de sesión.'));
       })
     );
   }
-  
 
   private storeTokens(data: LoginResponse): void {
     if (typeof window !== 'undefined') {
       localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, data.access);
       localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH, data.refresh);
       localStorage.setItem(LOCAL_STORAGE_KEYS.USERNAME, data.username);
+    }
+  }
+
+  private clearStorage(): void {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH);
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.USERNAME);
+      localStorage.removeItem('pendingFavoriteBook'); // 🔥 Limpiar pendientes también
+      localStorage.removeItem('pendingWishlistBook'); // 🔥 Limpiar pendientes también
     }
   }
 
@@ -90,7 +99,7 @@ export class UserAuthServiceService {
         }
       }),
       catchError(() => {
-        this.logout();
+        this.logout(); // 🔥 Cierre total si falla refresh
         return throwError(() => new Error('Error al refrescar el token. Inicia sesión nuevamente.'));
       })
     );
@@ -113,14 +122,9 @@ export class UserAuthServiceService {
   }
 
   logout(): void {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
-      localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH);
-      localStorage.removeItem(LOCAL_STORAGE_KEYS.USERNAME);
-    }
-  
-    this.profileService.clearUserProfile(); 
-    this.authStatus.next(false);
-    this.router.navigate([NAVIGATION_ROUTES.HOME]);
+    this.clearStorage();                    
+    this.profileService.clearUserProfile();   
+    this.authStatus.next(false);            
+    this.router.navigate([NAVIGATION_ROUTES.LOGIN]); 
   }
 }
