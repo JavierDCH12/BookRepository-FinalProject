@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, Subject, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, Subject, switchMap, tap, throwError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../environ/environ';
 import { LOCAL_STORAGE_KEYS, NAVIGATION_ROUTES } from '../utils/constants';
@@ -52,6 +52,7 @@ export class UserAuthServiceService {
 
   loginUser(username: string, password: string): Observable<any> {
     console.log('🛑 Enviando login para:', username);
+  
     return this.http.post<LoginResponse>(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response) => {
         console.log('✅ LOGIN RESPONSE:', response);
@@ -61,8 +62,13 @@ export class UserAuthServiceService {
         console.log('📦 Nuevo token guardado:', localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN));
       }),
       switchMap(() => {
+        console.log('⌛️ Esperando 1 tick para refrescar interceptor...');
+        return of(null); 
+      }),
+      switchMap(() => {
+        console.log('🔎 Solicitando perfil con token actualizado...');
         return this.profileService.getUserProfile().pipe(
-          tap(profile => {
+          tap((profile) => {
             console.log('👤 Perfil cargado tras login:', profile);
             this.profileService.setCurrentUser(profile);
             this.loginSuccessSourceAddBook.next();
