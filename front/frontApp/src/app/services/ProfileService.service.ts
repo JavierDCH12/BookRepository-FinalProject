@@ -37,7 +37,8 @@ export class ProfileService {
   }
 
   updateUserProfile(profileData: Partial<UserProfile>): Observable<UserProfile> {
-    return this.http.patch<UserProfile>(this.profileUrl, profileData).pipe(
+    const updateUrl = `${environment.apiUrl}users/profile/update-profile/`;
+    return this.http.put<UserProfile>(updateUrl, profileData).pipe(
       tap(profile => this.currentUserSubject.next(profile)),
       catchError((error) => {
         console.error('❌ Error al actualizar el perfil:', error);
@@ -45,6 +46,7 @@ export class ProfileService {
       })
     );
   }
+  
 
   setCurrentUser(user: UserProfile): void {
     this.currentUserSubject.next(user);

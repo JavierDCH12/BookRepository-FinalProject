@@ -59,7 +59,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  // 👉 MÉTODOS QUE FALTABAN
   activateEditMode(): void {
     this.editMode = true;
     this.showStats = false;
