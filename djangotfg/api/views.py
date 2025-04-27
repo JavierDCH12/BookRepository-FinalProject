@@ -141,26 +141,24 @@ def remove_favorite(request, book_key):
     return Response({'message': ERROR_BOOK_NOT_FOUND_IN_FAVS}, status=status.HTTP_404_NOT_FOUND)
 
 
-# UPLOAD LA FOTO DE PERFIL
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def upload_profile_picture(request):
-    """Subir o actualizar la foto de perfil del usuario"""
+    """Actualizar la URL de la foto de perfil del usuario"""
     user = request.user
 
-    if 'profile_picture' not in request.FILES:
-        return Response({"error": ERROR_UPLOAD_PHOTO}, status=status.HTTP_400_BAD_REQUEST)
+    profile_picture_url = request.data.get('profile_picture')
 
-    user.profile_picture = request.FILES['profile_picture']
+    if not profile_picture_url:
+        return Response({"error": "No se recibió URL de la foto de perfil."}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.profile_picture = profile_picture_url
     user.save()
 
-    return Response(
-        {
-            "message": SUCCESS_UPLOAD_PHOTO,
-            "profile_picture": user.profile_picture.url
-        },
-        status=status.HTTP_200_OK
-    )
+    return Response({
+        "message": "Foto de perfil actualizada correctamente.",
+        "profile_picture": user.profile_picture
+    }, status=status.HTTP_200_OK)
 
 
 # CREAR O ACTUALIZAR RESEÑA
