@@ -82,6 +82,7 @@ export class ProfileComponent implements OnInit {
     this.isLoading = true;
     this.profileService.getUserProfile().subscribe({
       next: (profile: UserProfile) => {
+        console.log('📄 Perfil recargado:', profile);
         this.userProfile = profile;
         this.isLoading = false;
       },
@@ -92,6 +93,7 @@ export class ProfileComponent implements OnInit {
       },
     });
   }
+  
 
   toggleEditMode(): void {
     this.editMode = !this.editMode;
@@ -146,8 +148,8 @@ export class ProfileComponent implements OnInit {
     if (!this.selectedFile || !this.userProfile) return;
   
     const file = this.selectedFile;
-    const timestamp = new Date().getTime(); 
-    const fileExtension = file.name.split('.').pop(); 
+    const timestamp = new Date().getTime(); // para evitar caché
+    const fileExtension = file.name.split('.').pop(); // obtener extensión
     const filePath = `user_${this.userProfile.id}/profile_${timestamp}.${fileExtension}`;
   
     const { error: uploadError } = await supabase.storage
@@ -172,8 +174,7 @@ export class ProfileComponent implements OnInit {
   
     this.profileService.updateUserProfile({ profile_picture: imageUrl }).subscribe({
       next: () => {
-        // Recargar perfil completo en lugar de solo actualizar manualmente
-        this.loadUserProfile();
+        this.loadUserProfile(); 
   
         Swal.fire({
           title: '✅ Imagen actualizada',
@@ -191,6 +192,7 @@ export class ProfileComponent implements OnInit {
       },
     });
   }
+  
   
 
   navigateToHome(): void {
