@@ -7,7 +7,6 @@ import { LOCAL_STORAGE_KEYS, NAVIGATION_ROUTES } from '../utils/constants';
 import { Router } from '@angular/router';
 import { ProfileService } from './ProfileService.service';
 
-// Tipado de la respuesta de login
 interface LoginResponse {
   access: string;
   refresh: string;
@@ -20,7 +19,6 @@ interface LoginResponse {
 export class UserAuthServiceService {
   private baseUrl = environment.apiUrl;
 
-  // Observables para notificar cambios de login y auth
   private loginSuccessSourceAddBook = new Subject<void>();
   loginSuccessSourceAddBook$ = this.loginSuccessSourceAddBook.asObservable();
 
@@ -55,12 +53,21 @@ export class UserAuthServiceService {
   loginUser(username: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response) => {
-        this.clearStorage();                     // Limpieza completa previa
-        this.profileService.clearUserProfile();   // Limpia perfil viejo
-        this.storeTokens(response);               // Guarda nuevo usuario
-        this.authStatus.next(true);               // Actualiza estado de auth
-        this.profileService.getUserProfile().subscribe(); // Carga perfil nuevo
-        this.loginSuccessSourceAddBook.next();    // Notifica éxito de login
+        this.clearStorage(); 
+        this.profileService.clearUserProfile(); 
+        this.storeTokens(response); 
+
+        this.authStatus.next(true);
+
+        this.profileService.getUserProfile().subscribe({
+          next: (profile) => {
+            this.profileService.setCurrentUser(profile);
+            this.loginSuccessSourceAddBook.next(); // Disparar evento de login correcto
+          },
+          error: (error) => {
+            console.error("⚠️ Error cargando perfil tras login:", error);
+          }
+        });
       }),
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error?.detail || 'Error en el inicio de sesión.'));
@@ -81,7 +88,7 @@ export class UserAuthServiceService {
       localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
       localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH);
       localStorage.removeItem(LOCAL_STORAGE_KEYS.USERNAME);
-      localStorage.removeItem('pendingFavoriteBook');
+      localStorage.removeItem('pendingFavoriteBook'); // También eliminar cualquier libro pendiente
       localStorage.removeItem('pendingWishlistBook');
     }
   }
@@ -125,9 +132,9 @@ export class UserAuthServiceService {
   }
 
   logout(): void {
-    this.clearStorage();
-    this.profileService.clearUserProfile();
-    this.authStatus.next(false);
-    this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
+    this.clearStorage();                     // Borrar todos los tokens y username
+    this.profileService.clearUserProfile();   // Limpiar perfil actual
+    this.authStatus.next(false);              // Emitir desautenticado
+    this.router.navigate([NAVIGATION_ROUTES.LOGIN]); // Redirigir a login
   }
 }
