@@ -50,12 +50,15 @@ export class AuthLoginComponent {
         next: () => {
           this.isSubmitting = false;
           this.backendErrorMessage = null;
+          this.loginForm.reset();          
           this.router.navigate(['/home']);
         },
+        
         error: (error) => {
           this.isSubmitting = false;
-          this.backendErrorMessage = error.error?.detail || 'Invalid credentials.';
+          this.backendErrorMessage = error?.message || 'Credenciales inválidas.';
         },
+        
       });
     } else {
       this.backendErrorMessage = 'Please fill out the form correctly.';
