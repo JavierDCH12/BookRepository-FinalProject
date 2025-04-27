@@ -122,7 +122,7 @@ REST_FRAMEWORK = {
         'login': '30/minute',
         'register': '30/minute',
         'favorites': '25/minute',
-        'profile_update': '5/minute',
+        'profile_update': '15/minute',
     },
 }
 
