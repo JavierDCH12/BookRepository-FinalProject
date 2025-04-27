@@ -141,33 +141,40 @@ export class ProfileComponent implements OnInit {
       this.uploadProfilePicture();
     }
   }
-
+  
   async uploadProfilePicture(): Promise<void> {
     if (!this.selectedFile || !this.userProfile) return;
-
+  
     const file = this.selectedFile;
-    const filePath = `user_${this.userProfile.id}/${file.name}`;
-
-    const { error } = await supabase.storage
+    const timestamp = new Date().getTime(); 
+    const fileExtension = file.name.split('.').pop(); 
+    const filePath = `user_${this.userProfile.id}/profile_${timestamp}.${fileExtension}`;
+  
+    const { error: uploadError } = await supabase.storage
       .from('profile-pictures')
       .upload(filePath, file, {
         cacheControl: '3600',
         upsert: true,
       });
-
-    if (error) {
-      console.error('❌ Error al subir a Supabase:', error.message);
+  
+    if (uploadError) {
+      console.error('❌ Error al subir a Supabase:', uploadError.message);
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo subir la foto. Inténtalo de nuevo.',
+        icon: 'error',
+      });
       return;
     }
-
-    const { data } = supabase.storage
-      .from('profile-pictures')
-      .getPublicUrl(filePath);
+  
+    const { data } = supabase.storage.from('profile-pictures').getPublicUrl(filePath);
     const imageUrl = data.publicUrl;
-
+  
     this.profileService.updateUserProfile({ profile_picture: imageUrl }).subscribe({
       next: () => {
-        this.userProfile!.profile_picture = imageUrl;
+        // Recargar perfil completo en lugar de solo actualizar manualmente
+        this.loadUserProfile();
+  
         Swal.fire({
           title: '✅ Imagen actualizada',
           text: 'Tu foto de perfil se ha subido correctamente.',
@@ -176,9 +183,15 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('❌ Error actualizando el perfil:', err);
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo actualizar tu perfil con la nueva imagen.',
+          icon: 'error',
+        });
       },
     });
   }
+  
 
   navigateToHome(): void {
     this.router.navigate([NAVIGATION_ROUTES.HOME]);
