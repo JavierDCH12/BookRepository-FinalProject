@@ -79,25 +79,15 @@ export class HomeComponent implements OnInit {
   
     this.userAuthService.loginSuccessSourceAddBook$.subscribe(() => {
       this.isAuthenticated = true;
-      this.loadUserProfile();
       this.checkPendingFavorite();
       this.checkPendingWishlist();
       this.wishlistService.loadWishlist();
       this.favoriteService.loadFavorites();
-  
-      this.currentView = 'search'; 
+      this.currentView = 'search';
     });
-
-    this.loadUserProfile();
   }
   
-  
-  
-  
 
-  get username(): string {
-    return this.userProfile?.username || localStorage.getItem('username') || 'Usuario';
-  }
 
   setView(view: 'search' | 'favorites' | 'wishlist') {
     this.currentView = view;
@@ -112,8 +102,13 @@ export class HomeComponent implements OnInit {
 
   logout() {
     this.userAuthService.logout();
+    this.userProfile = null;
+    this.isAuthenticated = false;
+    this.favoriteCount = 0;
+    this.wishlistCount = 0;
     this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
   }
+  
 
   navigateToLogin() {
     this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
