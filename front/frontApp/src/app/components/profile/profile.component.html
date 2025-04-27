@@ -1,57 +1,50 @@
 <div class="profile-container">
   <div class="profile-card">
 
-    <!-- 🖼️ Cabecera del perfil -->
+    <!-- 🖼️ Cabecera con foto de perfil -->
     <div class="profile-header">
-      <img 
-        *ngIf="userProfile" 
-        [src]="userProfile.profile_picture"
-        alt="Profile Picture">
-        
-      <label for="fileInput" class="upload-label" *ngIf="editMode">📂 Cambiar foto</label>
+      <img *ngIf="userProfile" [src]="userProfile.profile_picture" alt="Profile Picture">
+
+      <!-- Solo mostrar opción de cambiar foto si se está editando -->
+      <label *ngIf="editMode" for="fileInput" class="upload-label">📂 Cambiar foto</label>
       <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>
     </div>
 
-    <!-- 📄 Vista de Edición o Visualización de Perfil -->
-    <div *ngIf="!showStats">
-      <div class="profile-info">
-        <h2 *ngIf="!editMode">{{ userProfile?.username }}</h2>
-        <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.username" placeholder="Username">
+    <!-- 🔄 Botones de navegación entre modos -->
+    <div class="mode-switch">
+      <button (click)="activateEditMode()" [disabled]="editMode">✏️ Editar Perfil</button>
+      <button (click)="activateStatsMode()" [disabled]="showStats">📊 Ver Estadísticas</button>
+      <button (click)="navigateToHome()">🏠 Inicio</button>
+    </div>
 
-        <p class="email" *ngIf="!editMode">📧 {{ userProfile?.email }}</p>
-        <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.email" placeholder="Email">
+    <!-- ✏️ Vista de Edición de Perfil -->
+    <div *ngIf="editMode" class="edit-section">
+      <div class="profile-info">
+        <input class="input-edit" [(ngModel)]="editedProfile.username" placeholder="Username">
+        <input class="input-edit" [(ngModel)]="editedProfile.email" placeholder="Email">
       </div>
 
       <div class="profile-details">
         <div class="detail-item">
           <span class="label">📝 Nombre:</span>
-          <span *ngIf="!editMode">{{ userProfile?.first_name || '—' }}</span>
-          <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.first_name" placeholder="Nombre">
+          <input class="input-edit" [(ngModel)]="editedProfile.first_name" placeholder="Nombre">
         </div>
 
         <div class="detail-item">
           <span class="label">📝 Apellidos:</span>
-          <span *ngIf="!editMode">{{ userProfile?.last_name || '—' }}</span>
-          <input class="input-edit" *ngIf="editMode" [(ngModel)]="editedProfile.last_name" placeholder="Apellidos">
-        </div>
-
-        <div class="detail-item" *ngIf="editMode">
-          <span class="label">🔑 Nueva contraseña:</span>
-          <input class="input-edit" type="password" [(ngModel)]="editedProfile.password" placeholder="Contraseña">
+          <input class="input-edit" [(ngModel)]="editedProfile.last_name" placeholder="Apellidos">
         </div>
 
         <div class="detail-item">
-          <span class="label">📅 Miembro desde:</span>
-          <span>{{ userProfile?.date_joined | date: 'dd/MM/yyyy' }}</span>
+          <span class="label">🔑 Nueva contraseña:</span>
+          <input class="input-edit" type="password" [(ngModel)]="editedProfile.password" placeholder="Contraseña">
         </div>
       </div>
 
-      <!-- 🧭 Botones de acción -->
+      <!-- Guardar o cancelar cambios -->
       <div class="profile-actions">
-        <button *ngIf="!editMode" class="edit-btn" (click)="toggleEditMode()">✏️ Editar Perfil</button>
-        <button *ngIf="editMode" class="save-btn" (click)="saveProfileChanges()">💾 Guardar Cambios</button>
-        <button *ngIf="editMode" class="cancel-btn" (click)="toggleEditMode()">❌ Cancelar</button>
-        <button class="back-btn" (click)="navigateToHome()">🏠 Inicio</button>
+        <button class="save-btn" (click)="saveProfileChanges()">💾 Guardar Cambios</button>
+        <button class="cancel-btn" (click)="cancelEdit()">❌ Cancelar</button>
       </div>
     </div>
 
@@ -67,22 +60,17 @@
         <span class="stat-value">{{ wishlistCount || '—' }}</span>
       </div>
       <div class="stat-item">
-        <span class="stat-label">📅 Miembro desde:</span>
-        <span class="stat-value">{{ userProfile?.date_joined | date: 'dd/MM/yyyy' }}</span>
-      </div>
-      <div class="stat-item" *ngIf="favoriteCount > 0">
         <span class="stat-label">📊 Valoración media:</span>
         <span class="stat-value">{{ averageRating || '—' }}/5</span>
       </div>
-      <div *ngIf="!favoriteCount && !wishlistCount" class="no-stats">
-        <p>📭 Aún no tienes estadísticas disponibles. ¡Empieza a añadir libros a tus favoritos o wishlist!</p>
+      <div class="stat-item">
+        <span class="stat-label">📅 Miembro desde:</span>
+        <span class="stat-value">{{ userProfile?.date_joined | date: 'dd/MM/yyyy' }}</span>
       </div>
-    </div>
 
-    <!-- 🧭 Botones para cambiar de modo -->
-    <div class="profile-actions">
-      <button class="stats-btn" [disabled]="!showStats" (click)="showStats = false">✏️ Editar Perfil</button>
-      <button class="stats-btn" [disabled]="showStats" (click)="showStats = true">📊 Ver Estadísticas</button>
+      <div *ngIf="!favoriteCount && !wishlistCount" class="no-stats">
+        <p>📭 Aún no tienes estadísticas. ¡Añade libros a tus favoritos o wishlist!</p>
+      </div>
     </div>
 
   </div>

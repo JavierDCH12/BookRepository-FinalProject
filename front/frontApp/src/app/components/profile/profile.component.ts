@@ -9,7 +9,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environ/environ';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { supabase } from '../../../supabase/supaBaseClient';
 import { FavoriteService } from '../../services/FavoriteService.service';
 import { WishlistService } from '../../services/WishlistService.service';
@@ -34,8 +33,7 @@ export class ProfileComponent implements OnInit {
 
   editMode = false;
   editedProfile: Partial<UserProfile> = {};
-  showStats: boolean = true;
-
+  showStats = true;
 
   constructor(
     private profileService: ProfileService,
@@ -47,7 +45,6 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.loadUserProfile();
     this.loadStatistics();
-
   }
 
   loadStatistics(): void {
@@ -56,21 +53,31 @@ export class ProfileComponent implements OnInit {
       const totalRating = favorites.reduce((acc, fav) => acc + (fav.rating || 0), 0);
       this.averageRating = favorites.length ? +(totalRating / favorites.length).toFixed(1) : 0;
     });
-  
+
     this.wishlistService.wishlist$.subscribe(wishlist => {
       this.wishlistCount = wishlist.length;
     });
-    
+  }
+
+  // 👉 MÉTODOS QUE FALTABAN
+  activateEditMode(): void {
+    this.editMode = true;
+    this.showStats = false;
+    if (this.userProfile) {
+      this.editedProfile = { ...this.userProfile };
+    }
+  }
+
+  activateStatsMode(): void {
+    this.editMode = false;
+    this.showStats = true;
   }
 
   setViewStats(show: boolean): void {
     this.showStats = show;
     if (!show) this.editMode = false;
   }
-  
-  
 
-  //Cargar el perfil del usuario
   loadUserProfile(): void {
     this.isLoading = true;
     this.profileService.getUserProfile().subscribe({
@@ -86,7 +93,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  //Alternar modo edición
   toggleEditMode(): void {
     this.editMode = !this.editMode;
     if (this.editMode && this.userProfile) {
@@ -94,15 +100,12 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  //  Guardar cambios en el perfil
   saveProfileChanges(): void {
     if (!this.editedProfile) return;
 
     this.profileService.updateUserProfile(this.editedProfile).subscribe({
-      next: (response) => {
-        //console.log("✅ Perfil actualizado:", response);
+      next: () => {
         this.editMode = false;
-
         Swal.fire({
           title: '¡Perfil actualizado!',
           text: 'Tu perfil ha sido actualizado correctamente.',
@@ -116,7 +119,6 @@ export class ProfileComponent implements OnInit {
       },
       error: (error) => {
         console.error('❌ Error updating profile:', error);
-
         Swal.fire({
           title: 'Error',
           text: 'Hubo un problema al actualizar el perfil. Inténtalo de nuevo.',
@@ -127,7 +129,11 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  // Seleccionar y subir imagen de perfil
+  cancelEdit(): void {
+    this.editMode = false;
+    this.showStats = true;
+  }
+
   onFileSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
@@ -159,24 +165,21 @@ export class ProfileComponent implements OnInit {
       .getPublicUrl(filePath);
     const imageUrl = data.publicUrl;
 
-    this.profileService
-      .updateUserProfile({ profile_picture: imageUrl })
-      .subscribe({
-        next: () => {
-          this.userProfile!.profile_picture = imageUrl;
-          Swal.fire({
-            title: '✅ Imagen actualizada',
-            text: 'Tu foto de perfil se ha subido correctamente.',
-            icon: 'success',
-          });
-        },
-        error: (err) => {
-          console.error('❌ Error actualizando el perfil:', err);
-        },
-      });
+    this.profileService.updateUserProfile({ profile_picture: imageUrl }).subscribe({
+      next: () => {
+        this.userProfile!.profile_picture = imageUrl;
+        Swal.fire({
+          title: '✅ Imagen actualizada',
+          text: 'Tu foto de perfil se ha subido correctamente.',
+          icon: 'success',
+        });
+      },
+      error: (err) => {
+        console.error('❌ Error actualizando el perfil:', err);
+      },
+    });
   }
 
-  // Volver a la página de inicio
   navigateToHome(): void {
     this.router.navigate([NAVIGATION_ROUTES.HOME]);
   }
