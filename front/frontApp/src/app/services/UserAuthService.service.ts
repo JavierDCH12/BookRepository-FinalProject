@@ -73,7 +73,7 @@ export class UserAuthServiceService {
               console.error("⚠️ Error cargando perfil tras login:", error);
             }
           });
-        }, 50);
+        }, 250);
       }),
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error?.detail || 'Error en el inicio de sesión.'));
