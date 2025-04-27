@@ -31,7 +31,6 @@ class CustomLoginView(TokenObtainPairView):
 
 ### PERFIL DE USUARIO (GET & DELETE)
 @api_view(['GET', 'DELETE'])
-@cache_page(60)
 @permission_classes([IsAuthenticated])
 def user_profile(request):
     """Retrieve or deactivate user profile."""
