@@ -7,6 +7,7 @@ import { LOCAL_STORAGE_KEYS, NAVIGATION_ROUTES } from '../utils/constants';
 import { Router } from '@angular/router';
 import { ProfileService } from './ProfileService.service';
 
+// Tipado de la respuesta de login
 interface LoginResponse {
   access: string;
   refresh: string;
@@ -18,6 +19,8 @@ interface LoginResponse {
 })
 export class UserAuthServiceService {
   private baseUrl = environment.apiUrl;
+
+  // Observables para notificar cambios de login y auth
   private loginSuccessSourceAddBook = new Subject<void>();
   loginSuccessSourceAddBook$ = this.loginSuccessSourceAddBook.asObservable();
 
@@ -25,13 +28,13 @@ export class UserAuthServiceService {
   authStatus$ = this.authStatus.asObservable();
 
   constructor(
-    private http: HttpClient, 
-    private router: Router, 
+    private http: HttpClient,
+    private router: Router,
     private profileService: ProfileService
   ) {}
 
   private hasValidToken(): boolean {
-    if (typeof window === 'undefined') return false; 
+    if (typeof window === 'undefined') return false;
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
     return token ? !this.isTokenExpired(token) : false;
   }
@@ -52,12 +55,12 @@ export class UserAuthServiceService {
   loginUser(username: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response) => {
-        this.clearStorage();                  // 🔥 BORRAMOS TODO antes de nada
-        this.profileService.clearUserProfile(); // 🔥 Limpiar perfil
-        this.storeTokens(response);             // Guardamos nuevo token limpio
-        this.authStatus.next(true);             
-        this.profileService.getUserProfile().subscribe(); // Recargar perfil correcto
-        this.loginSuccessSourceAddBook.next();            
+        this.clearStorage();                     // Limpieza completa previa
+        this.profileService.clearUserProfile();   // Limpia perfil viejo
+        this.storeTokens(response);               // Guarda nuevo usuario
+        this.authStatus.next(true);               // Actualiza estado de auth
+        this.profileService.getUserProfile().subscribe(); // Carga perfil nuevo
+        this.loginSuccessSourceAddBook.next();    // Notifica éxito de login
       }),
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error?.detail || 'Error en el inicio de sesión.'));
@@ -78,8 +81,8 @@ export class UserAuthServiceService {
       localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
       localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH);
       localStorage.removeItem(LOCAL_STORAGE_KEYS.USERNAME);
-      localStorage.removeItem('pendingFavoriteBook'); // 🔥 Limpiar pendientes también
-      localStorage.removeItem('pendingWishlistBook'); // 🔥 Limpiar pendientes también
+      localStorage.removeItem('pendingFavoriteBook');
+      localStorage.removeItem('pendingWishlistBook');
     }
   }
 
@@ -99,7 +102,7 @@ export class UserAuthServiceService {
         }
       }),
       catchError(() => {
-        this.logout(); // 🔥 Cierre total si falla refresh
+        this.logout();
         return throwError(() => new Error('Error al refrescar el token. Inicia sesión nuevamente.'));
       })
     );
@@ -122,9 +125,9 @@ export class UserAuthServiceService {
   }
 
   logout(): void {
-    this.clearStorage();                    
-    this.profileService.clearUserProfile();   
-    this.authStatus.next(false);            
-    this.router.navigate([NAVIGATION_ROUTES.LOGIN]); 
+    this.clearStorage();
+    this.profileService.clearUserProfile();
+    this.authStatus.next(false);
+    this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
   }
 }

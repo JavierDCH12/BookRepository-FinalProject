@@ -65,12 +65,12 @@ export class HomeComponent implements OnInit {
     }
 
     // Suscripciones para actualizar el estado
-    this.wishlistService.wishlistCount$.subscribe(count => {
-      this.wishlistCount = count;
-    });
-
     this.favoriteService.favoriteCount$.subscribe(count => {
       this.favoriteCount = count;
+    });
+
+    this.wishlistService.wishlistCount$.subscribe(count => {
+      this.wishlistCount = count;
     });
 
     this.profileService.currentUser$.subscribe(profile => {
@@ -79,7 +79,7 @@ export class HomeComponent implements OnInit {
 
     this.userAuthService.loginSuccessSourceAddBook$.subscribe(() => {
       this.isAuthenticated = true;
-      this.loadUserProfile(); // ⚡ Recargar perfil tras login
+      this.loadUserProfile();
       this.checkPendingFavorite();
       this.checkPendingWishlist();
       this.wishlistService.loadWishlist();
@@ -87,8 +87,6 @@ export class HomeComponent implements OnInit {
       this.currentView = 'search';
     });
   }
-  
-
 
   setView(view: 'search' | 'favorites' | 'wishlist') {
     this.currentView = view;
@@ -108,9 +106,8 @@ export class HomeComponent implements OnInit {
     this.favoriteCount = 0;
     this.wishlistCount = 0;
     localStorage.clear(); // ⚡ Limpiar todo el almacenamiento local
-    this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
+    this.router.navigate(['/login']);
   }
-  
 
   navigateToLogin() {
     this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
@@ -222,7 +219,4 @@ export class HomeComponent implements OnInit {
   get username(): string {
     return this.userProfile?.username || localStorage.getItem('username') || 'Usuario';
   }
-  
-
-
 }

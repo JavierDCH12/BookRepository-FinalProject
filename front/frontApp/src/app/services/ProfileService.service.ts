@@ -12,14 +12,14 @@ export interface UserProfile {
   profile_picture?: string;
   first_name?: string;
   last_name?: string;
-  password?: string; 
+  password?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
-  private profileUrl = `${environment.apiUrl}users/profile/`; 
+  private profileUrl = `${environment.apiUrl}users/profile/`;
 
   private currentUserSubject = new BehaviorSubject<UserProfile | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
@@ -28,10 +28,10 @@ export class ProfileService {
 
   getUserProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>(this.profileUrl).pipe(
-      tap(profile => this.currentUserSubject.next(profile)), 
+      tap(profile => this.currentUserSubject.next(profile)),
       catchError((error) => {
-        console.error("❌ Error fetching user profile:", error);
-        return throwError(() => new Error("Failed to load user profile."));
+        console.error("❌ Error al cargar el perfil de usuario:", error);
+        return throwError(() => new Error("No se pudo cargar el perfil de usuario."));
       })
     );
   }
@@ -40,8 +40,8 @@ export class ProfileService {
     return this.http.patch<UserProfile>(this.profileUrl, profileData).pipe(
       tap(profile => this.currentUserSubject.next(profile)),
       catchError((error) => {
-        console.error('❌ Error updating user profile:', error);
-        return throwError(() => new Error('Failed to update user profile.'));
+        console.error('❌ Error al actualizar el perfil:', error);
+        return throwError(() => new Error('No se pudo actualizar el perfil.'));
       })
     );
   }
