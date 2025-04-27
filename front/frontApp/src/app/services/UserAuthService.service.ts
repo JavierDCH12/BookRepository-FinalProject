@@ -53,9 +53,10 @@ export class UserAuthServiceService {
   loginUser(username: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response) => {
-        this.profileService.clearUserProfile(); // Limpia cualquier perfil previo
-        this.storeTokens(response); // 🔥 Ahora storeTokens recibe todo el objeto
+        this.profileService.clearUserProfile();
+        this.storeTokens(response); 
         this.authStatus.next(true);
+        this.profileService.getUserProfile().subscribe(); 
         this.loginSuccessSourceAddBook.next();
       }),
       catchError((error: HttpErrorResponse) => {
@@ -63,6 +64,7 @@ export class UserAuthServiceService {
       })
     );
   }
+  
 
   private storeTokens(data: LoginResponse): void {
     if (typeof window !== 'undefined') {
