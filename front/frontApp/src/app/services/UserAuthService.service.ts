@@ -44,6 +44,7 @@ export class UserAuthServiceService {
   loginUser(username: string, password: string): Observable<any> {
     return this.http.post(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response: any) => {
+        this.profileService.clearUserProfile(); 
         this.storeTokens(response.access, response.refresh, username);
         this.authStatus.next(true);
         this.loginSuccessSourceAddBook.next();
@@ -53,6 +54,7 @@ export class UserAuthServiceService {
       })
     );
   }
+  
 
   private storeTokens(access: string, refresh: string, username: string): void {
     if (typeof window !== 'undefined') {
