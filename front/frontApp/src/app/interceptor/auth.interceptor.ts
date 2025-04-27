@@ -4,7 +4,7 @@ import { LOCAL_STORAGE_KEYS } from '../utils/constants';
 
 export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN); // Obtener el token del localStorage
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN); 
 
     if (token) {
       const clonedRequest = req.clone({
@@ -12,9 +12,9 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
           Authorization: `Bearer ${token}`
         }
       });
-      return next(clonedRequest);
+      return next(clonedRequest); 
     }
   }
 
-  return next(req);
+  return next(req); 
 };
