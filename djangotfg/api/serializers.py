@@ -7,8 +7,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         print("📥 Intento de login con:", attrs)
         data = super().validate(attrs)
+        
+        data['username'] = self.user.username
+        
         print("✅ Login exitoso:", data)
         return data
+
 
 
 # SERIALIZER DE PERFIL
