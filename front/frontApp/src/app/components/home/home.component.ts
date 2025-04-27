@@ -56,13 +56,12 @@ export class HomeComponent implements OnInit {
   
     if (!this.isAuthenticated) {
       this.currentView = 'search';
-    }
-  
-    if (this.isAuthenticated) {
+    } else {
       this.checkPendingFavorite();
       this.checkPendingWishlist();
       this.wishlistService.loadWishlist();
       this.favoriteService.loadFavorites();
+      this.loadUserProfile(); // ⚡ cargar perfil si ya está autenticado
     }
   
     this.wishlistService.wishlistCount$.subscribe(count => {
@@ -83,6 +82,7 @@ export class HomeComponent implements OnInit {
       this.checkPendingWishlist();
       this.wishlistService.loadWishlist();
       this.favoriteService.loadFavorites();
+      this.loadUserProfile(); 
       this.currentView = 'search';
     });
   }
