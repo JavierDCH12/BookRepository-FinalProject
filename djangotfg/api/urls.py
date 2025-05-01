@@ -5,7 +5,6 @@ from .views import (
     user_profile,
     manage_favorites,
     remove_favorite,
-    upload_profile_picture,
     update_profile,
     manage_review,
     update_rating,
