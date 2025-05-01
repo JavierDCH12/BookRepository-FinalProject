@@ -27,7 +27,6 @@ urlpatterns = [
     
     path('users/favorites/', manage_favorites, name='manage_favorites'),
     path('users/favorites/<str:book_key>/', remove_favorite, name='remove_favorite'),
-    path('users/upload-profile-picture/', upload_profile_picture, name='upload-profile-picture'),
     path('users/profile/update-profile/', update_profile, name='upload-profile'),
     path('users/favorites/<str:book_key>/review/', manage_review, name='manage_review'),
     path('users/favorites/<str:book_key>/rating/', update_rating, name='update_rating'),

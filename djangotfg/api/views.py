@@ -5,7 +5,8 @@ from rest_framework.decorators import api_view, permission_classes, throttle_cla
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from constants import SUCCESS_DEACTIVATE, ERROR_REGISTER, SUCCESS_UPDATE_PROFILE, ERROR_FETCHING_FAVS, \
     INFO_ALREADY_FAVS, INFO_BOOK_REMOVED_FAVS, ERROR_BOOK_NOT_FOUND_IN_FAVS, ERROR_UPLOAD_PHOTO, \
     SUCCESS_UPLOAD_PHOTO, ERROR_EMPTY, SUCCESS_SAVED_REVIEW, ERROR_INVALID_REVIEW, SUCCESS_UPDATE_REVIEW, \
@@ -140,16 +141,22 @@ def remove_favorite(request, book_key):
     return Response({'message': ERROR_BOOK_NOT_FOUND_IN_FAVS}, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['POST'])
+
+"""@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def upload_profile_picture(request):
-    """Actualizar la URL de la foto de perfil del usuario"""
     user = request.user
-
     profile_picture_url = request.data.get('profile_picture')
 
     if not profile_picture_url:
         return Response({"error": "No se recibió URL de la foto de perfil."}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Validar que sea una URL válida
+    validator = URLValidator()
+    try:
+        validator(profile_picture_url)
+    except ValidationError:
+        return Response({"error": "La URL proporcionada no es válida."}, status=status.HTTP_400_BAD_REQUEST)
 
     user.profile_picture = profile_picture_url
     user.save()
@@ -158,7 +165,7 @@ def upload_profile_picture(request):
         "message": "Foto de perfil actualizada correctamente.",
         "profile_picture": user.profile_picture
     }, status=status.HTTP_200_OK)
-
+"""
 
 # CREAR O ACTUALIZAR RESEÑA
 @api_view(['PATCH'])
