@@ -14,11 +14,13 @@
 
     <div class="profile-header">
       <img 
-        class="profile-picture"
-        [src]="userProfile.profile_picture"
-        [alt]="userProfile.username + ' avatar'"
-        title="{{ userProfile.username }}'s profile picture"
-      />
+      alt="User profile picture"
+  class="profile-picture"
+  [src]="userProfile.profile_picture + '?t=' + timestamp"
+  [alt]="userProfile.username + ' avatar'"
+  [title]="userProfile.username + '\'s profile picture'"
+/>
+
     
       <div class="user-info">
         <h2>👤 {{ userProfile.username }}</h2>

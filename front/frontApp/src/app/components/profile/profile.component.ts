@@ -31,6 +31,9 @@ export class ProfileComponent implements OnInit {
   wishlistCount: number = 0;
   averageRating: number = 0;
 
+  timestamp: number = Date.now();
+
+
   editMode = false;
   editedProfile: Partial<UserProfile> = {};
   showStats = true;
@@ -83,6 +86,7 @@ export class ProfileComponent implements OnInit {
       next: (profile: UserProfile) => {
         console.log('📄 Perfil recargado:', profile);
         this.userProfile = profile;
+        this.timestamp = Date.now(); 
         this.isLoading = false;
       },
       error: (error) => {

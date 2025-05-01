@@ -77,6 +77,7 @@ export class HomeComponent implements OnInit {
 
     this.profileService.currentUser$.subscribe(profile => {
       this.userProfile = profile;
+      this.timestamp = Date.now();
     });
 
     this.userAuthService.loginSuccessSourceAddBook$.subscribe(() => {

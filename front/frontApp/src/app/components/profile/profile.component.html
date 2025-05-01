@@ -1,23 +1,26 @@
 <div class="profile-container">
   <div class="profile-card">
 
-    <!-- 🖼️ Cabecera con foto de perfil -->
+    <!--  Cabecera con foto de perfil -->
     <div class="profile-header">
-      <img *ngIf="userProfile" [src]="userProfile.profile_picture" alt="Profile Picture">
-
+      <img
+      *ngIf="userProfile?.profile_picture"
+      [src]="userProfile?.profile_picture + '?t=' + timestamp"
+      alt="Foto de perfil actualizada"
+      class="profile-picture"
+    />
+    
       <!-- Solo mostrar opción de cambiar foto si se está editando -->
       <label *ngIf="editMode" for="fileInput" class="upload-label">📂 Cambiar foto</label>
       <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>
     </div>
 
-    <!-- 🔄 Botones de navegación entre modos -->
     <div class="mode-switch">
       <button (click)="activateEditMode()" [disabled]="editMode">✏️ Editar Perfil</button>
       <button (click)="activateStatsMode()" [disabled]="showStats">📊 Ver Estadísticas</button>
       <button (click)="navigateToHome()">🏠 Inicio</button>
     </div>
 
-    <!-- ✏️ Vista de Edición de Perfil -->
     <div *ngIf="editMode" class="edit-section">
       <div class="profile-info">
         <input class="input-edit" [(ngModel)]="editedProfile.username" placeholder="Username">
@@ -48,7 +51,7 @@
       </div>
     </div>
 
-    <!-- 📊 Vista de Estadísticas -->
+    <!--  Vista de Estadísticas -->
     <div *ngIf="showStats" class="stats-section">
       <h3>📈 Tus estadísticas</h3>
       <div class="stat-item">
