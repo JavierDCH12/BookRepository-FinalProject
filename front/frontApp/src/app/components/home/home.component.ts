@@ -35,6 +35,8 @@ export class HomeComponent implements OnInit {
   userProfile: UserProfile | null = null;
   searchedUsername: string = '';
   environment = environment;
+  timestamp: number = Date.now();
+
 
 
   currentView: 'search' | 'favorites' | 'wishlist' = 'search';
@@ -131,14 +133,16 @@ export class HomeComponent implements OnInit {
     this.profileService.getUserProfile().subscribe({
       next: (profile: UserProfile) => {
         this.userProfile = profile;
-        localStorage.setItem('username', profile.username); // ⚡ Actualizar el almacenamiento local
+        this.timestamp = Date.now(); // 👈 Forzar recarga de imagen
+        localStorage.setItem('username', profile.username);
       },
       error: (error: any) => {
         console.error('⚠️ Error cargando el perfil:', error);
-        this.logout(); // ⚡ Cerrar sesión si no se puede cargar el perfil
+        this.logout();
       }
     });
   }
+  
 
   // Función para comprobar si hay un libro pendiente de añadir a favoritos tras el login
   private checkPendingFavorite() {

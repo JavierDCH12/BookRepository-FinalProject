@@ -2,14 +2,14 @@
   <div class="home-container">
     <div class="top-layout">
       <div class="profile-card" *ngIf="isAuthenticated">
-        <img
-          *ngIf="userProfile"
-          class="profile-picture"
-          [src]="userProfile.profile_picture"
-          [alt]="userProfile.username + ' avatar'"
-          [title]="userProfile.username + '\'s profile picture'"
-          alt="Profile Picture"
-        />
+        <img alt="profile pciture"
+  *ngIf="userProfile"
+  class="profile-picture"
+  [src]="userProfile.profile_picture + '?t=' + timestamp"
+  [alt]="userProfile.username + ' avatar'"
+  [title]="userProfile.username + '\'s profile picture'"
+/>
+
 
         <h3>{{ username }}</h3>
         <p class="user-email">📧 {{ userProfile?.email }}</p>
