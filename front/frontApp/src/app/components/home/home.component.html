@@ -1,16 +1,20 @@
 <body>
   <div class="home-container">
-    <div class="top-layout">
+    <!-- ✅ Añadido ngClass para centrar si NO está autenticado -->
+    <div class="top-layout" [ngClass]="{ 'centered': !isAuthenticated }">
+      
+      <!-- 👤 Tarjeta de perfil (solo si autenticado) -->
       <div class="profile-card" *ngIf="isAuthenticated">
-        <img alt="profile pciture"
-  *ngIf="userProfile"
-  class="profile-picture"
-  [src]="userProfile.profile_picture + '?t=' + timestamp"
-  [alt]="userProfile.username + ' avatar'"
-  [title]="userProfile.username + '\'s profile picture'"
-/>
-
-
+        <!-- 
+        <img 
+          alt="profile picture"
+          *ngIf="userProfile"
+          class="profile-picture"
+          [src]="userProfile.profile_picture + '?t=' + timestamp"
+          [alt]="userProfile.username + ' avatar'"
+          [title]="userProfile.username + '\'s profile picture'"
+        />
+        -->
         <h3>{{ username }}</h3>
         <p class="user-email">📧 {{ userProfile?.email }}</p>
         <button class="profile-button" (click)="navigateToProfile()">
@@ -18,7 +22,7 @@
         </button>
       </div>
 
-      <!-- 🎯 Sección principal -->
+      <!-- 🎯 Sección principal visible siempre -->
       <div class="main-section">
         <h2>📚 Bienvenido a BookFinder</h2>
         <p *ngIf="!isAuthenticated">
@@ -44,11 +48,9 @@
             💖 Mi Wishlist
             <span class="wishlist-counter">{{ wishlistCount }}</span>
           </button>
-
           <button *ngIf="isAuthenticated" (click)="setView('search')" [disabled]="currentView === 'search'" class="modern-button">
             🔍 Buscar Libros
           </button>
-
           <button *ngIf="isAuthenticated" (click)="logout()" class="modern-button logout-button">
             🚪 Cerrar Sesión
           </button>
@@ -56,43 +58,32 @@
       </div>
     </div>
 
-    <!-- 🔍 Buscador público debajo del layout -->
+    <!-- 🔍 Buscador público -->
     <div class="search-container" *ngIf="isAuthenticated">
       <div class="public-profile-search-sidebar">
         <h4>🔎 Ver perfil público</h4>
         <div class="search-bar">
-          <input
-            type="text"
-            [(ngModel)]="searchedUsername"
-            placeholder="Introduce un username"
-            (keyup.enter)="navigateToPublicProfile()"
-          />
+          <input type="text" [(ngModel)]="searchedUsername" placeholder="Introduce un username" (keyup.enter)="navigateToPublicProfile()" />
           <button (click)="navigateToPublicProfile()">Ir</button>
         </div>
         <p class="search-hint">Explora los favoritos de otros usuarios.</p>
       </div>
     </div>
 
+    <!-- 📘 Contenido dinámico -->
     <div class="dynamic-content-container">
-      <app-book-search
-        *ngIf="!isAuthenticated || currentView === 'search'"
-      ></app-book-search>
-      <app-favorite-list
-        *ngIf="isAuthenticated && currentView === 'favorites'"
-      ></app-favorite-list>
-      <app-wishlist
-        *ngIf="isAuthenticated && currentView === 'wishlist'"
-      ></app-wishlist>
+      <app-book-search *ngIf="!isAuthenticated || currentView === 'search'"></app-book-search>
+      <app-favorite-list *ngIf="isAuthenticated && currentView === 'favorites'"></app-favorite-list>
+      <app-wishlist *ngIf="isAuthenticated && currentView === 'wishlist'"></app-wishlist>
     </div>
   </div>
 
+  <!-- 📎 Footer -->
   <footer class="footer">
     <div class="footer-content">
-      <p>
-        📖 <strong>BookFinder</strong> © 2024. Todos los derechos reservados.
-      </p>
+      <p>📖 <strong>BookFinder</strong> © 2024. Todos los derechos reservados.</p>
       <nav class="footer-nav">
-        <a href="https://github.com/JavierDCH12/BookRepository-FinalProject" target="_blank" rel="noopener noreferrer">Repositorio del proyecto</a> |        
+        <a href="https://github.com/JavierDCH12/BookRepository-FinalProject" target="_blank" rel="noopener noreferrer">Repositorio del proyecto</a> |
         <a href="https://github.com/JavierDCH12" target="_blank" rel="noopener noreferrer">Contacto</a>
       </nav>
     </div>
