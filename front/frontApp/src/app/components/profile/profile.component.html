@@ -4,15 +4,17 @@
     <!--  Cabecera con foto de perfil -->
     <div class="profile-header">
       <img
-      *ngIf="userProfile?.profile_picture"
-      [src]="userProfile?.profile_picture + '?t=' + timestamp"
-      alt="Foto de perfil actualizada"
-      class="profile-picture"
-    />
-    
-      <!-- Solo mostrar opción de cambiar foto si se está editando -->
+        *ngIf="userProfile?.profile_picture"
+        [src]="userProfile?.profile_picture + '?t=' + timestamp"
+        alt="Foto de perfil actualizada"
+        class="profile-picture"
+      />
+
+      <!-- 
+      // 🔧 Comentado temporalmente: opción de cambiar la foto de perfil
       <label *ngIf="editMode" for="fileInput" class="upload-label">📂 Cambiar foto</label>
       <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>
+      -->
     </div>
 
     <div class="mode-switch">
@@ -44,14 +46,12 @@
         </div>
       </div>
 
-      <!-- Guardar o cancelar cambios -->
       <div class="profile-actions">
         <button class="save-btn" (click)="saveProfileChanges()">💾 Guardar Cambios</button>
         <button class="cancel-btn" (click)="cancelEdit()">❌ Cancelar</button>
       </div>
     </div>
 
-    <!--  Vista de Estadísticas -->
     <div *ngIf="showStats" class="stats-section">
       <h3>📈 Tus estadísticas</h3>
       <div class="stat-item">
