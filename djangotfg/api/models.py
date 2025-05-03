@@ -4,21 +4,25 @@ from django.db import models
 from django.conf import settings
 
 
-# Modelos de la aplicación
-
+# Ruta por defecto
 def default_profile_picture():
-    return 'https://rorwpelcykogxwqyaopv.supabase.co/storage/v1/object/public/profile-pictures//default_avatar.jpg'
+    return 'profile_pictures/default_avatar.jpg'
 
-#USER MODEL
+# Ruta dinámica para guardar cada imagen
+def upload_to_profile(instance, filename):
+    return f'profile_pictures/user_{instance.id}/{filename}'
+
+# USER MODEL actualizado
 class User(AbstractUser):
     email = models.EmailField(max_length=125, unique=True)
-    profile_picture = models.URLField(
-        max_length=500,
+
+    profile_picture = models.ImageField(
+        upload_to=upload_to_profile,
         default=default_profile_picture,
         null=True,
         blank=True
     )
-    
+
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
 

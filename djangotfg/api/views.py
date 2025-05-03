@@ -34,7 +34,6 @@ class CustomLoginView(TokenObtainPairView):
 @api_view(['GET', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def user_profile(request):
-    """Retrieve or deactivate user profile."""
     user = request.user
 
     if request.method == 'DELETE':
@@ -43,7 +42,7 @@ def user_profile(request):
         return Response({'detail': SUCCESS_DEACTIVATE}, status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'GET':
-        serializer = UserProfileSerializer(user)
+        serializer = UserProfileSerializer(user, context={'request': request}) 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -70,11 +69,9 @@ def register_user(request):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 @throttle_classes([ProfileUpdateRateThrottle])
-
 def update_profile(request):
-    """Permite a los usuarios actualizar su perfil (nombre, apellidos, contraseña)."""
     user = request.user
-    serializer = UserProfileSerializer(user, data=request.data, partial=True)
+    serializer = UserProfileSerializer(user, data=request.data, partial=True, context={'request': request})  # 👈 CONTEXTO
 
     if serializer.is_valid():
         serializer.save()
@@ -222,7 +219,7 @@ def public_profile_view(request, username):
     except User.DoesNotExist:
         return Response({'error': ERROR_USER_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
 
-    serializer = PublicUserProfileSerializer(user)
+    serializer = PublicUserProfileSerializer(user, context={'request': request})  
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
