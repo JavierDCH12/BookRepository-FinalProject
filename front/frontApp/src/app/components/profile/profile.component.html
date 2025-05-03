@@ -3,13 +3,14 @@
 
     <!--  Cabecera con foto de perfil -->
     <div class="profile-header">
-      <!-- <img
+      <!-- 
+      <img
         *ngIf="userProfile?.profile_picture"
         [src]="userProfile?.profile_picture + '?t=' + timestamp"
         alt="Foto de perfil actualizada"
         class="profile-picture"
       />
-    -->
+      -->
 
       <!-- 
       <label *ngIf="editMode" for="fileInput" class="upload-label">📂 Cambiar foto</label>
@@ -17,12 +18,21 @@
       -->
     </div>
 
+    <!-- Información del usuario -->
+    <div class="user-info">
+      <h2>👤 {{ userProfile?.username }}</h2>
+      <p>📧 {{ userProfile?.email }}</p>
+      <p>📅 Se unió el {{ userProfile?.date_joined | date : "longDate" }}</p>
+    </div>
+
+    <!-- Botones de acciones -->
     <div class="mode-switch">
       <button (click)="activateEditMode()" [disabled]="editMode">✏️ Editar Perfil</button>
       <button (click)="activateStatsMode()" [disabled]="showStats">📊 Ver Estadísticas</button>
       <button (click)="navigateToHome()">🏠 Inicio</button>
     </div>
 
+    <!-- Sección de edición -->
     <div *ngIf="editMode" class="edit-section">
       <div class="profile-info">
         <input class="input-edit" [(ngModel)]="editedProfile.username" placeholder="Username">
@@ -52,6 +62,7 @@
       </div>
     </div>
 
+    <!-- Sección de estadísticas -->
     <div *ngIf="showStats" class="stats-section">
       <h3>📈 Tus estadísticas</h3>
       <div class="stat-item">
