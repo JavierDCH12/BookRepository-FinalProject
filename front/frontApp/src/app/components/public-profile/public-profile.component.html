@@ -1,31 +1,39 @@
 <div class="public-profile-container">
-
   <div class="loading-container" *ngIf="isLoading">
-    <p-progressSpinner styleClass="custom-spinner" strokeWidth="4" animationDuration=".8s"></p-progressSpinner>
+    <p-progressSpinner
+      styleClass="custom-spinner"
+      strokeWidth="4"
+      animationDuration=".8s"
+    ></p-progressSpinner>
     <p>⏳ Cargando perfil...</p>
   </div>
 
   <div class="error-container" *ngIf="!isLoading && errorMessage">
     <p>⚠️ {{ errorMessage }}</p>
-    <button class="back-home-button" (click)="navigateToHome()">🏠 Volver al inicio</button>
+    <button class="back-home-button" (click)="navigateToHome()">
+      🏠 Volver al inicio
+    </button>
   </div>
 
   <section *ngIf="!isLoading && userProfile" class="profile-content">
+    
 
     <div class="profile-header">
-      <img 
-      alt="User profile picture"
-  class="profile-picture"
-  [src]="userProfile.profile_picture + '?t=' + timestamp"
-  [alt]="userProfile.username + ' avatar'"
-  [title]="userProfile.username + '\'s profile picture'"
-/>
-
+      <!-- Imagen de perfil (comentada temporalmente) -->
+      <!--
+      <img
+        alt="User profile picture"
+        class="profile-picture"
+        [src]="userProfile.profile_picture + '?t=' + timestamp"
+        [alt]="userProfile.username + ' avatar'"
+        [title]="userProfile.username + '\'s profile picture'"
+      />
+      -->
     
       <div class="user-info">
         <h2>👤 {{ userProfile.username }}</h2>
         <p>📧 {{ userProfile.email }}</p>
-        <p>📅 Se unió el {{ userProfile.date_joined | date: 'longDate' }}</p>
+        <p>📅 Se unió el {{ userProfile.date_joined | date : "longDate" }}</p>
       </div>
     </div>
     
@@ -41,11 +49,11 @@
         <div
           class="book-card"
           *ngFor="let book of userProfile.favorites; let i = index"
-          [ngStyle]="{ 'animation-delay': (i * 100) + 'ms' }"
+          [ngStyle]="{ 'animation-delay': i * 100 + 'ms' }"
         >
-          <img 
-            class="book-cover" 
-            [src]="book.cover_url || 'assets/default-cover.png'" 
+          <img
+            class="book-cover"
+            [src]="book.cover_url || 'assets/default-cover.png'"
             [alt]="book.title + ' cover'"
             title="{{ book.title }} cover"
           />
@@ -54,7 +62,7 @@
             <p *ngIf="book.author" class="author">✍️ {{ book.author }}</p>
 
             <div class="rating-display" *ngIf="book.rating && book.rating > 0">
-              <ng-container *ngFor="let star of [1,2,3,4,5]">
+              <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
                 <span [class.filled-star]="star <= book.rating">★</span>
               </ng-container>
             </div>
@@ -68,7 +76,9 @@
     </section>
 
     <div class="back-button-container">
-      <button class="back-home-button" (click)="navigateToHome()">🏠 Volver al inicio</button>
+      <button class="back-home-button" (click)="navigateToHome()">
+        🏠 Volver al inicio
+      </button>
     </div>
   </section>
 </div>
