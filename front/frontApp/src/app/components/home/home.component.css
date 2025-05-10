@@ -34,16 +34,19 @@ body {
   margin: auto;
 }
 
+/* Contenedor principal */
 .top-layout {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 40px; 
+  justify-content: space-between; 
+  align-items: flex-start; 
 }
 
 /* Tarjetas de perfil */
 .profile-card {
-  width: 320px; /* Ancho fijo para la tarjeta */
-  max-width: 100%; /* Asegurar que no se desborde en pantallas pequeñas */
+  flex: 1 1 300px;  
+  max-width: 320px;
   background: #ffffff;
   padding: 24px;
   border-radius: 16px;
@@ -163,11 +166,19 @@ body {
   min-width: 0;
 }
 
+/* Sección principal */
 .main-section {
+  flex: 3 1 600px; /* Permitir que la sección principal ocupe más espacio */
   background: #ffffff;
   padding: 32px;
-  border-radius: 20px;
+  border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.main-section:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
 .main-section h2 {
@@ -290,14 +301,15 @@ body {
 /* Responsive */
 @media (max-width: 800px) {
   .top-layout {
-    flex-direction: column;
+    flex-direction: column; /* Cambiar a diseño vertical en pantallas pequeñas */
+    gap: 20px;
   }
   .home-container {
     padding: 20px;
   }
   .profile-card,
   .main-section {
-    width: 100%;
+    width: 100%; /* Asegurar que ocupen todo el ancho disponible */
     padding: 24px;
   }
   .buttons {
