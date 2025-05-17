@@ -34,7 +34,6 @@ body {
   margin: auto;
 }
 
-/* Contenedor principal */
 .top-layout {
   display: flex; 
   flex-wrap: wrap; 
@@ -43,7 +42,6 @@ body {
   align-items: flex-start; 
 }
 
-/* Tarjetas de perfil */
 .profile-card {
   flex: 1 1 300px;  
   max-width: 320px;
