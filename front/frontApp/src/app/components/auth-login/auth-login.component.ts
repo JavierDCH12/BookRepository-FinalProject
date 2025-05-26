@@ -56,6 +56,7 @@ export class AuthLoginComponent {
           this.isSubmitting = false;
           this.backendErrorMessage = null;
           this.loginForm.reset();
+          console.log('✅ Login exitoso. Procesando favoritos y wishlist pendientes...');
 
           this.favoriteService.processPendingFavorite();
 

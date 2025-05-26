@@ -63,19 +63,28 @@ export class WishlistService {
 
   processPendingWishlist(): void {
     const json = localStorage.getItem('pendingWishlistBook');
-    if (!json) return;
+    
+    if (!json) {
+      console.warn('📦 No hay libro pendiente en wishlist (localStorage vacío)');
+      return;
+    }
   
     const book: WishlistBook = JSON.parse(json);
+    console.log('📦 Intentando añadir wishlist pendiente:', book);
   
     this.addToWishlist(book).pipe(
       tap(() => {
+        console.log(`✅ Wishlist añadida tras login: ${book.title}`);
         localStorage.removeItem('pendingWishlistBook');
+        this.loadWishlist(); // Asegúrate de tener este método
       }),
       catchError((err) => {
+        console.error('❌ Error al añadir wishlist pendiente:', err);
         return throwError(() => err);
       })
     ).subscribe();
   }
+  
   
 
   
