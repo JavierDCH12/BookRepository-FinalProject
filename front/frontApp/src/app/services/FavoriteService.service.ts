@@ -25,7 +25,6 @@ export class FavoriteService {
   private favoriteBooksSubject = new BehaviorSubject<FavoriteBook[]>([]);
   favoriteBooks$ = this.favoriteBooksSubject.asObservable();
 
-  // ✅ Contador reactivo de favoritos
   public favoriteCount$ = this.favoriteBooks$.pipe(
     map(favs => favs.length)
   );
@@ -40,6 +39,24 @@ export class FavoriteService {
       )
       .subscribe();
   }
+
+  processPendingFavorite(): void {
+    const json = localStorage.getItem('pendingFavoriteBook');
+    if (!json) return;
+  
+    const book: FavoriteBook = JSON.parse(json);
+  
+    this.addFavorite(book).subscribe({
+      next: () => {
+        localStorage.removeItem('pendingFavoriteBook');
+        this.loadFavorites();
+      },
+      error: err => {
+        console.error(' Error al añadir favorito pendiente', err);
+      }
+    });
+  }
+  
 
   getFavorites(): Observable<FavoriteBook[]> {
     return this.favoriteBooks$;

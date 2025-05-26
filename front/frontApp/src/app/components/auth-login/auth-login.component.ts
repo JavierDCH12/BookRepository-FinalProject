@@ -9,6 +9,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { UserAuthServiceService } from '../../services/UserAuthService.service';
+import { FavoriteService } from '../../services/FavoriteService.service';
+import { WishlistService } from '../../services/WishlistService.service';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
 
 @Component({
@@ -27,7 +29,9 @@ export class AuthLoginComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private userAuthServiceService: UserAuthServiceService
+    private userAuthServiceService: UserAuthServiceService,
+    private favoriteService: FavoriteService,            // 👈 NUEVO
+    private wishlistService: WishlistService             // 👈 NUEVO
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
@@ -35,12 +39,28 @@ export class AuthLoginComponent {
     });
   }
 
-  // Mostrar contraseña
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
 
-  // Enviar formulario
+  processPendingFavorite(): void {
+      const json = localStorage.getItem('pendingFavoriteBook');
+      if (!json) return;
+    
+      const book: FavoriteBook = JSON.parse(json);
+    
+      this.addFavorite(book).subscribe({
+        next: () => {
+          localStorage.removeItem('pendingFavoriteBook');
+          this.loadFavorites();
+        },
+        error: err => {
+          console.error(' Error al añadir favorito pendiente', err);
+        }
+      });
+    }
+    
+
   onSubmit() {
     if (this.loginForm.valid) {
       this.isSubmitting = true;
@@ -50,7 +70,15 @@ export class AuthLoginComponent {
         next: () => {
           this.isSubmitting = false;
           this.backendErrorMessage = null;
-          this.loginForm.reset();          
+          this.loginForm.reset();
+
+          // ✅ Procesar favorito pendiente si existe
+          this.favoriteService.processPendingFavorite();
+
+          // ✅ Procesar wishlist pendiente si existe
+          this.wishlistService.processPendingWishlist();
+
+          // ✅ Redirigir
           this.router.navigate(['/home']);
         },
         
@@ -58,16 +86,13 @@ export class AuthLoginComponent {
           this.isSubmitting = false;
           this.backendErrorMessage = error?.message || 'Credenciales inválidas.';
         },
-        
       });
     } else {
       this.backendErrorMessage = 'Please fill out the form correctly.';
     }
   }
 
-  // Navegar a la página de registro
-    navigateToRegister() {
+  navigateToRegister() {
     this.router.navigate([NAVIGATION_ROUTES.REGISTER]);
   }
-
 }

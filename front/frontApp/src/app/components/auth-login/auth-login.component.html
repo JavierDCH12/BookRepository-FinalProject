@@ -10,7 +10,7 @@
     <label class="input-group">
       <i class="pi pi-lock icon"></i>
       <input [type]="showPassword ? 'text' : 'password'" formControlName="password" required placeholder="Enter your password" />
-      <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+      <button type="button" class="toggle-password" (click)="togglePasswordVisibility()" title="Toggle password visibility">
         <i class="pi" [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"></i>
       </button>
     </label>

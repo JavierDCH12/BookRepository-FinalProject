@@ -51,25 +51,19 @@ export class UserAuthServiceService {
   }
 
   loginUser(username: string, password: string): Observable<any> {
-    console.log('🛑 Enviando login para:', username);
   
     return this.http.post<LoginResponse>(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response) => {
-        console.log('✅ LOGIN RESPONSE:', response);
         this.clearStorage();
         this.storeTokens(response);
         this.authStatus.next(true);
-        console.log('📦 Nuevo token guardado:', localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN));
       }),
       switchMap(() => {
-        console.log('⌛️ Esperando 1 tick para refrescar interceptor...');
         return of(null); 
       }),
       switchMap(() => {
-        console.log('🔎 Solicitando perfil con token actualizado...');
         return this.profileService.getUserProfile().pipe(
           tap((profile) => {
-            console.log('👤 Perfil cargado tras login:', profile);
             this.profileService.setCurrentUser(profile);
             this.loginSuccessSourceAddBook.next();
           })

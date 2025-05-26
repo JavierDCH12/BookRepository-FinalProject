@@ -60,4 +60,23 @@ export class WishlistService {
     console.error('WishlistService error:', error);
     return throwError(() => new Error('Ocurrió un error al gestionar la wishlist.'));
   }
+
+  processPendingWishlist(): void {
+    const json = localStorage.getItem('pendingWishlistBook');
+    if (!json) return;
+  
+    const book: WishlistBook = JSON.parse(json);
+  
+    this.addToWishlist(book).pipe(
+      tap(() => {
+        localStorage.removeItem('pendingWishlistBook');
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      })
+    ).subscribe();
+  }
+  
+
+  
 }
