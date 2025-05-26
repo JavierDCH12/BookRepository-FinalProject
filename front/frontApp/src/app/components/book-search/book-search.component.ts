@@ -129,32 +129,7 @@ export class BookSearchComponent implements OnInit {
     });
   }
 
-  toggleFavorite(book: Book): void {
-    if (!this.isAuthenticated) {
-      localStorage.setItem('pendingFavoriteBook', JSON.stringify(book));
-      this.toggleAuthModal(true);
-      return;
-    }
-
-    const key = book.book_key;
-    if (this.isFavorite(key)) {
-      this.favoriteService.removeFavorite(key).pipe(take(1)).subscribe({
-        next: () => this.favoriteBooks.delete(key),
-        error: () => console.error('⚠️ Error removing favorite')
-      });
-    } else {
-      const favorite: FavoriteBook = {
-        ...this.transformToBookDTO(book),
-        review: '',
-        rating: 0
-      } as FavoriteBook;
-
-      this.favoriteService.addFavorite(favorite).pipe(take(1)).subscribe({
-        next: () => this.favoriteBooks.add(key),
-        error: () => console.error('⚠️ Error adding favorite')
-      });
-    }
-  }
+  
 
   isFavorite(bookKey: string): boolean {
     return this.favoriteBooks.has(bookKey);
@@ -169,13 +144,48 @@ export class BookSearchComponent implements OnInit {
     });
   }
 
-  toggleWishlist(book: Book): void {
+  toggleFavorite(book: Book): void {
     if (!this.isAuthenticated) {
-      localStorage.setItem('pendingWishlistBook', JSON.stringify(book));
+      const pendingBook = {
+        ...this.transformToBookDTO(book),
+        review: '',
+        rating: 0
+      };
+      localStorage.setItem('pendingFavoriteBook', JSON.stringify(pendingBook));
+      console.log('📦 Guardado en localStorage favorito pendiente:', pendingBook);
       this.toggleAuthModal(true);
       return;
     }
-
+  
+    const key = book.book_key;
+    if (this.isFavorite(key)) {
+      this.favoriteService.removeFavorite(key).pipe(take(1)).subscribe({
+        next: () => this.favoriteBooks.delete(key),
+        error: () => console.error('⚠️ Error removing favorite')
+      });
+    } else {
+      const favorite: FavoriteBook = {
+        ...this.transformToBookDTO(book),
+        review: '',
+        rating: 0
+      } as FavoriteBook;
+  
+      this.favoriteService.addFavorite(favorite).pipe(take(1)).subscribe({
+        next: () => this.favoriteBooks.add(key),
+        error: () => console.error('⚠️ Error adding favorite')
+      });
+    }
+  }
+  
+  toggleWishlist(book: Book): void {
+    if (!this.isAuthenticated) {
+      const pendingWishlist = this.transformToBookDTO(book);
+      localStorage.setItem('pendingWishlistBook', JSON.stringify(pendingWishlist));
+      console.log('📦 Guardado en localStorage wishlist pendiente:', pendingWishlist);
+      this.toggleAuthModal(true);
+      return;
+    }
+  
     const key = book.book_key;
     if (this.isInWishlist(key)) {
       this.wishlistService.removeFromWishlist(key).pipe(take(1)).subscribe({
@@ -184,13 +194,16 @@ export class BookSearchComponent implements OnInit {
       });
     } else {
       const wishlist: WishlistBook = this.transformToBookDTO(book) as WishlistBook;
-
+  
       this.wishlistService.addToWishlist(wishlist).pipe(take(1)).subscribe({
         next: () => this.wishlistBooks.add(key),
         error: () => console.error('⚠️ Error adding to wishlist')
       });
     }
   }
+  
+
+  
 
   isInWishlist(bookKey: string): boolean {
     return this.wishlistBooks.has(bookKey);
