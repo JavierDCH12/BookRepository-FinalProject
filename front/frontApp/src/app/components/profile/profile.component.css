@@ -204,6 +204,34 @@ button {
   gap: 8px;
 }
 
+/* Menú de opciones */
+.menu-options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.menu-option {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-option:hover {
+  background-color: #e0e0e0;
+}
+
+.menu-option.active {
+  background-color: #1e88e5; /* Azul más oscuro para destacar */
+  color: white;
+  box-shadow: 0 4px 10px rgba(30, 136, 229, 0.3);
+  cursor: default; /* Indicar que no es clickeable */
+}
+
 /* ✨ Animaciones */
 @keyframes fadeIn {
   from {

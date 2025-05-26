@@ -1,23 +1,23 @@
 <div class="container">
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <h2>Login</h2>
+    <h2>Iniciar Sesión</h2>
 
     <label class="input-group">
       <i class="pi pi-user icon"></i>
-      <input type="text" formControlName="username" required placeholder="Enter your username" />
+      <input type="text" formControlName="username" required placeholder="Introduce tu nombre de usuario" />
     </label>
     
     <label class="input-group">
       <i class="pi pi-lock icon"></i>
-      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" required placeholder="Enter your password" />
-      <button type="button" class="toggle-password" (click)="togglePasswordVisibility()" title="Toggle password visibility">
+      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" required placeholder="Introduce tu contraseña" />
+      <button type="button" class="toggle-password" (click)="togglePasswordVisibility()" title="Mostrar/Ocultar contraseña">
         <i class="pi" [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"></i>
       </button>
     </label>
     
     <span *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-text">
-      <span *ngIf="loginForm.get('password')?.hasError('required')">Password is required.</span>
-      <span *ngIf="loginForm.get('password')?.hasError('minlength')">Password must be at least 5 characters long.</span>
+      <span *ngIf="loginForm.get('password')?.hasError('required')">La contraseña es obligatoria.</span>
+      <span *ngIf="loginForm.get('password')?.hasError('minlength')">La contraseña debe tener al menos 5 caracteres.</span>
     </span>
 
     <div *ngIf="backendErrorMessage" class="error-message">
@@ -26,9 +26,9 @@
 
     <button type="submit" [disabled]="loginForm.invalid || isSubmitting">
       <i *ngIf="isSubmitting" class="pi pi-spin pi-spinner" style="font-size: 1.2rem; margin-right: 6px;"></i>
-      {{ isSubmitting ? 'Logging in...' : 'Login' }}
+      {{ isSubmitting ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
     </button>
   </form>
 
-  <button type="button" (click)="navigateToRegister()" class="register-button">Go to Register</button>
+  <button type="button" (click)="navigateToRegister()" class="register-button">Ir a Registro</button>
 </div>
