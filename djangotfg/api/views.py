@@ -303,28 +303,31 @@ def delete_from_wishlist(request, book_key):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def public_reviews_by_book(request, book_key):
+    """Devuelve todas las reseñas públicas de un libro concreto."""
     try:
-        reviews = FavoriteBook.objects.filter(book_key=book_key).exclude(review__isnull=True).exclude(review__exact='')
+        reviews = FavoriteBook.objects.filter(book_key=book_key)\
+            .exclude(review__isnull=True)\
+            .exclude(review__exact='')
 
         data = []
         for fav in reviews:
             user = fav.user
-            if user is None:
+
+            if not user or not hasattr(user, 'username'):
                 continue
 
             data.append({
                 'username': user.username,
                 'review': fav.review,
                 'rating': fav.rating,
-                'cover_url': fav.cover_url,
-                'profile_picture': user.profile_picture if user.profile_picture else None
+                'cover_url': fav.cover_url
             })
 
         return Response(data, status=status.HTTP_200_OK)
+
     except Exception as e:
-        # Log opcional
         import logging
         logger = logging.getLogger(__name__)
-        logger.error(f"Error en public_reviews_by_book: {str(e)}")
-
-        return Response({"detail": "Error interno al obtener las reseñas."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        logger.error(f" Error en public_reviews_by_book: {str(e)}")
+        return Response({"detail": "Error interno al obtener reseñas."},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
