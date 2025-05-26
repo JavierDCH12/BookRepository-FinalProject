@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from '../../environ/environ';
+import { of } from 'rxjs';
 
 export interface FavoriteBook {
   book_key: string;
@@ -142,7 +143,3 @@ export class FavoriteService {
     return throwError(() => error);
   }
 }
-function of(arg0: null): Observable<any> {
-  throw new Error('Function not implemented.');
-}
-

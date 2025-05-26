@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from '../../environ/environ';
+import { of } from 'rxjs';
 
 export interface WishlistBook {
   book_key: string;
@@ -88,8 +89,5 @@ export class WishlistService {
   
 
   
-}
-function of(arg0: null): Observable<any> {
-  throw new Error('Function not implemented.');
 }
 
