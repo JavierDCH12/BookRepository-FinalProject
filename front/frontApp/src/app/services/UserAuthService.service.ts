@@ -95,8 +95,8 @@ export class UserAuthServiceService {
       localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
       localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH);
       localStorage.removeItem(LOCAL_STORAGE_KEYS.USERNAME);
-      localStorage.removeItem('pendingFavoriteBook');
-      localStorage.removeItem('pendingWishlistBook');
+      //localStorage.removeItem('pendingFavoriteBook');
+      //localStorage.removeItem('pendingWishlistBook');
     }
   }
 
