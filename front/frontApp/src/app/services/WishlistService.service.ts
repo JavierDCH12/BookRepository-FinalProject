@@ -61,31 +61,35 @@ export class WishlistService {
     return throwError(() => new Error('Ocurrió un error al gestionar la wishlist.'));
   }
 
-  processPendingWishlist(): void {
+  processPendingWishlist(): Observable<any> {
     const json = localStorage.getItem('pendingWishlistBook');
-    
+  
     if (!json) {
       console.warn('📦 No hay libro pendiente en wishlist (localStorage vacío)');
-      return;
+      return of(null); 
     }
   
     const book: WishlistBook = JSON.parse(json);
     console.log('📦 Intentando añadir wishlist pendiente:', book);
   
-    this.addToWishlist(book).pipe(
+    return this.addToWishlist(book).pipe(
       tap(() => {
         console.log(`✅ Wishlist añadida tras login: ${book.title}`);
         localStorage.removeItem('pendingWishlistBook');
-        this.loadWishlist(); // Asegúrate de tener este método
+        this.loadWishlist(); // Asegura refresco tras añadir
       }),
       catchError((err) => {
         console.error('❌ Error al añadir wishlist pendiente:', err);
-        return throwError(() => err);
+        return of(null); 
       })
-    ).subscribe();
+    );
   }
   
   
 
   
 }
+function of(arg0: null): Observable<any> {
+  throw new Error('Function not implemented.');
+}
+

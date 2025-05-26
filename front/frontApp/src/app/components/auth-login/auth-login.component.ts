@@ -12,6 +12,7 @@ import { UserAuthServiceService } from '../../services/UserAuthService.service';
 import { FavoriteService } from '../../services/FavoriteService.service';
 import { WishlistService } from '../../services/WishlistService.service';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-auth-login',
@@ -50,21 +51,25 @@ export class AuthLoginComponent {
     if (this.loginForm.valid) {
       this.isSubmitting = true;
       const { username, password } = this.loginForm.value;
-
+  
       this.userAuthServiceService.loginUser(username, password).subscribe({
         next: () => {
           this.isSubmitting = false;
           this.backendErrorMessage = null;
           this.loginForm.reset();
+  
           console.log('✅ Login exitoso. Procesando favoritos y wishlist pendientes...');
-
-          this.favoriteService.processPendingFavorite();
-
-          this.wishlistService.processPendingWishlist();
-
-          this.router.navigate(['/home']);
+  
+          forkJoin([
+            this.favoriteService.processPendingFavorite(),
+            this.wishlistService.processPendingWishlist()
+          ]).subscribe({
+            complete: () => {
+              console.log('✅ Pendientes procesados. Redirigiendo a /home');
+              this.router.navigate(['/home']);
+            }
+          });
         },
-        
         error: (error) => {
           this.isSubmitting = false;
           this.backendErrorMessage = error?.message || 'Credenciales inválidas.';
