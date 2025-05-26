@@ -51,16 +51,13 @@ export class UserAuthServiceService {
   }
 
   loginUser(username: string, password: string): Observable<any> {
-  
     return this.http.post<LoginResponse>(`${this.baseUrl}users/login/`, { username, password }).pipe(
       tap((response) => {
-        this.clearStorage();
+        this.clearSessionTokens();
         this.storeTokens(response);
         this.authStatus.next(true);
       }),
-      switchMap(() => {
-        return of(null); 
-      }),
+      switchMap(() => of(null)),
       switchMap(() => {
         return this.profileService.getUserProfile().pipe(
           tap((profile) => {
@@ -74,9 +71,6 @@ export class UserAuthServiceService {
       })
     );
   }
-  
-  
-  
 
   private storeTokens(data: LoginResponse): void {
     if (typeof window !== 'undefined') {
@@ -86,12 +80,22 @@ export class UserAuthServiceService {
     }
   }
 
-  private clearStorage(): void {
+  
+  private clearSessionTokens(): void {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
       localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH);
       localStorage.removeItem(LOCAL_STORAGE_KEYS.USERNAME);
-      localStorage.removeItem('pendingFavoriteBook'); // También eliminar cualquier libro pendiente
+    }
+  }
+
+
+  private clearAllStorage(): void {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH);
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.USERNAME);
+      localStorage.removeItem('pendingFavoriteBook');
       localStorage.removeItem('pendingWishlistBook');
     }
   }
@@ -135,9 +139,9 @@ export class UserAuthServiceService {
   }
 
   logout(): void {
-    this.clearStorage();                     // Borrar todos los tokens y username
-    this.profileService.clearUserProfile();   // Limpiar perfil actual
-    this.authStatus.next(false);              // Emitir desautenticado
-    this.router.navigate([NAVIGATION_ROUTES.LOGIN]); // Redirigir a login
+    this.clearAllStorage();                     
+    this.profileService.clearUserProfile();
+    this.authStatus.next(false);
+    this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
   }
 }
