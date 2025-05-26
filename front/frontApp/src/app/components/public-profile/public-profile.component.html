@@ -47,12 +47,18 @@
           (click)="navigateToBookDetail(book.book_key)"
           title="Ver detalles de {{ book.title }}"
         >
-          <img [src]="book.cover || 'assets/default-book-cover.jpg'" [alt]="book.title" [title]="book.title" />
+          <img 
+          alt="Book cover image"
+            [src]="book.cover_url || 'assets/default-book-cover.jpg'" 
+            [alt]="book.title" 
+            [title]="book.title" 
+          />
           <h4>{{ book.title }}</h4>
           <p>{{ book.author }}</p>
         </div>
       </div>
     </div>
+    
 
     <div class="back-button-container">
       <button class="back-home-button" (click)="navigateToHome()">
