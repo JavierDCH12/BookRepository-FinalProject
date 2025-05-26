@@ -38,42 +38,21 @@
     </div>
     
 
-    <section class="favorites-section">
-      <h3>📚 Libros favoritos</h3>
-
-      <div *ngIf="userProfile.favorites.length === 0" class="no-favorites">
-        <p>✨ Este usuario aún no ha añadido libros a favoritos.</p>
-      </div>
-
-      <div class="favorites-grid" *ngIf="userProfile.favorites.length > 0">
+    <div class="favorite-books" *ngIf="(userProfile?.favorites?.length ?? 0) > 0">
+      <h3>📚 Libros Favoritos</h3>
+      <div class="book-grid">
         <div
           class="book-card"
-          *ngFor="let book of userProfile.favorites; let i = index"
-          [ngStyle]="{ 'animation-delay': i * 100 + 'ms' }"
+          *ngFor="let book of userProfile.favorites"
+          (click)="navigateToBookDetail(book.book_key)"
+          title="Ver detalles de {{ book.title }}"
         >
-          <img
-            class="book-cover"
-            [src]="book.cover_url || 'assets/default-cover.png'"
-            [alt]="book.title + ' cover'"
-            title="{{ book.title }} cover"
-          />
-          <div class="book-info">
-            <h4>{{ book.title }}</h4>
-            <p *ngIf="book.author" class="author">✍️ {{ book.author }}</p>
-
-            <div class="rating-display" *ngIf="book.rating && book.rating > 0">
-              <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                <span [class.filled-star]="star <= book.rating">★</span>
-              </ng-container>
-            </div>
-
-            <blockquote class="review" *ngIf="book.review">
-              “{{ book.review }}”
-            </blockquote>
-          </div>
+          <img [src]="book.cover || 'assets/default-book-cover.jpg'" [alt]="book.title" [title]="book.title" />
+          <h4>{{ book.title }}</h4>
+          <p>{{ book.author }}</p>
         </div>
       </div>
-    </section>
+    </div>
 
     <div class="back-button-container">
       <button class="back-home-button" (click)="navigateToHome()">

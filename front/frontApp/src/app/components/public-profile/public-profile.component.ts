@@ -77,4 +77,14 @@ export class PublicProfileComponent implements OnInit {
   navigateToHome() {
     this.router.navigate([NAVIGATION_ROUTES.HOME]);
   }
+
+  // Método para navegar a la pantalla de detalle del libro
+  navigateToBookDetail(bookKey: string): void {
+    this.router.navigate(['/book-detail', bookKey]);
+  }
+
+  // Método para obtener los libros favoritos del usuario
+  getFavoriteBooks(): any[] {
+    return this.userProfile?.favorites || []; // ✅ Cambiado de 'favoriteBooks' a 'favorites'
+  }
 }
