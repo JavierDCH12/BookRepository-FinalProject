@@ -43,22 +43,7 @@ export class AuthLoginComponent {
     this.showPassword = !this.showPassword;
   }
 
-  processPendingFavorite(): void {
-      const json = localStorage.getItem('pendingFavoriteBook');
-      if (!json) return;
-    
-      const book: FavoriteBook = JSON.parse(json);
-    
-      this.addFavorite(book).subscribe({
-        next: () => {
-          localStorage.removeItem('pendingFavoriteBook');
-          this.loadFavorites();
-        },
-        error: err => {
-          console.error(' Error al añadir favorito pendiente', err);
-        }
-      });
-    }
+
     
 
   onSubmit() {
@@ -72,13 +57,10 @@ export class AuthLoginComponent {
           this.backendErrorMessage = null;
           this.loginForm.reset();
 
-          // ✅ Procesar favorito pendiente si existe
           this.favoriteService.processPendingFavorite();
 
-          // ✅ Procesar wishlist pendiente si existe
           this.wishlistService.processPendingWishlist();
 
-          // ✅ Redirigir
           this.router.navigate(['/home']);
         },
         
