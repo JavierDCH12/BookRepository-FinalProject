@@ -1,6 +1,8 @@
 # 📚 WebApp de Gestión de Libros (Backend + Frontend)
 
-Proyecto de desarrollo completo de una aplicación web para la gestión de usuarios, libros favoritos, valoraciones y reseñas. Incluye tanto la API backend como el frontend interactivo.
+Proyecto completo de desarrollo de una aplicación web interactiva centrada en la gestión de usuarios y libros, con funcionalidades como favoritos, valoraciones y reseñas. Incluye tanto el diseño y desarrollo del frontend (interfaz de usuario) como la creación de una API RESTful robusta en el backend.
+
+El objetivo ha sido construir una plataforma moderna, segura y escalable, capaz de ofrecer una experiencia fluida al usuario y preparada para futuras ampliaciones.
 
 ## 🚀 Tecnologías utilizadas
 ### Backend
@@ -97,7 +99,7 @@ Proyecto de desarrollo completo de una aplicación web para la gestión de usuar
 - Optimización de carga en frontend con lazy loading
 
 ## 📈 Estado del proyecto
-✅ Desarrollo en curso — fase de documentación, optimización y últimas pruebas de integración.
+✅ Desarrollo finalizado — actualmente en fase de documentación, optimización de rendimiento y validación completa de funcionalidades antes del despliegue definitivo.
 
 ## 📧 Autor
 **Javier Delgado Chacón**  
