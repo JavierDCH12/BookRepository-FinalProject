@@ -11,7 +11,7 @@ El objetivo ha sido construir una plataforma moderna, segura y escalable, capaz 
 - Django REST Framework
 - SimpleJWT (autenticación por tokens JWT)
 - drf-yasg (documentación OpenAPI/Swagger)
-- PostgreSQL (en producción) / SQLite (en desarrollo)
+- PostgreSQL (en producción)
 
 ### Frontend
 - Angular 16+
@@ -22,7 +22,7 @@ El objetivo ha sido construir una plataforma moderna, segura y escalable, capaz 
 
 ## 🔎 Funcionalidades principales
 - Registro y autenticación de usuarios
-- Gestión de perfil y foto de usuario
+- Gestión de perfil
 - Añadir y eliminar libros favoritos
 - Valoración y reseñas de libros favoritos
 - Consulta de libros más populares
