@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SearchService, Book } from '../../services/BookSearchService.service';
 import { FavoriteService } from '../../services/FavoriteService.service';
+import { UserAuthServiceService } from '../../services/UserAuthService.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
@@ -17,6 +18,7 @@ import Swal from 'sweetalert2';
 export class BookDetailComponent implements OnInit {
   book: Book | null = null;
   isFavorite = false;
+  isAuthenticated = false;
   reviewText = '';
   isEditingReview = false;
   isLoading = true;
@@ -29,10 +31,13 @@ export class BookDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private searchService: SearchService,
     private favoriteService: FavoriteService,
+    private userAuthService: UserAuthServiceService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.isAuthenticated = this.userAuthService.isAuthenticated();
+
     const bookKey = this.route.snapshot.paramMap.get('bookKey');
     if (bookKey) {
       this.bookKey = bookKey;
@@ -67,7 +72,6 @@ export class BookDetailComponent implements OnInit {
   navigateToPublicProfile(username: string): void {
     this.router.navigate([`/user/${username}`]);
   }
-  
 
   checkIfFavorite(bookKey: string): void {
     this.favoriteService.getFavorites().subscribe({
@@ -97,6 +101,12 @@ export class BookDetailComponent implements OnInit {
       review: this.reviewText || '',
       rating: this.rating || 0
     };
+
+    if (!this.isAuthenticated) {
+      localStorage.setItem('pendingFavoriteBook', JSON.stringify(favoriteBook));
+      this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
+      return;
+    }
 
     this.favoriteService.addFavorite(favoriteBook).subscribe({
       next: () => {
