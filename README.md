@@ -11,7 +11,7 @@ El objetivo ha sido construir una plataforma moderna, segura y escalable, capaz 
 - Django REST Framework
 - SimpleJWT (autenticación por tokens JWT)
 - drf-yasg (documentación OpenAPI/Swagger)
-- PostgreSQL (en producción)
+- PostgreSQL (despliegue en Railway)
 
 ### Frontend
 - Angular 16+
@@ -21,9 +21,10 @@ El objetivo ha sido construir una plataforma moderna, segura y escalable, capaz 
 - SweetAlert2 (para notificaciones y diálogos interactivos)
 
 ## 🔎 Funcionalidades principales
-- Registro y autenticación de usuarios
-- Gestión de perfil
+- Registro y autenticación (login) de usuarios
+- Gestión de perfil y actualización de contraseñas
 - Añadir y eliminar libros favoritos
+- Añadir y eliminar libros de la wishlist
 - Valoración y reseñas de libros favoritos
 - Consulta de libros más populares
 - Visualización de perfiles públicos
@@ -94,12 +95,11 @@ El objetivo ha sido construir una plataforma moderna, segura y escalable, capaz 
 - HTTPS forzado en producción
 - Cookies seguras y protección CSRF
 - Throttling para login, registro y endpoints sensibles
-- Índices de base de datos en campos clave para optimización
 - Caché en endpoints públicos
 - Optimización de carga en frontend con lazy loading
 
 ## 📈 Estado del proyecto
-✅ Desarrollo finalizado — actualmente en fase de documentación, optimización de rendimiento y validación completa de funcionalidades antes del despliegue definitivo.
+✅ Desarrollo finalizado — actualmente en fase de documentación, optimización de rendimiento y validación completa de funcionalidades antes del despliegue definitivo. Tercera versión (tag) publicada.
 
 ## 📧 Autor
 **Javier Delgado Chacón**  
