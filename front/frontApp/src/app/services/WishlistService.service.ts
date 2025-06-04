@@ -23,7 +23,6 @@ export class WishlistService {
   private wishlistSubject = new BehaviorSubject<WishlistBook[]>([]);
   public wishlist$ = this.wishlistSubject.asObservable();
 
-  // ✅ Observable reactivo con el contador de libros
   public wishlistCount$ = this.wishlist$.pipe(
     map((wishlist) => wishlist.length)
   );
@@ -66,21 +65,21 @@ export class WishlistService {
     const json = localStorage.getItem('pendingWishlistBook');
   
     if (!json) {
-      console.warn('📦 No hay libro pendiente en wishlist (localStorage vacío)');
+      console.warn(' No hay libro pendiente en wishlist (localStorage vacío)');
       return of(null); 
     }
   
     const book: WishlistBook = JSON.parse(json);
-    console.log('📦 Intentando añadir wishlist pendiente:', book);
+    console.log(' Intentando añadir wishlist pendiente:', book);
   
     return this.addToWishlist(book).pipe(
       tap(() => {
-        console.log(`✅ Wishlist añadida tras login: ${book.title}`);
+        console.log(` Wishlist añadida tras login: ${book.title}`);
         localStorage.removeItem('pendingWishlistBook');
-        this.loadWishlist(); // Asegura refresco tras añadir
+        this.loadWishlist(); 
       }),
       catchError((err) => {
-        console.error('❌ Error al añadir wishlist pendiente:', err);
+        console.error(' Error al añadir wishlist pendiente:', err);
         return of(null); 
       })
     );
