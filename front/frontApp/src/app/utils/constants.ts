@@ -1,4 +1,4 @@
-// Constants for the application
+// CONSTANTES DE USO PARA RUTAS  Y TOKEN
 // These constants are used throughout the application for various purposes
 export const NAVIGATION_ROUTES = {
     HOME: '/',
