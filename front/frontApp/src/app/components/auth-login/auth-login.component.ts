@@ -31,8 +31,8 @@ export class AuthLoginComponent {
     private fb: FormBuilder,
     private router: Router,
     private userAuthServiceService: UserAuthServiceService,
-    private favoriteService: FavoriteService,            // 👈 NUEVO
-    private wishlistService: WishlistService             // 👈 NUEVO
+    private favoriteService: FavoriteService,            
+    private wishlistService: WishlistService            
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
@@ -58,14 +58,14 @@ export class AuthLoginComponent {
           this.backendErrorMessage = null;
           this.loginForm.reset();
   
-          console.log('✅ Login exitoso. Procesando favoritos y wishlist pendientes...');
+          console.log('Login exitoso. Procesando favoritos y wishlist pendientes...');
   
           forkJoin([
             this.favoriteService.processPendingFavorite(),
             this.wishlistService.processPendingWishlist()
           ]).subscribe({
             complete: () => {
-              console.log('✅ Pendientes procesados. Redirigiendo a /home');
+              console.log('Pendientes procesados. Redirigiendo a /home');
               this.router.navigate(['/home']);
             }
           });
