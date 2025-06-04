@@ -50,7 +50,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
       next: (link: string | null) => {
         if (link) window.open(link, '_blank');
       },
-      error: (err) => console.error('❌ Error obteniendo Wikipedia:', err)
+      error: (err) => console.error(' Error obteniendo Wikipedia:', err)
     });
   }
 
@@ -59,10 +59,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
   
     this.wishlistService.removeFromWishlist(bookKey).subscribe({
       next: () => {
-        console.log(`✅ ${bookKey} eliminado de la wishlist`);
+        console.log(` ${bookKey} eliminado de la wishlist`);
       },
       error: (err) => {
-        console.warn(`⚠️ Error al eliminar ${bookKey} del backend`, err);
+        console.warn(` Error al eliminar ${bookKey} del backend`, err);
       }
     });
   }
