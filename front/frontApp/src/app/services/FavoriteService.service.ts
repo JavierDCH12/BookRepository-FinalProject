@@ -44,21 +44,21 @@ export class FavoriteService {
   processPendingFavorite(): Observable<any> {
     const json = localStorage.getItem('pendingFavoriteBook');
     if (!json) {
-      console.warn('📦 No hay favorito pendiente en localStorage');
+      console.warn(' No hay favorito pendiente en localStorage');
       return of(null); 
     }
 
     const book: FavoriteBook = JSON.parse(json);
-    console.log('📦 Intentando enviar favorito pendiente:', book);
+    console.log(' Intentando enviar favorito pendiente:', book);
 
     return this.addFavorite(book).pipe(
       tap(() => {
-        console.log(`✅ Favorito añadido tras login: ${book.title}`);
+        console.log(` Favorito añadido tras login: ${book.title}`);
         localStorage.removeItem('pendingFavoriteBook');
         this.loadFavorites();
       }),
       catchError(err => {
-        console.error('❌ Error al añadir favorito pendiente:', err);
+        console.error(' Error al añadir favorito pendiente:', err);
         return of(null); 
       })
     );
@@ -67,7 +67,7 @@ export class FavoriteService {
   addPendingFavorite(book: FavoriteBook): void {
     const json = JSON.stringify(book);
     localStorage.setItem('pendingFavoriteBook', json);
-    console.log('📦 Guardado en localStorage favorito pendiente:', book);
+    console.log(' Guardado en localStorage favorito pendiente:', book);
   }
   
   getFavorites(): Observable<FavoriteBook[]> {
