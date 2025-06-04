@@ -50,7 +50,7 @@ export class FavoriteListComponent implements OnInit {
       next: (books: FavoriteBook[]) => {
         this.popularBooks = books;
       },
-      error: (err) => console.error('⚠️ Error loading popular books:', err),
+      error: (err) => console.error('Error loading popular books:', err),
     });
   }
 
@@ -69,9 +69,9 @@ export class FavoriteListComponent implements OnInit {
       },
       error: (error) => {
         if (error.status === 404) {
-          console.warn(`⚠️ Book ${bookKey} ya no estaba en favoritos (404).`);
+          console.warn(`Book ${bookKey} ya no estaba en favoritos (404).`);
         } else {
-          console.error(`❌ Error eliminando favorito ${bookKey}:`, error);
+          console.error(`Error eliminando favorito ${bookKey}:`, error);
         }
       }
     });
@@ -93,10 +93,10 @@ export class FavoriteListComponent implements OnInit {
   
       this.favoriteService.updateRating(bookKey, rating).subscribe({
         next: () => {
-          console.log(`⭐ Rating actualizado a ${rating} para ${bookKey}`);
+          console.log(`Rating actualizado a ${rating} para ${bookKey}`);
         },
         error: (err) => {
-          console.error(`❌ Error actualizando rating para ${bookKey}`, err);
+          console.error(`Error actualizando rating para ${bookKey}`, err);
         }
       });
     }
@@ -109,7 +109,7 @@ export class FavoriteListComponent implements OnInit {
         if (link) window.open(link, '_blank');
       },
       error: (err) => {
-        console.error(`❌ Error obteniendo el enlace de Wikipedia:`, err);
+        console.error(` Error obteniendo el enlace de Wikipedia:`, err);
       }
     });
   }
