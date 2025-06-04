@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
     this.isAuthenticated = this.userAuthService.isAuthenticated();
 
     if (this.isAuthenticated) {
-      this.loadUserProfile(); // ⚡ Cargar perfil si ya está autenticado
+      this.loadUserProfile(); 
       this.checkPendingFavorite();
       this.checkPendingWishlist();
       this.wishlistService.loadWishlist();
@@ -108,7 +108,7 @@ export class HomeComponent implements OnInit {
     this.isAuthenticated = false;
     this.favoriteCount = 0;
     this.wishlistCount = 0;
-    localStorage.clear(); // ⚡ Limpiar todo el almacenamiento local
+    localStorage.clear(); 
     this.router.navigate(['/login']);
   }
 
@@ -134,11 +134,11 @@ export class HomeComponent implements OnInit {
     this.profileService.getUserProfile().subscribe({
       next: (profile: UserProfile) => {
         this.userProfile = profile;
-        this.timestamp = Date.now(); // 👈 Forzar recarga de imagen
+        this.timestamp = Date.now(); 
         localStorage.setItem('username', profile.username);
       },
       error: (error: any) => {
-        console.error('⚠️ Error cargando el perfil:', error);
+        console.error(' Error cargando el perfil:', error);
         this.logout();
       }
     });
@@ -165,15 +165,14 @@ export class HomeComponent implements OnInit {
 
       this.favoriteService.addFavorite(favoriteBook).subscribe({
         next: () => {
-          //console.log(`✅ Libro '${favoriteBook.title}' añadido automáticamente después del login.`);
           localStorage.removeItem('pendingFavoriteBook');
           this.toastr.success(
-            `'${favoriteBook.title}' se ha añadido a tus favoritos ⭐`,
+            `'${favoriteBook.title}' se ha añadido a tus favoritos `,
             'Libro añadido'
           );
         },
         error: (err: any) => {
-          console.error('⚠️ Error añadiendo favorito post-login:', err);
+          console.error(' Error añadiendo favorito post-login:', err);
           localStorage.removeItem('pendingFavoriteBook');
           this.toastr.error(
             'No se pudo añadir el libro automáticamente.',
@@ -202,7 +201,6 @@ export class HomeComponent implements OnInit {
   
       this.wishlistService.addToWishlist(wishlistBook).subscribe({
         next: () => {
-          //console.log(`Libro '${wishlistBook.title}' añadido a wishlist tras login.`);
           localStorage.removeItem('pendingWishlistBook');
           this.toastr.success(
             `'${wishlistBook.title}' se ha añadido a tu wishlist `,
