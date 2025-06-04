@@ -125,7 +125,7 @@ export class BookSearchComponent implements OnInit {
       next: (favorites: FavoriteBook[]) => {
         this.favoriteBooks = new Set(favorites.map(f => f.book_key));
       },
-      error: () => console.error('⚠️ Error loading favorites')
+      error: () => console.error('Error loading favorites')
     });
   }
 
@@ -140,7 +140,7 @@ export class BookSearchComponent implements OnInit {
       next: (wishlist: WishlistBook[]) => {
         this.wishlistBooks = new Set(wishlist.map(w => w.book_key));
       },
-      error: () => console.error('⚠️ Error loading wishlist')
+      error: () => console.error('Error loading wishlist')
     });
   }
 
@@ -152,7 +152,7 @@ export class BookSearchComponent implements OnInit {
         rating: 0
       };
       localStorage.setItem('pendingFavoriteBook', JSON.stringify(pendingBook));
-      console.log('📦 Guardado en localStorage favorito pendiente:', pendingBook);
+      console.log('Guardado en localStorage favorito pendiente:', pendingBook);
       this.toggleAuthModal(true);
       return;
     }
@@ -161,7 +161,7 @@ export class BookSearchComponent implements OnInit {
     if (this.isFavorite(key)) {
       this.favoriteService.removeFavorite(key).pipe(take(1)).subscribe({
         next: () => this.favoriteBooks.delete(key),
-        error: () => console.error('⚠️ Error removing favorite')
+        error: () => console.error('Error removing favorite')
       });
     } else {
       const favorite: FavoriteBook = {
@@ -172,7 +172,7 @@ export class BookSearchComponent implements OnInit {
   
       this.favoriteService.addFavorite(favorite).pipe(take(1)).subscribe({
         next: () => this.favoriteBooks.add(key),
-        error: () => console.error('⚠️ Error adding favorite')
+        error: () => console.error('Error adding favorite')
       });
     }
   }
@@ -181,7 +181,7 @@ export class BookSearchComponent implements OnInit {
     if (!this.isAuthenticated) {
       const pendingWishlist = this.transformToBookDTO(book);
       localStorage.setItem('pendingWishlistBook', JSON.stringify(pendingWishlist));
-      console.log('📦 Guardado en localStorage wishlist pendiente:', pendingWishlist);
+      console.log('Guardado en localStorage wishlist pendiente:', pendingWishlist);
       this.toggleAuthModal(true);
       return;
     }
@@ -190,14 +190,14 @@ export class BookSearchComponent implements OnInit {
     if (this.isInWishlist(key)) {
       this.wishlistService.removeFromWishlist(key).pipe(take(1)).subscribe({
         next: () => this.wishlistBooks.delete(key),
-        error: () => console.error('⚠️ Error removing from wishlist')
+        error: () => console.error(' Error removing from wishlist')
       });
     } else {
       const wishlist: WishlistBook = this.transformToBookDTO(book) as WishlistBook;
   
       this.wishlistService.addToWishlist(wishlist).pipe(take(1)).subscribe({
         next: () => this.wishlistBooks.add(key),
-        error: () => console.error('⚠️ Error adding to wishlist')
+        error: () => console.error(' Error adding to wishlist')
       });
     }
   }
@@ -215,7 +215,7 @@ export class BookSearchComponent implements OnInit {
         if (link) {
           window.open(link, '_blank');
         } else {
-          console.warn(`⚠️ No Wikipedia link for ${author}`);
+          console.warn(` No Wikipedia link for ${author}`);
         }
       },
       error: (err) => console.error('❌ Wikipedia error:', err)
