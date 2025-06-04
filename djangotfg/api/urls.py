@@ -34,6 +34,7 @@ urlpatterns = [
     path('wishlist/', manage_wishlist, name='manage-wishlist'),
     path('wishlist/<str:book_key>/', delete_from_wishlist, name='wishlist-delete'),
     path('books/<str:book_key>/reviews/', public_reviews_by_book, name='public_reviews_by_book'),
+    path('wikipedia-link/', wikipedia_link), 
 
 
 ]
