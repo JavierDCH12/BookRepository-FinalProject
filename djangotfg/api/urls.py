@@ -11,7 +11,7 @@ from .views import (
     public_profile_view,
     popular_books,
     manage_wishlist,
-    delete_from_wishlist, wikipedia_link
+    delete_from_wishlist, wikipedia_link,
     CustomLoginView,  # Nuestra vista de login personalizada
 )
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
