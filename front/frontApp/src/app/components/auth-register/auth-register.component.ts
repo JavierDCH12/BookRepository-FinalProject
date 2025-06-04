@@ -1,16 +1,27 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { UserAuthServiceService } from '../../services/UserAuthService.service';
+import { FavoriteService } from '../../services/FavoriteService.service';
+import { WishlistService } from '../../services/WishlistService.service';
 import { NAVIGATION_ROUTES } from '../../utils/constants';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-auth-register',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './auth-register.component.html',
-  styleUrls: ['./auth-register.component.css']
+  styleUrls: ['./auth-register.component.css'],
 })
 export class AuthRegisterComponent {
   form: FormGroup;
@@ -20,6 +31,8 @@ export class AuthRegisterComponent {
 
   constructor(
     private userAuthService: UserAuthServiceService,
+    private favoriteService: FavoriteService,
+    private wishlistService: WishlistService,
     private formBuilder: FormBuilder,
     private router: Router
   ) {
@@ -28,15 +41,12 @@ export class AuthRegisterComponent {
         username: ['', [Validators.required, Validators.minLength(5)]],
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(5)]],
-        confirmPassword: ['', Validators.required]
+        confirmPassword: ['', Validators.required],
       },
       { validators: this.passwordsMatch }
     );
   }
 
-  /**
-   * Validador personalizado para comprobar que ambas contraseñas coinciden
-   */
   passwordsMatch(group: AbstractControl): ValidationErrors | null {
     const password = group.get('password')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
@@ -45,9 +55,6 @@ export class AuthRegisterComponent {
       : null;
   }
 
-  /**
-   * Manejo del envío del formulario de registro
-   */
   onSubmit(): void {
     if (this.form.valid) {
       const { username, email, password } = this.form.value;
@@ -56,15 +63,22 @@ export class AuthRegisterComponent {
 
       this.userAuthService.registerUser(username, email, password).subscribe({
         next: () => {
-          this.successfulRegistration = true;
-          this.isLoading = false;
-          setTimeout(() => {
-            this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
-          }, 2000);
+          console.log('Registro exitoso. Procesando favoritos y wishlist pendientes...');
+          forkJoin([
+            this.favoriteService.processPendingFavorite(),
+            this.wishlistService.processPendingWishlist()
+          ]).subscribe({
+            complete: () => {
+              console.log('Pendientes procesados. Redirigiendo a /home...');
+              this.isLoading = false;
+              this.successfulRegistration = true;
+              this.router.navigate([NAVIGATION_ROUTES.HOME]);
+            }
+          });
         },
         error: (error) => {
           this.isLoading = false;
-          console.error('Registration error:', error);
+          console.error(' Error en el registro:', error);
 
           if (error?.error) {
             this.backendErrorMessage =
@@ -79,11 +93,10 @@ export class AuthRegisterComponent {
       });
     } else {
       this.backendErrorMessage = 'Por favor, completa correctamente el formulario.';
-      this.form.markAllAsTouched(); 
+      this.form.markAllAsTouched();
     }
   }
 
- 
   navigateToLogin(): void {
     this.router.navigate([NAVIGATION_ROUTES.LOGIN]);
   }
