@@ -84,13 +84,13 @@ export class ProfileComponent implements OnInit {
     this.isLoading = true;
     this.profileService.getUserProfile().subscribe({
       next: (profile: UserProfile) => {
-        console.log('📄 Perfil recargado:', profile);
+        console.log(' Perfil recargado:', profile);
         this.userProfile = profile;
         this.timestamp = Date.now(); 
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('⚠️ Error loading profile:', error);
+        console.error('Error loading profile:', error);
         this.errorMessage = 'Failed to load user profile.';
         this.isLoading = false;
       },
@@ -123,7 +123,7 @@ export class ProfileComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.error('❌ Error updating profile:', error);
+        console.error(' Error updating profile:', error);
         Swal.fire({
           title: 'Error',
           text: 'Hubo un problema al actualizar el perfil. Inténtalo de nuevo.',
@@ -151,8 +151,8 @@ export class ProfileComponent implements OnInit {
     if (!this.selectedFile || !this.userProfile) return;
   
     const file = this.selectedFile;
-    const timestamp = new Date().getTime(); // para evitar caché
-    const fileExtension = file.name.split('.').pop(); // obtener extensión
+    const timestamp = new Date().getTime();
+    const fileExtension = file.name.split('.').pop(); 
     const filePath = `user_${this.userProfile.id}/profile_${timestamp}.${fileExtension}`;
   
     const { error: uploadError } = await supabase.storage
@@ -163,7 +163,7 @@ export class ProfileComponent implements OnInit {
       });
   
     if (uploadError) {
-      console.error('❌ Error al subir a Supabase:', uploadError.message);
+      console.error(' Error al subir a Supabase:', uploadError.message);
       Swal.fire({
         title: 'Error',
         text: 'No se pudo subir la foto. Inténtalo de nuevo.',
@@ -180,13 +180,13 @@ export class ProfileComponent implements OnInit {
         this.loadUserProfile(); 
   
         Swal.fire({
-          title: '✅ Imagen actualizada',
+          title: ' Imagen actualizada',
           text: 'Tu foto de perfil se ha subido correctamente.',
           icon: 'success',
         });
       },
       error: (err) => {
-        console.error('❌ Error actualizando el perfil:', err);
+        console.error(' Error actualizando el perfil:', err);
         Swal.fire({
           title: 'Error',
           text: 'No se pudo actualizar tu perfil con la nueva imagen.',
