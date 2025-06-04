@@ -30,7 +30,7 @@ export class ProfileService {
     return this.http.get<UserProfile>(this.profileUrl).pipe(
       tap(profile => this.currentUserSubject.next(profile)),
       catchError((error) => {
-        console.error("❌ Error al cargar el perfil de usuario:", error);
+        console.error(" Error al cargar el perfil de usuario:", error);
         return throwError(() => new Error("No se pudo cargar el perfil de usuario."));
       })
     );
@@ -41,7 +41,7 @@ export class ProfileService {
     return this.http.put<UserProfile>(updateUrl, profileData).pipe(
       tap(profile => this.currentUserSubject.next(profile)),
       catchError((error) => {
-        console.error('❌ Error al actualizar el perfil:', error);
+        console.error(' Error al actualizar el perfil:', error);
         return throwError(() => new Error('No se pudo actualizar el perfil.'));
       })
     );
