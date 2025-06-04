@@ -16,7 +16,7 @@ export class PublicProfileComponent implements OnInit {
   userProfile: PublicUserProfile | null = null;
   isLoading = true;
   errorMessage: string | null = null;
-  timestamp: number = Date.now(); // ✅ Añadido para evitar caché en imágenes
+  timestamp: number = Date.now(); 
 
   constructor(
     private route: ActivatedRoute,
@@ -30,11 +30,11 @@ export class PublicProfileComponent implements OnInit {
       this.publicProfileService.publicProfile$.subscribe({
         next: (profile) => {
           this.userProfile = profile;
-          this.timestamp = Date.now(); // ✅ Actualizar timestamp al recibir perfil
+          this.timestamp = Date.now(); 
           this.isLoading = false;
         },
         error: (err) => {
-          console.error('❌ Error al recibir perfil público:', err);
+          console.error(' Error al recibir perfil público:', err);
           this.errorMessage = `Error cargando el perfil de ${username}`;
           this.userProfile = null;
           this.isLoading = false;
@@ -61,11 +61,11 @@ export class PublicProfileComponent implements OnInit {
     this.publicProfileService.getPublicProfile(username).subscribe({
       next: (profile) => {
         this.userProfile = profile;
-        this.timestamp = Date.now(); // ✅ Actualizar timestamp aquí también
+        this.timestamp = Date.now(); 
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('❌ Error al cargar perfil público:', err);
+        console.error(' Error al cargar perfil público:', err);
         this.errorMessage = `El usuario "${username}" no existe o no se pudo cargar.`;
         this.userProfile = null;
         this.isLoading = false;
@@ -85,6 +85,6 @@ export class PublicProfileComponent implements OnInit {
 
   // Método para obtener los libros favoritos del usuario
   getFavoriteBooks(): any[] {
-    return this.userProfile?.favorites || []; // ✅ Cambiado de 'favoriteBooks' a 'favorites'
+    return this.userProfile?.favorites || []; 
   }
 }
