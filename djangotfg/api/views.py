@@ -1,4 +1,6 @@
 from django.db.models import Count
+import requests
+
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
