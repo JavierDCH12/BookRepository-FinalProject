@@ -54,7 +54,7 @@ export class BookDetailComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        console.error('❌ Error fetching book details');
+        console.error('Error fetching book details');
         this.isLoading = false;
       }
     });
@@ -65,7 +65,7 @@ export class BookDetailComponent implements OnInit {
       next: (reviews) => {
         this.publicReviews = reviews;
       },
-      error: () => console.error('❌ Error fetching public reviews'),
+      error: () => console.error('Error fetching public reviews'),
     });
   }
 
@@ -83,7 +83,7 @@ export class BookDetailComponent implements OnInit {
           this.rating = foundFavorite.rating || 0;
         }
       },
-      error: () => console.error('⚠️ Error loading favorites'),
+      error: () => console.error('Error loading favorites'),
     });
   }
 
@@ -117,7 +117,7 @@ export class BookDetailComponent implements OnInit {
           text: `${this.book?.title} se ha añadido correctamente.`
         });
       },
-      error: (err) => console.error('❌ Error al añadir a favoritos:', err)
+      error: (err) => console.error('Error al añadir a favoritos:', err)
     });
   }
 
@@ -134,7 +134,7 @@ export class BookDetailComponent implements OnInit {
           text: `${this.book?.title} se ha eliminado de tus favoritos.`
         });
       },
-      error: (err) => console.error('❌ Error al eliminar de favoritos:', err)
+      error: (err) => console.error('Error al eliminar de favoritos:', err)
     });
   }
 
@@ -149,7 +149,7 @@ export class BookDetailComponent implements OnInit {
           text: 'Tu reseña se ha guardado correctamente.'
         });
       },
-      error: () => console.error('❌ Error al guardar la reseña'),
+      error: () => console.error('Error al guardar la reseña'),
     });
   }
 
@@ -172,7 +172,7 @@ export class BookDetailComponent implements OnInit {
             text: `Has valorado este libro con ${star} estrella(s).`
           });
         },
-        error: () => console.error('❌ Error al actualizar el rating')
+        error: () => console.error('Error al actualizar el rating')
       });
     }
   }
