@@ -287,6 +287,41 @@ def manage_wishlist(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#WIKI
+@api_view(['GET'])
+def wikipedia_link(request):
+    author = request.GET.get('author')
+    if not author:
+        return Response({'error': 'Author name required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    wikipedia_api_url = 'https://en.wikipedia.org/w/api.php'
+    params = {
+        'action': 'query',
+        'format': 'json',
+        'origin': '*',
+        'titles': author,
+        'prop': 'pageprops'
+    }
+
+    try:
+        response = requests.get(wikipedia_api_url, params=params, timeout=5)
+        data = response.json()
+        pages = data.get("query", {}).get("pages", {})
+        if not pages:
+            return Response({'link': None})
+
+        page_id = list(pages.keys())[0]
+        if page_id == "-1":
+            return Response({'link': None})
+
+        formatted_title = author.replace(' ', '_')
+        wikipedia_link = f'https://en.wikipedia.org/wiki/{formatted_title}'
+        return Response({'link': wikipedia_link})
+
+    except requests.RequestException as e:
+        return Response({'error': 'Wikipedia request failed'}, status=status.HTTP_502_BAD_GATEWAY)
+
+
 ## ELIMINAR DE LA LISTA DE DESEOS
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
